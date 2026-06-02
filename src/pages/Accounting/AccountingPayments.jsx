@@ -10,21 +10,27 @@ import {
 } from "../../api/accountingApi";
 import PaymentModal from "./PaymentModal";
 import Navbar from "../../components/Navbar";
+import { getItemInLocalStorage } from "../../utils/localStorage";
 
 const AccountingPayments = () => {
+  const userType = getItemInLocalStorage("USERTYPE");
+  const isAdmin = userType === "pms_admin";
+  const isAccountingUser = userType === "accounting_emp";
+  const canCreate = isAdmin || isAccountingUser;
+  const canEditDelete = isAdmin;
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [filterInvoiceId, setFilterInvoiceId] = useState("");
 
   useEffect(() => {
     fetchPayments();
   }, []);
 
-    // -----------------------------
+  // -----------------------------
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchTerm);
@@ -46,32 +52,32 @@ const AccountingPayments = () => {
     }
   };
 
-//  const handleFilterByInvoice = async (invoiceId) => {
-//     setFilterInvoiceId(invoiceId);
+  //  const handleFilterByInvoice = async (invoiceId) => {
+  //     setFilterInvoiceId(invoiceId);
 
-//     if (!invoiceId) {
-//       fetchPayments();
-//       return;
-//     }
+  //     if (!invoiceId) {
+  //       fetchPayments();
+  //       return;
+  //     }
 
-//     setLoading(true);
-//     try {
-//       const response = await getPaymentsByInvoice(invoiceId);
-//       setPayments(response.data.data || response.data);
-//     } catch (error) {
-//       toast.error("Failed to filter payments");
-//       console.error(error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+  //     setLoading(true);
+  //     try {
+  //       const response = await getPaymentsByInvoice(invoiceId);
+  //       setPayments(response.data.data || response.data);
+  //     } catch (error) {
+  //       toast.error("Failed to filter payments");
+  //       console.error(error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
   const handleCreate = () => {
     setSelectedPayment(null);
     setIsModalOpen(true);
   };
 
-   const handleEdit = async (payment) => {
+  const handleEdit = async (payment) => {
     try {
       setLoading(true);
 
@@ -105,7 +111,7 @@ const AccountingPayments = () => {
     }
   };
 
-    const handleSave = async (data) => {
+  const handleSave = async (data) => {
     try {
       if (selectedPayment) {
         await updateAccountingPayment(selectedPayment.id, data);
@@ -144,17 +150,31 @@ const AccountingPayments = () => {
       <Navbar />
       <div className="w-full flex mx-3 mb-10 flex-col overflow-hidden p-6 bg-white/80 mt-2">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Accounting Payments</h1>
-          <button
-            onClick={handleCreate}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            + Add Payment
-          </button>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold">Accounting Payments</h1>
+            {isAdmin && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
+                Full Access
+              </span>
+            )}
+            {isAccountingUser && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-200">
+                Create Only
+              </span>
+            )}
+          </div>
+          {canCreate && (
+            <button
+              onClick={handleCreate}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              + Add Payment
+            </button>
+          )}
         </div>
 
         <div className="mb-4 flex gap-4">
-             <input
+          <input
             type="text"
             placeholder="Search by reference or invoice number"
             value={searchTerm}
@@ -233,27 +253,36 @@ const AccountingPayments = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
-                          className={`px-2 py-1 rounded text-xs ${
-                            payment.payment_type === "completed"
+                          className={`px-2 py-1 rounded text-xs ${payment.payment_type === "completed"
                               ? "bg-green-100 text-green-800"
                               : payment.payment_type === "failed"
                                 ? "bg-red-100 text-red-800"
                                 : "bg-yellow-100 text-yellow-800"
-                          }`}
+                            }`}
                         >
                           {payment.payment_type}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
-                          onClick={() => handleEdit(payment)}
-                          className="text-blue-600 hover:text-blue-900 mr-3"
+                          onClick={() => canEditDelete ? handleEdit(payment) : undefined}
+                          disabled={!canEditDelete}
+                          title={!canEditDelete ? "Only Admin can edit" : "Edit"}
+                          className={canEditDelete
+                            ? "text-blue-600 hover:text-blue-900 mr-3"
+                            : "text-gray-300 cursor-not-allowed mr-3"
+                          }
                         >
                           Edit
                         </button>
                         <button
-                          onClick={() => handleDelete(payment.id)}
-                          className="text-red-600 hover:text-red-900"
+                          onClick={() => canEditDelete ? handleDelete(payment.id) : undefined}
+                          disabled={!canEditDelete}
+                          title={!canEditDelete ? "Only Admin can delete" : "Delete"}
+                          className={canEditDelete
+                            ? "text-red-600 hover:text-red-900"
+                            : "text-gray-300 cursor-not-allowed"
+                          }
                         >
                           Delete
                         </button>

@@ -11,8 +11,13 @@ import {
 } from "../../api/accountingApi";
 import AccountingAnalyticsDashboard from "./AccountingAnalyticsDashboard";
 import Navbar from "../../components/Navbar";
+import { getItemInLocalStorage } from "../../utils/localStorage";
 
 const AccountingDashboard = () => {
+  const userType = getItemInLocalStorage("USERTYPE");
+  const isAdmin = userType === "pms_admin";
+  const isAccountingUser = userType === "accounting_emp";
+  // pms_admin => full CRUD; pms_accounting => create only (edit/delete disabled)
   const [stats, setStats] = useState({
     totalInvoices: 0,
     totalPayments: 0,
@@ -100,9 +105,9 @@ const AccountingDashboard = () => {
             sum +
             parseFloat(
               entry.total_amount ??
-                entry.total_debit ??
-                entry.amount ??
-                0,
+              entry.total_debit ??
+              entry.amount ??
+              0,
             ),
           0,
         );
@@ -185,6 +190,7 @@ const AccountingDashboard = () => {
     },
     {
       name: "Payments",
+
       path: "/accounting/payments",
       icon: "💳",
       color: "bg-indigo-100 text-indigo-600",
@@ -208,280 +214,293 @@ const AccountingDashboard = () => {
   return (
     <section className="flex">
       <Navbar />
-    <div className="w-full flex mx-3 mb-10 flex-col overflow-hidden p-6 bg-white/80 mt-2">
-      <h1 className="text-3xl font-bold mb-6">Accounting Dashboard</h1>
+      <div className="w-full flex mx-3 mb-10 flex-col overflow-hidden p-6 bg-white/80 mt-2">
+        <h1 className="text-3xl font-bold mb-6">Accounting Dashboard</h1>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500 text-sm">Total Invoices</p>
-              <p className="text-2xl font-bold">{stats.totalInvoices}</p>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm">Total Invoices</p>
+                <p className="text-2xl font-bold">{stats.totalInvoices}</p>
+              </div>
+              <div className="text-4xl">🧾</div>
             </div>
-            <div className="text-4xl">🧾</div>
           </div>
-        </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500 text-sm">Total Revenue</p>
-              <p className="text-3xl font-bold text-green-600">
-                ₹{parseFloat(stats.totalRevenue).toFixed(2)}
-              </p>
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm">Total Revenue</p>
+                <p className="text-3xl font-bold text-green-600">
+                  ₹{parseFloat(stats.totalRevenue).toFixed(2)}
+                </p>
+              </div>
+              <div className="text-4xl">💰</div>
             </div>
-            <div className="text-4xl">💰</div>
           </div>
-        </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500 text-sm">Pending Amount</p>
-              <p className="text-3xl font-bold text-orange-600">
-                ₹{parseFloat(stats.pendingAmount).toFixed(2)}
-              </p>
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm">Pending Amount</p>
+                <p className="text-3xl font-bold text-orange-600">
+                  ₹{parseFloat(stats.pendingAmount).toFixed(2)}
+                </p>
+              </div>
+              <div className="text-4xl">⏳</div>
             </div>
-            <div className="text-4xl">⏳</div>
           </div>
-        </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500 text-sm">Total Expenses {societyMaintenancePercent > 0 && <span className="text-xs text-gray-400">(incl. {societyMaintenancePercent}% Mgmt Fees)</span>}</p>
-              <p className="text-3xl font-bold text-red-600">
-                ₹{(parseFloat(stats.totalExpenses) * (1 + societyMaintenancePercent / 100)).toFixed(2)}
-              </p>
-              {/* {societyMaintenancePercent > 0 && (
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm">Total Expenses {societyMaintenancePercent > 0 && <span className="text-xs text-gray-400">(incl. {societyMaintenancePercent}% Mgmt Fees)</span>}</p>
+                <p className="text-3xl font-bold text-red-600">
+                  ₹{(parseFloat(stats.totalExpenses) * (1 + societyMaintenancePercent / 100)).toFixed(2)}
+                </p>
+                {/* {societyMaintenancePercent > 0 && (
                 <p className="text-xs text-gray-400 mt-1">
                   Base: ₹{parseFloat(stats.totalExpenses).toFixed(2)} + Mgmt: ₹{(parseFloat(stats.totalExpenses) * societyMaintenancePercent / 100).toFixed(2)}
                 </p>
               )} */}
+              </div>
+              <div className="text-4xl">💸</div>
             </div>
-            <div className="text-4xl">💸</div>
           </div>
-        </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500 text-sm">Overdue Invoices</p>
-              <p className="text-2xl font-bold text-red-600">
-                {stats.overdueInvoices}
-              </p>
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm">Overdue Invoices</p>
+                <p className="text-2xl font-bold text-red-600">
+                  {stats.overdueInvoices}
+                </p>
+              </div>
+              <div className="text-4xl">⚠️</div>
             </div>
-            <div className="text-4xl">⚠️</div>
           </div>
         </div>
-      </div>
 
-      {/* Quick Access Modules */}
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Quick Access</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-          {modules.map((module) => (
-            <Link
-              key={module.path}
-              to={module.path}
-              className={`${module.color} rounded-lg p-4 text-center hover:shadow-lg transition-shadow`}
-            >
-              <div className="text-3xl mb-2">{module.icon}</div>
-              <p className="text-sm font-medium">{module.name}</p>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* Recent Activities */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Invoices */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">Recent Invoices</h2>
-            <Link
-              to="/accounting/invoices"
-              className="text-blue-600 text-sm hover:underline"
-            >
-              View All
-            </Link>
+        {/* Quick Access Modules */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold">Quick Access</h2>
+            {/* Role Badge */}
+            {isAdmin && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
+                <span className="w-2 h-2 rounded-full bg-blue-500 inline-block"></span>
+                Admin — Full Access
+              </span>
+            )}
+            {isAccountingUser && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-200">
+                <span className="w-2 h-2 rounded-full bg-amber-500 inline-block"></span>
+                Accounting — Create Only
+              </span>
+            )}
           </div>
-          <div className="space-y-3">
-            {stats.recentInvoices.length === 0 ? (
-              <p className="text-gray-500 text-sm">No invoices yet</p>
-            ) : (
-              stats.recentInvoices.map((invoice) => (
-                <div
-                  key={invoice.id}
-                  className="flex justify-between items-center py-2 border-b"
-                >
-                  <div>
-                    <p className="font-medium">{invoice.invoice_number}</p>
-                    <p className="text-sm text-gray-500">
-                      {invoice.customer_name}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-medium">
-                      ₹{parseFloat(invoice.total_amount || 0).toFixed(2)}
-                    </p>
-                    <span
-                      className={`text-xs px-2 py-1 rounded ${
-                        invoice.status === "paid"
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+            {modules.map((module) => (
+              <Link
+                key={module.path}
+                to={module.path}
+                className={`${module.color} rounded-lg p-4 text-center hover:shadow-lg transition-shadow`}
+              >
+                <div className="text-3xl mb-2">{module.icon}</div>
+                <p className="text-sm font-medium">{module.name}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Recent Activities */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Recent Invoices */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-semibold">Recent Invoices</h2>
+              <Link
+                to="/accounting/invoices"
+                className="text-blue-600 text-sm hover:underline"
+              >
+                View All
+              </Link>
+            </div>
+            <div className="space-y-3">
+              {stats.recentInvoices.length === 0 ? (
+                <p className="text-gray-500 text-sm">No invoices yet</p>
+              ) : (
+                stats.recentInvoices.map((invoice) => (
+                  <div
+                    key={invoice.id}
+                    className="flex justify-between items-center py-2 border-b"
+                  >
+                    <div>
+                      <p className="font-medium">{invoice.invoice_number}</p>
+                      <p className="text-sm text-gray-500">
+                        {invoice.customer_name}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-medium">
+                        ₹{parseFloat(invoice.total_amount || 0).toFixed(2)}
+                      </p>
+                      <span
+                        className={`text-xs px-2 py-1 rounded ${invoice.status === "paid"
                           ? "bg-green-100 text-green-800"
                           : invoice.status === "overdue"
-                          ? "bg-red-100 text-red-800"
-                          : "bg-yellow-100 text-yellow-800"
-                      }`}
-                    >
-                      {invoice.status}
-                    </span>
+                            ? "bg-red-100 text-red-800"
+                            : "bg-yellow-100 text-yellow-800"
+                          }`}
+                      >
+                        {invoice.status}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))
-            )}
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* Recent Payments */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-semibold">Recent Payments</h2>
+              <Link
+                to="/accounting/payments"
+                className="text-blue-600 text-sm hover:underline"
+              >
+                View All
+              </Link>
+            </div>
+            <div className="space-y-3">
+              {stats.recentPayments.length === 0 ? (
+                <p className="text-gray-500 text-sm">No payments yet</p>
+              ) : (
+                stats.recentPayments.map((payment) => (
+                  <div
+                    key={payment.id}
+                    className="flex justify-between items-center py-2 border-b"
+                  >
+                    <div>
+                      <p className="font-medium">
+                        {payment.reference_number ||
+                          payment.reference ||
+                          payment.payment_number ||
+                          payment.accounting_invoice?.invoice_number ||
+                          payment.invoice_number ||
+                          "N/A"}
+                      </p>
+                      <p className="text-sm text-gray-500 capitalize">
+                        {(payment.payment_mode || payment.payment_method || "N/A").replace("_", " ")}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-medium text-green-600">
+                        ₹{parseFloat(payment.amount || 0).toFixed(2)}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {payment.payment_date
+                          ? new Date(payment.payment_date).toLocaleDateString()
+                          : "-"}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Recent Payments */}
-        <div className="bg-white rounded-lg shadow p-6">
+        {/* Recent Journal Entries */}
+        <div className="bg-white rounded-lg shadow p-6 mt-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">Recent Payments</h2>
+            <h2 className="text-lg font-semibold">Recent Journal Entries</h2>
             <Link
-              to="/accounting/payments"
+              to="/accounting/journal-entries"
               className="text-blue-600 text-sm hover:underline"
             >
               View All
             </Link>
           </div>
-          <div className="space-y-3">
-            {stats.recentPayments.length === 0 ? (
-              <p className="text-gray-500 text-sm">No payments yet</p>
-            ) : (
-              stats.recentPayments.map((payment) => (
-                <div
-                  key={payment.id}
-                  className="flex justify-between items-center py-2 border-b"
-                >
-                  <div>
-                    <p className="font-medium">
-                      {payment.reference_number ||
-                        payment.reference ||
-                        payment.payment_number ||
-                        payment.accounting_invoice?.invoice_number ||
-                        payment.invoice_number ||
-                        "N/A"}
-                    </p>
-                    <p className="text-sm text-gray-500 capitalize">
-                      {(payment.payment_mode || payment.payment_method || "N/A").replace("_", " ")}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-medium text-green-600">
-                      ₹{parseFloat(payment.amount || 0).toFixed(2)}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {payment.payment_date
-                        ? new Date(payment.payment_date).toLocaleDateString()
-                        : "-"}
-                    </p>
-                  </div>
-                </div>
-              ))
-            )}
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                    Reference
+                  </th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                    Date
+                  </th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                    Description
+                  </th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                    Amount
+                  </th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {stats.recentJournalEntries.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="px-4 py-4 text-center text-gray-500">
+                      No journal entries yet
+                    </td>
+                  </tr>
+                ) : (
+                  stats.recentJournalEntries.map((entry) => (
+                    <tr key={entry.id}>
+                      <td className="px-4 py-3">{entry.reference || entry.entry_number || "-"}</td>
+                      <td className="px-4 py-3">
+                        {new Date(entry.entry_date).toLocaleDateString()}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-600">
+                        {entry.description || "-"}
+                      </td>
+                      <td className="px-4 py-3">
+                        ₹
+                        {(
+                          parseFloat(
+                            entry.total_amount ??
+                            entry.total_debit ??
+                            entry.amount ??
+                            entry.total_credit ??
+                            0,
+                          ) || 0
+                        ).toFixed(2)}
+                      </td>
+                      <td className="px-4 py-3">
+                        <span
+                          className={`px-2 py-1 rounded text-xs ${entry.status === "posted"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-yellow-100 text-yellow-800"
+                            }`}
+                        >
+                          {entry.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Analytics Dashboard */}
+        <div className="mt-6">
+          <h2 className="text-2xl font-bold mb-4">Accounting Analytics</h2>
+          <div className="bg-gray-900 p-5 rounded-lg shadow-custom-all-sides">
+            <AccountingAnalyticsDashboard />
           </div>
         </div>
       </div>
-
-      {/* Recent Journal Entries */}
-      <div className="bg-white rounded-lg shadow p-6 mt-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Recent Journal Entries</h2>
-          <Link
-            to="/accounting/journal-entries"
-            className="text-blue-600 text-sm hover:underline"
-          >
-            View All
-          </Link>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
-                  Reference
-                </th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
-                  Date
-                </th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
-                  Description
-                </th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
-                  Amount
-                </th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
-                  Status
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {stats.recentJournalEntries.length === 0 ? (
-                <tr>
-                  <td colSpan="5" className="px-4 py-4 text-center text-gray-500">
-                    No journal entries yet
-                  </td>
-                </tr>
-              ) : (
-                stats.recentJournalEntries.map((entry) => (
-                  <tr key={entry.id}>
-                    <td className="px-4 py-3">{entry.reference || entry.entry_number || "-"}</td>
-                    <td className="px-4 py-3">
-                      {new Date(entry.entry_date).toLocaleDateString()}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
-                      {entry.description || "-"}
-                    </td>
-                    <td className="px-4 py-3">
-                      ₹
-                      {(
-                        parseFloat(
-                          entry.total_amount ??
-                          entry.total_debit ??
-                          entry.amount ??
-                          entry.total_credit ??
-                          0,
-                        ) || 0
-                      ).toFixed(2)}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`px-2 py-1 rounded text-xs ${
-                          entry.status === "posted"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-yellow-100 text-yellow-800"
-                        }`}
-                      >
-                        {entry.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Analytics Dashboard */}
-      <div className="mt-6">
-        <h2 className="text-2xl font-bold mb-4">Accounting Analytics</h2>
-        <div className="bg-gray-900 p-5 rounded-lg shadow-custom-all-sides">
-          <AccountingAnalyticsDashboard />
-        </div>
-      </div>
-    </div>
     </section>
   );
 };
