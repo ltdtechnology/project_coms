@@ -30,6 +30,7 @@ const SetupUserDetails = () => {
     user_sites: [],
     user_members: [],
     user_vendor: [],
+    vehicle_details: [],
   });
 
   const [loading, setLoading] = useState(true);
@@ -101,7 +102,7 @@ const SetupUserDetails = () => {
               <span className="font-semibold">Mobile:</span>{" "}
               {formData.mobile || "N/A"}
             </p>
-              <p>
+            <p>
               <span className="font-semibold">Lives Here:</span>{" "}
               {formData.lives_here ? "Yes" : "No"}
             </p>
@@ -283,6 +284,47 @@ const SetupUserDetails = () => {
               No vendors found
             </div>
           )}
+          {formData.vehicle_details && formData.vehicle_details.length > 0 && (
+            <div className="bg-white shadow-lg rounded-lg p-6 mb-3 w-full mt-5 border border-gray-900">
+              <h3 className="text-lg font-semibold text-gray-800">
+                Vehicle Details
+              </h3>
+
+              {formData.vehicle_details.map((vehicle, idx) => (
+                <div
+                  key={idx}
+                  className="mt-4 p-4 border rounded-md bg-gray-50"
+                >
+                  <div className="grid grid-cols-2 gap-4">
+                    <p>
+                      <span className="font-semibold">Vehicle Type:</span>{" "}
+                      {vehicle.vehicle_type || "N/A"}
+                    </p>
+
+                    <p>
+                      <span className="font-semibold">Vehicle Number:</span>{" "}
+                      {vehicle.vehicle_no || "N/A"}
+                    </p>
+
+                    <p>
+                      <span className="font-semibold">Parking Slot No:</span>{" "}
+                      {vehicle.parking_slot_no || "N/A"}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {formData.vehicle_details &&
+            formData.vehicle_details.length === 0 && (
+              <div className="bg-white shadow-lg rounded-lg p-6 mb-3 w-full mt-5 border border-gray-900">
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Vehicle Details
+                </h3>
+                <p>No vehicle details found</p>
+              </div>
+            )}
         </div>
       </div>
     </section>
