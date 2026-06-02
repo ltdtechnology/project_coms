@@ -15,8 +15,14 @@ import {
 import InvoiceModal from "./InvoiceModal";
 import AddPaymentModal from "./AddPaymentModal";
 import Navbar from "../../components/Navbar";
+import { getItemInLocalStorage } from "../../utils/localStorage";
 
 const AccountingInvoices = () => {
+  const userType = getItemInLocalStorage("USERTYPE");
+  const isAdmin = userType === "pms_admin";
+  const isAccountingUser = userType === "accounting_emp";
+  const canCreate = isAdmin || isAccountingUser;
+  const canEditDelete = isAdmin;
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -190,13 +196,27 @@ const AccountingInvoices = () => {
       <Navbar />
       <div className="w-full flex mx-3 mb-10 flex-col overflow-hidden p-6 bg-white/80 mt-2">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Accounting Invoices</h1>
-          <button
-            onClick={handleCreate}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            + Add Invoice
-          </button>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold">Accounting Invoices</h1>
+            {isAdmin && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
+                Full Access
+              </span>
+            )}
+            {isAccountingUser && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-200">
+                Create Only
+              </span>
+            )}
+          </div>
+          {canCreate && (
+            <button
+              onClick={handleCreate}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              + Add Invoice
+            </button>
+          )}
         </div>
 
         <div className="mb-4 flex gap-4">
@@ -305,8 +325,7 @@ const AccountingInvoices = () => {
 
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`px-2 py-1 rounded text-xs ${
-                              invoice.status === "paid"
+                            className={`px-2 py-1 rounded text-xs ${invoice.status === "paid"
                                 ? "bg-green-100 text-green-800"
                                 : invoice.status === "overdue"
                                   ? "bg-red-100 text-red-800"
@@ -315,7 +334,7 @@ const AccountingInvoices = () => {
                                     : invoice.status === "partially_paid"
                                       ? "bg-yellow-100 text-yellow-800"
                                       : "bg-gray-100 text-gray-800"
-                            }`}
+                              }`}
                           >
                             {invoice.status}
                           </span>
@@ -334,23 +353,22 @@ const AccountingInvoices = () => {
                           {(invoice.status === "sent" ||
                             invoice.status === "overdue" ||
                             invoice.status === "partially_paid") && (
-                            <button
-                              onClick={() => handleAddPayment(invoice)}
-                              className="text-green-600 hover:text-green-900 mr-3"
-                            >
-                              Add Payment
-                            </button>
-                          )}
+                              <button
+                                onClick={() => handleAddPayment(invoice)}
+                                className="text-green-600 hover:text-green-900 mr-3"
+                              >
+                                Add Payment
+                              </button>
+                            )}
 
                           <button
-                            onClick={() => handleEdit(invoice)}
-                            // disabled={invoice.status === "paid"}
-                            className={`mr-3 ${
-                              // invoice.status === "paid"
-                              // ? "text-gray-400 cursor-not-allowed"
-                              // : "text-blue-600 hover:text-blue-900"
-                              "text-blue-600 hover:text-blue-900"
-                            }`}
+                            onClick={() => canEditDelete ? handleEdit(invoice) : undefined}
+                            disabled={!canEditDelete}
+                            title={!canEditDelete ? "Only Admin can edit" : "Edit"}
+                            className={`mr-3 ${!canEditDelete
+                                ? "text-gray-300 cursor-not-allowed"
+                                : "text-blue-600 hover:text-blue-900"
+                              }`}
                           >
                             Edit
                           </button>
@@ -363,13 +381,13 @@ const AccountingInvoices = () => {
                           </button>
 
                           <button
-                            onClick={() => handleDelete(invoice)}
-                            disabled={deleteDisabled}
-                            className={`${
-                              deleteDisabled
-                                ? "text-gray-400 cursor-not-allowed"
+                            onClick={() => canEditDelete ? handleDelete(invoice) : undefined}
+                            disabled={!canEditDelete || deleteDisabled}
+                            title={!canEditDelete ? "Only Admin can delete" : ""}
+                            className={`${!canEditDelete || deleteDisabled
+                                ? "text-gray-300 cursor-not-allowed"
                                 : "text-red-600 hover:text-red-900"
-                            }`}
+                              }`}
                           >
                             Delete
                           </button>

@@ -163,9 +163,9 @@ const Login = () => {
       //   navigate(selectedSiteId === 10 ? "/employee/dashboard" : "/mytickets");
       // }
       const route =
-        userType === "pms_admin" || userType === "project_head"
+        userType === "pms_admin" || userType === "project_head" 
           ? "/dashboard"
-          : selectedSiteId === 10
+          : selectedSiteId === 10 || selectedSiteId === 59
           ? "/employee/dashboard"
           : "/mytickets";
 

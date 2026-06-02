@@ -330,7 +330,7 @@ const Navbar = () => {
 
         <div className="flex flex-col h-full gap-4 mb-5 relative">
           {/* admin */}
-          {(user === "pms_admin" || user === "project_head") && (
+          {(user === "pms_admin" || user === "project_head"  ) && (
             <>
               <NavLink
                 className={({ isActive }) =>
@@ -551,7 +551,7 @@ const Navbar = () => {
 
                 {/* Accounting */}
 
-                {feat.includes("accounting") && (
+                {feat.includes("accounting")  && (
                   <NavLink
                     to={"/accounting"}
                     className={({ isActive }) =>
@@ -1846,7 +1846,7 @@ const Navbar = () => {
                   {firstName} {lastName}
                 </h2>
               </NavLink>
-              {siteId === 10 && (
+              {(siteId === 10 || siteId === 59 ) && (
                 <NavLink
                   to={"/employee/dashboard"}
                   className={({ isActive }) =>
@@ -1870,6 +1870,33 @@ const Navbar = () => {
                       } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                   >
                     Dashboard
+                  </h2>
+                </NavLink>
+              )}
+              {user === "accounting_emp" && (
+                <NavLink
+                  to={"/accounting"}
+                  className={({ isActive }) =>
+                    ` ${isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                    }`
+                  }
+                >
+                  <div>
+                    {React.createElement(MdAccountTree, { size: "20" })}
+                  </div>
+                  <h2
+                    className={`whitespace-pre duration-300 ${!open && "opacity-0 translate-x-28 overflow-hidden"
+                      }`}
+                  >
+                    Accounting
+                  </h2>
+                  <h2
+                    className={`${open && "hidden"
+                      } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                  >
+                    Accounting
                   </h2>
                 </NavLink>
               )}
