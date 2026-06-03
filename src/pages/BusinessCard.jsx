@@ -202,7 +202,7 @@ const BusinessCard = () => {
         {loading && <p className="mt-4">Loading business cards...</p>}
 
         {/* CARD LIST */}
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {businessCards.map((card) => (
             <div
               key={card.id}
@@ -242,8 +242,8 @@ const BusinessCard = () => {
                     onClick={() => copyText(card.email_id, "Email copied")}
                     className="bg-white p-2 rounded-md"
                   >
-                      <div className="flex items-center gap-1">
-                    <MdEmail />
+                    <div className="flex items-center gap-1">
+                      <MdEmail />
                       <span>Email</span>
                     </div>
                   </button>
@@ -253,7 +253,7 @@ const BusinessCard = () => {
                     className="bg-white p-2 rounded-md"
                   >
                     <div className="flex items-center gap-1">
-                    <ImEarth />
+                      <ImEarth />
                       <span>Website</span>
                     </div>
                   </button>
@@ -273,7 +273,7 @@ const BusinessCard = () => {
           ))}
         </div>
       </div>
-      {addCard && <AddBusinesscardModal onClose={() => setAddCard(false)} />}
+      {addCard && <AddBusinesscardModal onClose={() => setAddCard(false)} refreshCards={fetchBusinessCards} />}
     </section>
   );
 };

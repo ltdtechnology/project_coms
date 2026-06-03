@@ -300,10 +300,10 @@ const AddNewVisitor = () => {
     postData.append("visitor[site_id]", siteId || "");
     postData.append("visitor[created_by_id]", formData.host || "");
     postData.append("visitor[name]", formData.visitorName || "");
-   postData.append(
-  "visitor[visitor_staff_category_id]",
-  formData.supportCategory || ""
-);
+    postData.append(
+      "visitor[visitor_staff_category_id]",
+      formData.supportCategory || ""
+    );
     postData.append("visitor[contact_no]", formData.mobile || "");
     postData.append("visitor[purpose]", formData.purpose || "");
     postData.append("visitor[start_pass]", passStartDate || "");
@@ -484,16 +484,16 @@ const AddNewVisitor = () => {
 
   const filteredUnits = Array.isArray(filteredData)
     ? filteredData.flatMap(
-        (floor) =>
-          floor.units
-            ?.filter((unit) =>
-              unit.name.toLowerCase().includes(searchUnit.toLowerCase()),
-            )
-            .map((unit) => ({
-              id: unit.id,
-              name: `Floor: ${floor.floorName} - Unit: ${unit.name}`,
-            })) || [],
-      )
+      (floor) =>
+        floor.units
+          ?.filter((unit) =>
+            unit.name.toLowerCase().includes(searchUnit.toLowerCase()),
+          )
+          .map((unit) => ({
+            id: unit.id,
+            name: `Floor: ${floor.floorName} - Unit: ${unit.name}`,
+          })) || [],
+    )
     : [];
 
   const unitOptions = filteredData.flatMap((floor) =>
@@ -995,51 +995,65 @@ const AddNewVisitor = () => {
         <h2 className="font-medium border-b-2 mt-5 border-black">
           Additional Visitor
         </h2>
-        <div className="grid md:grid-cols-3 gap-3 mt-5">
+
+        <div className="mt-5">
           {visitors.map((visitor, index) => (
-            <div key={index}>
-              <div className="grid gap-2 items-center w-full">
-                <label htmlFor="" className="font-semibold">
+            <div
+              key={index}
+              className="grid md:grid-cols-3 gap-3 items-end mb-4"
+            >
+              {/* Name */}
+              <div>
+                <label className="font-semibold block mb-1">
                   Name:
                 </label>
                 <input
                   type="text"
                   placeholder="Name"
                   name="name"
-                  className="border border-gray-400 p-2 rounded-md"
+                  className="border border-gray-400 p-2 rounded-md w-full"
                   value={visitor.name}
                   onChange={(event) => handleInputChange(index, event)}
                 />
               </div>
-              &nbsp;&nbsp;
-              <div className="grid gap-2 items-center w-full">
-                <label htmlFor="" className="font-semibold">
+
+              {/* Mobile */}
+              <div>
+                <label className="font-semibold block mb-1">
                   Mobile:
                 </label>
                 <input
                   type="text"
                   placeholder="Mobile Number"
                   name="mobile"
-                  className="border border-gray-400 p-2 rounded-md"
-                  value={visitor.mobile || visitor.contact_no}
+                  className="border border-gray-400 p-2 rounded-md w-full"
+                  maxLength={10}
+                  value={visitor.mobile || visitor.contact_no || ""}
                   onChange={(event) => handleInputChange(index, event)}
                 />
-                <button onClick={() => handleRemoveVisitor(index)}>
+              </div>
+
+              {/* Delete Button */}
+              <div>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveVisitor(index)}
+                  className="bg-red-500 text-white p-2 rounded hover:bg-red-600"
+                >
                   <FaTrash />
                 </button>
-                &nbsp;
               </div>
             </div>
           ))}
 
-          <div>
-            <button
-              onClick={handleAddVisitor}
-              className="bg-black text-white hover:bg-gray-700 font-semibold py-2 px-4 rounded"
-            >
-              Add Additional Visitor
-            </button>
-          </div>
+          {/* Add Visitor Button */}
+          <button
+            type="button"
+            onClick={handleAddVisitor}
+            className="bg-black text-white hover:bg-gray-700 font-semibold py-2 px-4 rounded"
+          >
+            Add Additional Visitor
+          </button>
         </div>
         {selectedFrequency === "Frequently" && (
           <div className="flex flex-col gap-2 my-2">
@@ -1071,13 +1085,12 @@ const AddNewVisitor = () => {
               {weekdaysMap.map((weekdayObj) => (
                 <button
                   key={weekdayObj.day}
-                  className={` rounded-md p-2 px-4 shadow-custom-all-sides font-medium ${
-                    selectedWeekdays?.includes(weekdayObj.day)
+                  className={` rounded-md p-2 px-4 shadow-custom-all-sides font-medium ${selectedWeekdays?.includes(weekdayObj.day)
                       ? // &&
-                        // weekdayObj.isActive
-                        "bg-green-400 text-white "
+                      // weekdayObj.isActive
+                      "bg-green-400 text-white "
                       : ""
-                  }`}
+                    }`}
                   onClick={(e) => {
                     e.preventDefault();
                     handleWeekdaySelection(weekdayObj.day);
@@ -1091,6 +1104,12 @@ const AddNewVisitor = () => {
         )}
 
         <div className="flex gap-5 justify-center items-center my-4 mb-10">
+           <button
+            onClick={()=>navigate("/admin/passes/visitors")}
+            className="bg-gray-500 text-white hover:bg-gray-700 font-semibold py-2 px-4 rounded"
+          >
+            Cancel
+          </button>
           <button
             onClick={createNewVisitor}
             className="bg-black text-white hover:bg-gray-700 font-semibold py-2 px-4 rounded"
