@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
 //import Navbar from "../../../components/Navbar";
@@ -14,6 +14,7 @@ import { dateFormat, formatTime } from "../../utils/dateUtils";
 const OutwardsTable = ({ goodsOut }) => {
   const [filteredData, setFilteredData] = useState(goodsOut);
   const themeColor = useSelector((state) => state.theme.color);
+
   const columns = [
     {
       name: "Action",
@@ -22,9 +23,9 @@ const OutwardsTable = ({ goodsOut }) => {
           <Link to={`/admin/inwards-details/${row.id}`}>
             <BsEye size={15} />
           </Link>
-           <Link to={`/admin/passes/edit/goods-in-out/${row.id}`}>
-          <BiEdit size={17} />
-        </Link>
+          <Link to={`/admin/passes/edit/goods-in-out/${row.id}`}>
+            <BiEdit size={17} />
+          </Link>
         </div>
       ),
     },
@@ -37,7 +38,10 @@ const OutwardsTable = ({ goodsOut }) => {
 
     {
       name: "Person Name",
-      selector: (row) => row.person_name,
+      selector: (row) =>
+        typeof row.person_name === "object"
+          ? row.person_name?.name
+          : row.person_name,
       sortable: true,
     },
 
@@ -63,24 +67,36 @@ const OutwardsTable = ({ goodsOut }) => {
       sortable: true,
     },
   ];
-
   const [searchText, setSearchText] = useState("");
+
   const handleSearch = (e) => {
     const searchValue = e.target.value;
     setSearchText(searchValue);
-    if (searchValue.trim === "") {
+
+    if (searchValue.trim() === "") {
       setFilteredData(goodsOut);
-    } else {
-      const filteredResult = goodsOut.filter(
-        (item) =>
-          item.person_name && 
-        item.person_name.name &&
-        item.person_name.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.vehicle_no.toLowerCase().includes(searchValue.toLowerCase())
-      );
-      setFilteredData(filteredResult);
+      return;
     }
+
+    const filteredResult = goodsOut.filter((item) => {
+      const personName =
+        typeof item.person_name === "object"
+          ? item.person_name?.name || ""
+          : item.person_name || "";
+
+      const vehicleNo = item.vehicle_no || "";
+
+      return (
+        personName.toLowerCase().includes(searchValue.toLowerCase()) ||
+        vehicleNo.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    });
+
+    setFilteredData(filteredResult);
   };
+  useEffect(() => {
+    setFilteredData(goodsOut);
+  }, [goodsOut]);
 
   return (
     <section className="flex">
