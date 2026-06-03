@@ -18,11 +18,12 @@ import {
 } from "../../api";
 import { dateFormat } from "../../utils/dateUtils";
 import image from "/profile.png";
-import { color } from "highcharts";
 
 const Staff = () => {
   const [staffs, setStaffs] = useState([]);
   const [filteredStaff, setFilteredStaff] = useState([]);
+  const [historyStaff, setHistoryStaff] = useState([]);
+  const [originalHistoryStaff, setOriginalHistoryStaff] = useState([]);
   const [FilteredApproval, setFilteredApproval] = useState([]);
   const [approvalStatusChanged, setApprovalStatusChanged] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -84,6 +85,35 @@ const Staff = () => {
     },
   };
 
+  const getLatestAttendance = (row) => {
+    if (!row.attendances?.length) return null;
+    return row.attendances[row.attendances.length - 1];
+  };
+
+  const dateTimeFormat = (date) => {
+    if (!date) return "-";
+    return new Date(date).toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const filterBySearch = (list) => {
+    if (!searchText.trim()) return list;
+    const q = searchText.toLowerCase();
+    return list.filter((item) => {
+      const fullName = `${item.firstname || ""} ${item.lastname || ""}`.toLowerCase();
+      return (
+        fullName.includes(q) ||
+        item.unit_name?.toLowerCase().includes(q) ||
+        item.mobile_no?.toLowerCase().includes(q)
+      );
+    });
+  };
+
   // ✅ CSV helpers
   const csvEscape = (v) => {
     if (v === null || v === undefined) return "";
@@ -102,6 +132,7 @@ const Staff = () => {
     a.click();
     window.URL.revokeObjectURL(url);
   };
+
   const handleDateExport = async () => {
     if (!startDate || !endDate) {
       toast.error("Please select both dates");
@@ -134,7 +165,6 @@ const Staff = () => {
     }
   };
 
-  // ✅ Export ALL staff data (fetch all pages from API)
   const exportStaffToCSVAll = async () => {
     try {
       const EXPORT_PER_PAGE = 200; // can increase if backend allows
@@ -142,21 +172,17 @@ const Staff = () => {
       let allRows = [];
       let totalPagesFromApi = 1;
 
-      // fetch first page
       const firstRes = await getStaff();
       const firstData = firstRes?.data || {};
       const firstList = Array.isArray(firstData.staffs) ? firstData.staffs : [];
       allRows = allRows.concat(firstList);
 
-      // detect total pages
       if (firstData.total_pages) {
         totalPagesFromApi = firstData.total_pages;
       } else if (firstData.total_count) {
-        totalPagesFromApi =
-          Math.ceil(firstData.total_count / EXPORT_PER_PAGE) || 1;
+        totalPagesFromApi = Math.ceil(firstData.total_count / EXPORT_PER_PAGE) || 1;
       }
 
-      // fetch remaining pages
       for (page = 2; page <= totalPagesFromApi; page++) {
         const res = await getStaff(page, EXPORT_PER_PAGE);
         const data = res?.data || {};
@@ -164,22 +190,13 @@ const Staff = () => {
         allRows = allRows.concat(list);
       }
 
-      // optional: if search is active, export filtered results
       let exportRows = allRows;
       if (searchText.trim()) {
-        const q = searchText.toLowerCase();
-        exportRows = allRows.filter((item) => {
-          const fullName = `${item.firstname} ${item.lastname}`.toLowerCase();
-          return (
-            fullName.includes(q) ||
-            item.unit_name?.toLowerCase().includes(q) ||
-            item.mobile_no?.toLowerCase().includes(q)
-          );
-        });
+        exportRows = filterBySearch(allRows);
       }
 
       if (!exportRows.length) {
-        alert("No data to export");
+        toast.info("No data to export");
         return;
       }
 
@@ -199,9 +216,7 @@ const Staff = () => {
 
       const rows = exportRows.map((row) => {
         const fullName = `${row.firstname || ""} ${row.lastname || ""}`.trim();
-        const profileUrl = row?.profile_picture?.url
-          ? domainPrefix + row.profile_picture.url
-          : "";
+        const profileUrl = row?.profile_picture?.url ? domainPrefix + row.profile_picture.url : "";
 
         return [
           csvEscape(row.id),
@@ -221,57 +236,118 @@ const Staff = () => {
       downloadCSV(headers, rows, "staff_export.csv");
     } catch (error) {
       console.error("Export failed:", error);
-      alert("Export failed");
+      toast.error("Export failed");
+    }
+  };
+
+  const fetchAllStaff = async (pageNumber = 1, perPage = rowsPerPage) => {
+    try {
+      const res = await getStaff(perPage, pageNumber);
+      const staffArray = res.data.staffs || [];
+      const count = res.data.total_count || staffArray.length;
+
+      setStaffs(staffArray);
+      setFilteredStaff(filterBySearch(staffArray));
+      setTotalCount(count);
+    } catch (error) {
+      console.error("Failed to fetch all staff:", error);
+    }
+  };
+
+  const fetchStaffIn = async (pageNumber = 1, perPage = rowsPerPage) => {
+    try {
+      const res = await getStaff(perPage, pageNumber);
+      const staffArray = res.data.staffs || [];
+      const inStaff = staffArray.filter((item) => {
+        const attendance = getLatestAttendance(item);
+        return attendance?.punched_in_at && !attendance?.punched_out_at;
+      });
+
+      setStaffs(inStaff);
+      setFilteredStaff(filterBySearch(inStaff));
+      setTotalCount(inStaff.length);
+    } catch (error) {
+      console.error("Failed to fetch staff in:", error);
+    }
+  };
+
+  const fetchStaffOut = async (pageNumber = 1, perPage = rowsPerPage) => {
+    try {
+      const res = await getStaff(perPage, pageNumber);
+      const staffArray = res.data.staffs || [];
+      const outStaff = staffArray.filter((item) => {
+        const attendance = getLatestAttendance(item);
+        return Boolean(attendance?.punched_out_at);
+      });
+
+      setStaffs(outStaff);
+      setFilteredStaff(filterBySearch(outStaff));
+      setTotalCount(outStaff.length);
+    } catch (error) {
+      console.error("Failed to fetch staff out:", error);
+    }
+  };
+
+  const fetchHistory = async (pageNumber = 1, perPage = rowsPerPage) => {
+    try {
+      const res = await getStaff(perPage, pageNumber);
+      const staffArray = res.data.staffs || [];
+      const historyData = staffArray.filter(
+        (item) => item.status_type === "Approved" || item.status_type === "Rejected"
+      );
+
+      setHistoryStaff(historyData);
+      setOriginalHistoryStaff(historyData);
+      setTotalCount(historyData.length);
+    } catch (error) {
+      console.error("Failed to fetch history staff:", error);
     }
   };
 
   useEffect(() => {
-    const fetchStaff = async () => {
-      try {
-        const res = await getStaff(rowsPerPage, currentPage);
-
-        const staffArray = res.data.staffs || [];
-        const totalCount = res.data.total_count || staffArray.length; // fallback just in case
-
-        setStaffs(staffArray);
-        setTotalCount(totalCount); //This is key for pagination display
-
-        //Filtering logic
-        const filteredResult = !searchText.trim()
-          ? staffArray
-          : staffArray.filter((item) => {
-            const fullName =
-              `${item.firstname} ${item.lastname}`.toLowerCase();
-            return (
-              fullName.includes(searchText.toLowerCase()) ||
-              item.unit_name
-                ?.toLowerCase()
-                .includes(searchText.toLowerCase()) ||
-              item.mobile_no?.toLowerCase().includes(searchText.toLowerCase())
-            );
-          });
-
-        setFilteredStaff(filteredResult);
-      } catch (error) {
-        console.error("Failed to fetch staff:", error);
-      }
-    };
-
-    fetchStaff();
-  }, [currentPage, rowsPerPage, searchText]);
+    if (page === "all") {
+      fetchAllStaff(currentPage, rowsPerPage);
+    } else if (page === "staffin") {
+      fetchStaffIn(currentPage, rowsPerPage);
+    } else if (page === "staffout") {
+      fetchStaffOut(currentPage, rowsPerPage);
+    } else if (page === "history") {
+      fetchHistory(currentPage, rowsPerPage);
+    }
+  }, [page, currentPage, rowsPerPage]);
 
   const handleSearch = (e) => {
-    const searchValue = e.target.value.toLowerCase();
+    const searchValue = e.target.value;
     setSearchText(searchValue);
-    if (!searchValue.trim()) {
-      setFilteredStaff(staffs);
-    } else {
-      const filteredResult = staffs.filter((item) => {
-        const fullName = `${item.firstname} ${item.lastname}`.toLowerCase();
+    const normalized = searchValue.toLowerCase();
+
+    if (page === "history") {
+      if (!normalized.trim()) {
+        setHistoryStaff(originalHistoryStaff);
+        return;
+      }
+
+      const filteredResult = originalHistoryStaff.filter((item) => {
+        const fullName = `${item.firstname || ""} ${item.lastname || ""}`.toLowerCase();
         return (
-          fullName.includes(searchValue) ||
-          item.unit_name?.toLowerCase().includes(searchValue) ||
-          item.mobile_no?.toLowerCase().includes(searchValue)
+          fullName.includes(normalized) ||
+          item.unit_name?.toLowerCase().includes(normalized) ||
+          item.mobile_no?.toLowerCase().includes(normalized)
+        );
+      });
+      setHistoryStaff(filteredResult);
+    } else {
+      if (!normalized.trim()) {
+        setFilteredStaff(staffs);
+        return;
+      }
+
+      const filteredResult = staffs.filter((item) => {
+        const fullName = `${item.firstname || ""} ${item.lastname || ""}`.toLowerCase();
+        return (
+          fullName.includes(normalized) ||
+          item.unit_name?.toLowerCase().includes(normalized) ||
+          item.mobile_no?.toLowerCase().includes(normalized)
         );
       });
       setFilteredStaff(filteredResult);
@@ -498,7 +574,7 @@ const Staff = () => {
               >
                 All
               </h2>
-              {/* <h2
+              <h2
                 className={`p-2 ${page === "staffin"
                   ? "text-blue-500 font-medium shadow-custom-all-sides"
                   : "text-black"
@@ -515,7 +591,7 @@ const Staff = () => {
                 onClick={() => setPage("staffout")}
               >
                 Staff Out
-              </h2> */}
+              </h2>
               <h2
                 className={`p-2 ${page === "approval"
                   ? "text-blue-500 font-medium shadow-custom-all-sides"
@@ -525,7 +601,7 @@ const Staff = () => {
               >
                 Staff Approvals
               </h2>
-              {/* <h2
+              <h2
                 className={`p-2 ${page === "history"
                   ? "text-blue-500 font-medium shadow-custom-all-sides"
                   : "text-black"
@@ -533,21 +609,21 @@ const Staff = () => {
                 onClick={() => setPage("history")}
               >
                 History
-              </h2> */}
+              </h2>
             </div>
           </div>
 
-          {page === "all" && (
+          {['all', 'staffin', 'staffout', 'history'].includes(page) && (
             <div className="flex md:flex-row flex-col gap-5 justify-between my-2">
               <input
                 type="text"
                 value={searchText}
                 onChange={handleSearch}
-                className="border border-gray-300 rounded-md w-full px-2 placeholder:text-sm"
+                className="border border-gray-300 rounded-md w-full px-2 placeholder:text-sm py-3"
                 placeholder="Search by name, unit, mobile"
               />
-              <span className="flex gap-4">
-                <button
+              <span className="flex gap-4 flex-wrap">
+                {/* <button
                   onClick={() => setShowFilter(true)}
                   className="border-2 border-gray-700 text-gray-700 font-semibold px-4 rounded-md hover:bg-gray-800 hover:text-white transition-all"
                 >
@@ -556,32 +632,32 @@ const Staff = () => {
                 <button
                   onClick={() => setShowExportModal(true)}
                   className="border-2 border-blue-600 text-blue-600 font-semibold px-4 rounded-md hover:bg-blue-700 hover:text-white transition-all"
-                >
+                > 
                   Export
-                </button>
-
-                <Link
-                  to={"/admin/passes/add-staff"}
-                  style={{ background: "rgb(3 19 37)" }}
-                  className="border-2 font-semibold py-2.5 px-3 rounded-md text-white flex items-center gap-2"
-                >
-                  <PiPlusCircle size={20} />
-                  Add
-                </Link>
+                </button> */}
+                {page === 'all' && (
+                  <Link
+                    to={'/admin/passes/add-staff'}
+                    style={{ background: 'rgb(3 19 37)' }}
+                    className="border-2 font-semibold py-2.5 px-3 rounded-md text-white flex items-center gap-2"
+                  >
+                    <PiPlusCircle size={20} />
+                    Add
+                  </Link>
+                )}
               </span>
             </div>
           )}
 
-          {page === "all" && (
-
+          {['all', 'staffin', 'staffout', 'history'].includes(page) && (
             <Table
               columns={columns}
-              data={filteredStaff}
+              data={page === 'history' ? historyStaff : filteredStaff}
               customStyles={customTableStyles}
               pagination
               paginationServer
               paginationPerPage={rowsPerPage}
-              paginationTotalRows={totalCount}
+              paginationTotalRows={page === 'history' ? historyStaff.length : totalCount}
               currentPage={currentPage}
               onChangePage={setCurrentPage}
               onChangeRowsPerPage={(newPerPage) => {
