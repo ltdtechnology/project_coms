@@ -95,8 +95,10 @@ const applyFilters = () => {
     const bookedBy = booking?.book_by_user?.toLowerCase() || "";
 
     const bookingStatus = booking?.status?.toLowerCase() || "";
-    const paymentMode = booking?.payment_mode?.toLowerCase() || "";
-
+const paymentStatus =
+  booking?.payment?.status?.toLowerCase() ||
+  booking?.status?.toLowerCase() ||
+  "";
     return (
       (!filters.fac_name ||
         facName.includes(filters.fac_name.toLowerCase())) &&
@@ -113,7 +115,7 @@ const applyFilters = () => {
 
       // 🔥 Payment Mode Filter
       (!filters.payment_status ||
-        paymentMode === filters.payment_status.toLowerCase())
+        paymentStatus === filters.payment_status.toLowerCase())
     );
   });
 

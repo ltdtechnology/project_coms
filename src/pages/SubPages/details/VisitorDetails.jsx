@@ -46,7 +46,7 @@ const VisitorDetails = () => {
     return date.toLocaleString();
   };
 
-   // ✅ FIXED: Flatten All Visit Logs
+  // ✅ FIXED: Flatten All Visit Logs
   const visitorLogs = useMemo(() => {
     if (!details.logs || details.logs.length === 0) return [];
 
@@ -261,12 +261,21 @@ const VisitorDetails = () => {
             </div>
             <div className="grid grid-cols-2">
               <p className="font-semibold text-sm">Approve Status:</p>
-              {details?.hosts?.[0]?.is_approved !== null ? (
-                <p className={details?.hosts?.[0]?.is_approved ? "text-green-600" : "text-red-600"}>
-                  {details?.hosts?.[0]?.is_approved ? "Approved" : "Not Approved"}
+
+              {details?.skip_host_approval ? (
+                <p className="text-green-600 font-medium">
+                  Approved
+                </p>
+              ) : details?.hosts?.[0]?.is_approved === true ? (
+                <p className="text-green-600 font-medium">
+                  Approved
+                </p>
+              ) : details?.hosts?.[0]?.is_approved === false ? (
+                <p className="text-red-600 font-medium">
+                  Rejected
                 </p>
               ) : (
-                <p className="text-gray-500 text-xs font-medium py-0.5 px-2 rounded border border-gray-300 inline-block">
+                <p className="text-gray-500 font-medium">
                   Pending
                 </p>
               )}
@@ -303,7 +312,7 @@ const VisitorDetails = () => {
             </div>
           )}
 
-         <div className="my-4">
+          <div className="my-4">
             <h2 className="font-medium border-b text-lg border-gray-400 px-2">
               Visitor Log
             </h2>
