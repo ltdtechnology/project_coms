@@ -16,6 +16,7 @@ import { getFacitilitySetup, postFacitilitySetup } from "../../api";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { MdClose } from "react-icons/md";
 
 const SetupFacility = () => {
   const [allowMultipleSlots, setAllowMultipleSlots] = useState("no");
@@ -1080,13 +1081,19 @@ const SetupFacility = () => {
           </div>
         </div>
 
-        <div className="flex justify-center my-2">
+        <div className="flex justify-center my-2 gap-4">
           <button
             style={{ background: themeColor }}
             className=" text-white p-2 px-4 font-semibold rounded-md flex items-center gap-2"
             onClick={postAmenitiesSetup}
           >
             <FaCheck /> Submit
+          </button>
+           <button
+            className=" text-white bg-gray-500 p-2 px-4 font-semibold rounded-md flex items-center gap-2"
+            onClick={()=>navigate("/setup/facility")}
+          >
+            <MdClose /> Cancel
           </button>
         </div>
       </div>

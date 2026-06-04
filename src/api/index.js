@@ -649,7 +649,14 @@ export const getGRNDetails = async (id) =>
       token: token,
     },
   });
-
+export const getSetupAmenityExport = async (siteId) =>
+  axiosInstance.get("amenities/export.xlsx", {
+    params: {
+      "q[site_id_eq]": siteId,
+      token: token,
+    },
+    responseType: "blob",
+  });
 export const postHelpDeskResolutionEscalationSetup = async (data) =>
   axiosInstance.post(`/pms/admin/create_escalation.json`, data, {
     params: {
@@ -1603,20 +1610,24 @@ export const postParkingConfiguration = async (data) =>
 //     },
 //   });
 
-export const getFacitilitySetup = async (page, per_page) => {
+export const getFacitilitySetup = async (page = 1, per_page = 10) => {
   try {
-    const response = await axiosInstance.get(`/amenities.json?q[amenity_is_hotel_not_null]=true`, {
-      params: {
-        token: token,
-        Page: page,
-        Per_Page: per_page,
-      },
-      headers: {
-        "Cache-Control": "no-cache",
-        Pragma: "no-cache",
-        Expires: "0",
-      },
-    });
+    const response = await axiosInstance.get(
+      "/amenities.json?q[amenity_is_hotel_not_null]=true",
+      {
+        params: {
+          token,
+          page,
+          per_page,
+        },
+        headers: {
+          "Cache-Control": "no-cache",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      }
+    );
+
     return response;
   } catch (error) {
     console.error("Error fetching facility setup:", error);

@@ -12,10 +12,11 @@ import { BsEye } from "react-icons/bs";
 // import SeatBooking from "./SeatBooking";
 import SetupSeatBooking from "./SetupSeatBooking";
 import SetupHotelBooking from "./SetupHotelBooking";
-import { getFacitilitySetup, getHotelSetup } from "../../api";
+import { getFacitilitySetup, getHotelSetup, getSetupAmenityExport } from "../../api";
 import HotelBooking from "./HotelBooking";
 import { FaCalendarCheck } from "react-icons/fa6";
 import AmenitiesCalendar from "./AmenitiesCalendar";
+import toast from "react-hot-toast";
 
 const SetupBookingFacility = () => {
   const [searchText, setSearchText] = useState("");
@@ -78,6 +79,36 @@ const SetupBookingFacility = () => {
     };
     fetchHotelBooking();
   }, [page_no, per_page]);
+
+  const handleExport = async () => {
+    try {
+      setLoading(true);
+
+      const response = await getSetupAmenityExport();
+
+      const blob = new Blob([response.data], {
+        type:
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "facility_setup.xlsx";
+
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Export Error:", error);
+      toast.error("Failed to export data");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const setupColumn = [
     {
@@ -169,25 +200,25 @@ const SetupBookingFacility = () => {
       sortable: true,
     },
     {
-  name: "Status",
-  cell: (row) => (
-    <label className="relative inline-flex items-center cursor-pointer">
-      <input
-        type="checkbox"
-checked={!!row.active}    
-    onChange={() => handleStatusToggle(row)}
-        className="sr-only peer"
-      />
-      <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer 
+      name: "Status",
+      cell: (row) => (
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            checked={!!row.active}
+            onChange={() => handleStatusToggle(row)}
+            className="sr-only peer"
+          />
+          <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer 
         peer-checked:bg-green-500 
         after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
         after:bg-white after:border after:rounded-full after:h-5 after:w-5 
         after:transition-all peer-checked:after:translate-x-full">
-      </div>
-    </label>
-  ),
-  sortable: true,
-},
+          </div>
+        </label>
+      ),
+      sortable: true,
+    },
     // {
     //   name: "Created By",
     //   selector: (row) => row.createdBy,
@@ -229,34 +260,34 @@ checked={!!row.active}
   //   },
   // ];
 
- const handleStatusToggle = async (row) => {
-  const updatedStatus = !row.active;
+  const handleStatusToggle = async (row) => {
+    const updatedStatus = !row.active;
 
-  try {
-    // 🔥 Update in backend (replace with your actual API)
-    // await updateFacilityStatus(row.id, { active: updatedStatus });
+    try {
+      // 🔥 Update in backend (replace with your actual API)
+      // await updateFacilityStatus(row.id, { active: updatedStatus });
 
-    if (page === "facility") {
-      const updatedData = bookingFacility.map((item) =>
-        item.id === row.id ? { ...item, active: updatedStatus } : item
-      );
-      SetBookingFacility(updatedData);
-      setOriginalFacilityData(updatedData);
+      if (page === "facility") {
+        const updatedData = bookingFacility.map((item) =>
+          item.id === row.id ? { ...item, active: updatedStatus } : item
+        );
+        SetBookingFacility(updatedData);
+        setOriginalFacilityData(updatedData);
+      }
+
+      if (page === "HotelBooking") {
+        const updatedData = hotelBooking.map((item) =>
+          item.id === row.id ? { ...item, active: updatedStatus } : item
+        );
+        setHotelBooking(updatedData);
+        setOriginalHotelData(updatedData);
+      }
+
+      console.log("Status Changed:", row.id, updatedStatus);
+    } catch (error) {
+      console.error("Status update failed", error);
     }
-
-    if (page === "HotelBooking") {
-      const updatedData = hotelBooking.map((item) =>
-        item.id === row.id ? { ...item, active: updatedStatus } : item
-      );
-      setHotelBooking(updatedData);
-      setOriginalHotelData(updatedData);
-    }
-
-    console.log("Status Changed:", row.id, updatedStatus);
-  } catch (error) {
-    console.error("Status update failed", error);
-  }
-};
+  };
   const calendarData = [
     // Amenities: single-day bookings
     ...filteredBookings.map((booking) => {
@@ -333,10 +364,9 @@ checked={!!row.active}
         <div className="flex justify-center my-2">
           <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200 ">
             <h2
-              className={`p-1 ${
-                page === "facility" &&
+              className={`p-1 ${page === "facility" &&
                 "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
+                } rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
               onClick={() => setPage("facility")}
             >
               Amenities Bookings
@@ -351,19 +381,17 @@ checked={!!row.active}
               Seat
             </h2> */}
             <h2
-              className={`p-1 ${
-                page === "HotelBooking" &&
+              className={`p-1 ${page === "HotelBooking" &&
                 "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
+                } rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
               onClick={() => setPage("HotelBooking")}
             >
               Guest Room Bookings
             </h2>
             <h2
-              className={`p-1 ${
-                page === "Calendar" &&
+              className={`p-1 ${page === "Calendar" &&
                 "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
+                } rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
               onClick={() => setPage("Calendar")}
             >
               <FaCalendarCheck size={25} />
@@ -390,6 +418,7 @@ checked={!!row.active}
                   Add
                 </Link>
                 <button
+                  onClick={handleExport}
                   style={{ background: themeColor }}
                   className="bg-black rounded-lg flex font-semibold items-center gap-2 text-white p-2 my-2"
                 >
@@ -452,6 +481,7 @@ checked={!!row.active}
                   Add
                 </Link>
                 <button
+                  // onClick={handleExport}
                   style={{ background: themeColor }}
                   className="bg-black rounded-lg flex font-semibold items-center gap-2 text-white p-2 my-2"
                 >
