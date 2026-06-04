@@ -304,7 +304,7 @@ const SubCatPage = ({ handleToggleCategoryPage1, setCAtAdded }) => {
         /> */}
       </div>
       <div className="flex item-center justify-center py-3 gap-2">
-        <button
+        {/* <button
           style={{ background: themeColor }}
           type="button"
           className="px-4 py-2 bg-green-500 text-white rounded-md"
@@ -321,7 +321,7 @@ const SubCatPage = ({ handleToggleCategoryPage1, setCAtAdded }) => {
           }}
         >
           Add to List
-        </button>
+        </button> */}
         <button
           style={{ background: themeColor }}
           type="submit"

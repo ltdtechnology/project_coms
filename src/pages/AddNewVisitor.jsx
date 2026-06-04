@@ -315,8 +315,14 @@ const AddNewVisitor = () => {
       formData.expectedDate || new Date().toISOString().split("T")[0],
     );
     postData.append("visitor[expected_time]", formData.expectedTime || "");
-    postData.append("visitor[skip_host_approval]", formData.hostApproval || "");
-    postData.append("visitor[goods_inwards]", formData.goodsInward || "");
+    postData.append(
+      "visitor[skip_host_approval]",
+      formData.hostApproval ? "true" : "false",
+    );
+    postData.append(
+      "visitor[goods_inwards]",
+      formData.goodsInward ? "true" : "false",
+    );
     postData.append("visitor[visit_type]", selectedVisitorType || "");
     postData.append("visitor[pass_number]", formData.passNumber || "");
     postData.append("visitor[frequency]", selectedFrequency || "");
@@ -332,7 +338,6 @@ const AddNewVisitor = () => {
     } else if (imageFile) {
       postData.append("visitor[profile_pic]", imageFile, imageFile.name);
     }
-    const blob = await fetch(capturedImage).then((res) => res.blob());
     selectedWeekdays.forEach((day) => {
       postData.append("visitor[working_days][]", day);
     });

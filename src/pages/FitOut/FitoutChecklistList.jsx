@@ -182,15 +182,15 @@ const FitoutChecklistList = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-2">
-          {/* <Link to={`/fitout/checklist/form/${row.id}`}>
+          <Link to={`/fitout/checklist/form/${row.id}`}>
             <FaEye
               className="text-blue-500 hover:text-blue-700 cursor-pointer"
               size={16}
               title="View Checklist Form"
             >
-              View
-            </FaEye> */}
-          {/* </Link> */}
+              {/* View */}
+            </FaEye> 
+          </Link>
         </div>
       ),
       sortable: false,
@@ -218,7 +218,7 @@ const FitoutChecklistList = () => {
           </div> */}
         {page === "meetingBooking" && (
           <div>
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center mb-4">
               <input
                 type="text"
                 placeholder="Search By Name"

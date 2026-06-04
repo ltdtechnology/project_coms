@@ -367,6 +367,47 @@ const RVehicles = () => {
     }
   };
 
+ const filteredVehicles = useMemo(() => {
+  if (!searchTerm.trim()) return vehicles;
+
+  const search = searchTerm.toLowerCase().trim();
+
+  return vehicles.filter((item) => {
+    const name =
+      item?.name ||
+      item?.registered_vehicle?.name ||
+      "";
+
+    const vehicleNumber =
+      item?.vehicle_number ||
+      item?.registered_vehicle?.vehicle_number ||
+      "";
+
+    const vehicleCategory =
+      item?.vehicle_category ||
+      item?.registered_vehicle?.vehicle_category ||
+      "";
+
+    const vehicleType =
+      item?.vehicle_type ||
+      item?.registered_vehicle?.vehicle_type ||
+      "";
+
+    const createdBy =
+      item?.created_by ||
+      item?.registered_user ||
+      "";
+
+    return (
+      String(name).toLowerCase().includes(search) ||
+      String(vehicleNumber).toLowerCase().includes(search) ||
+      String(vehicleCategory).toLowerCase().includes(search) ||
+      String(vehicleType).toLowerCase().includes(search) ||
+      String(createdBy).toLowerCase().includes(search)
+    );
+  });
+}, [vehicles, searchTerm]);
+
   /** ---------------- Main fetch ---------------- */
   useEffect(() => {
     const controller = new AbortController();
@@ -378,9 +419,9 @@ const RVehicles = () => {
       try {
         let params = { page: currentPageNum, per_page: PER_PAGE };
 
-        if (searchTerm.trim()) {
-          params["q[name_or_vehicle_number_cont]"] = searchTerm.trim();
-        }
+        // if (searchTerm.trim()) {
+        //   params["q[name_or_vehicle_number_cont]"] = searchTerm.trim();
+        // }
 
         let response;
         let data = {};
@@ -550,7 +591,7 @@ const RVehicles = () => {
               <div className="relative mb-1 mr-2 flex items-center gap-2 mb-2">
               <input
                 type="text"
-                placeholder="Search name or vehicle..."
+                placeholder="Search Category or vehicle..."
                 value={searchTerm}
                 onChange={handleSearchChange}
                 className="pl-8 pr-3 py-2 border border-gray-300 rounded-lg text-sm w-[1300px]"
@@ -566,7 +607,7 @@ const RVehicles = () => {
             </div>
 
           <RVehiclesTable
-            data={vehicles}
+            data={filteredVehicles}
             loading={loading}
             error={error}
             currentPageNum={currentPageNum}

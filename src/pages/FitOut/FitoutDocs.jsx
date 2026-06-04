@@ -151,6 +151,24 @@ const FitoutDocs = ({ handleToggleCategoryPage1, setCAtAdded }) => {
       console.log("resp", resp);
       setFormData({ ...formData, category: "", minTat: "", engineer: [] });
       toast.success("Docs Uploaded Sucessfully!");
+       setInputValue("");
+
+      setFormData({
+        fitout_request_id: "",
+        name: "",
+        fitout_docs: [],
+      });
+
+      // close popup
+      setIsModalOpen1(false);
+
+      // close add document page
+      handleToggleCategoryPage1();
+
+      // refresh list
+      if (setCAtAdded) {
+        setCAtAdded((prev) => !prev);
+      }
     } catch (error) {
       console.log(error);
     } finally {

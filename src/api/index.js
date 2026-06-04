@@ -592,7 +592,12 @@ export const destroyFitoutCategory = async (catId) =>
       token: token,
     },
   });
-
+export const destroyFitoutSubcategory = async (id) =>
+  axiosInstance.delete(`/fitout_subcategories/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
 export const postHelpDeskSubCategoriesSetup = async (data) =>
   axiosInstance.post(`/pms/admin/create_helpdesk_sub_category.json`, data, {
     params: {
