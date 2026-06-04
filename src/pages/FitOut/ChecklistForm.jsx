@@ -29,8 +29,8 @@ import {
   FormHelperText,
   Paper,
 } from "@mui/material";
-import { 
-  getSnagChecklistByCategory, 
+import {
+  getSnagChecklistByCategory,
   postSnagAnswer,
   getFitoutCategoriesSetupDetails,
   getSiteDetails,
@@ -77,13 +77,13 @@ const ChecklistForm = ({
           categoryId,
           response.data
         );
-        
+
         // Extract the first checklist object from the array
         if (Array.isArray(response.data) && response.data.length > 0) {
           const checklist = response.data[0];
           setChecklistData(checklist);
           console.log("Using first checklist:", checklist);
-          
+
           // Fetch site name using site_id from checklist
           if (checklist.site_id) {
             try {
@@ -97,7 +97,7 @@ const ChecklistForm = ({
               setSiteName("Site Not Found");
             }
           }
-          
+
           // Fetch category name using category_id from checklist
           if (categoryId) {
             try {
@@ -127,8 +127,13 @@ const ChecklistForm = ({
     if (resourceId) {
       console.log("Fetching by resourceId (category):", resourceId);
       fetchSNAGQ(resourceId);
+    } else {
+      setLoading(false);
+      toast.error("Resource ID not found");
     }
   }, [resourceId]);
+
+
 
   // Populate form with submitted data when in view mode
   useEffect(() => {
@@ -601,7 +606,7 @@ const ChecklistForm = ({
                             </Typography>
                           </Box>
                         </Box>
-                        
+
                         {/* Category ID */}
                         <Box
                           sx={{
@@ -617,7 +622,7 @@ const ChecklistForm = ({
                             {checklistData.snag_audit_category_id}
                           </Typography>
                         </Box>
-                        
+
                         {/* Site Name */}
                         <Box
                           sx={{
@@ -636,7 +641,7 @@ const ChecklistForm = ({
                             </Typography>
                           </Box>
                         </Box>
-                        
+
                         {/* Site ID */}
                         <Box
                           sx={{

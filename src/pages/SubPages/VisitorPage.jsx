@@ -976,11 +976,15 @@ const VisitorPage = () => {
       name: "Host Approval",
       cell: (row) => {
         const hostApproval = row.hosts?.[0]?.is_approved;
+        const skipApproval = row.skip_host_approval;
 
         let status = "Pending";
         let colorClass = "text-yellow-600";
 
-        if (hostApproval === true) {
+        if (skipApproval) {
+          status = "Approved";
+          colorClass = "text-green-600";
+        } else if (hostApproval === true) {
           status = "Approved";
           colorClass = "text-green-600";
         } else if (hostApproval === false) {
@@ -1000,12 +1004,12 @@ const VisitorPage = () => {
 
     {
       name: "Pass Start",
-      selector: (row) => (row.start_pass ? dateFormat(row.start_pass) : ""),
+      selector: (row) => (row.pass_start_date ? dateFormat(row.pass_start_date) : ""),
       sortable: true,
     },
     {
       name: "Pass End",
-      selector: (row) => (row.end_pass ? dateFormat(row.end_pass) : ""),
+      selector: (row) => (row.pass_end_date ? dateFormat(row.pass_end_date) : ""),
       sortable: true,
       width: "120px"
     },
@@ -1026,18 +1030,19 @@ const VisitorPage = () => {
     {
       name: "Check In",
       selector: (row) => {
-        const checkIn = row.visits_log?.[0]?.check_in;
-        return checkIn ? dateTimeFormat(checkIn) : "-";
+        const firstLog = row.visits_log?.[0];
+        return firstLog?.check_in ? dateTimeFormat(firstLog.check_in) : "-";
       },
-      sortable: true,
     },
     {
       name: "Check Out",
       selector: (row) => {
-        const checkOut = row.visits_log?.[0]?.check_out;
-        return checkOut ? dateTimeFormat(checkOut) : "-";
+        const logs = row.visits_log || [];
+        const checkOutLog = logs.find((log) => log.check_out) || logs[logs.length - 1];
+        return checkOutLog?.check_out
+          ? dateTimeFormat(checkOutLog.check_out)
+          : "-";
       },
-      sortable: true,
     },
     {
       name: "Created At",

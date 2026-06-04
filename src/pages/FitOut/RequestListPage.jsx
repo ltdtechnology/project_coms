@@ -213,7 +213,6 @@ const RequestListPage = () => {
             title="View Details"
           >
             <BsEye size={18} />
-            View
           </Link>
         </div>
       ),
@@ -252,7 +251,7 @@ const RequestListPage = () => {
         </div>
         {page === "meetingBooking" && (
           <div>
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center mb-4">
               <input
                 type="text"
                 placeholder="Search By Name"
@@ -263,8 +262,7 @@ const RequestListPage = () => {
               <div className="flex justify-end">
                 <Link
                   to={"/fitout/request/create"}
-                  style={{ background: themeColor }}
-                  className="flex items-center gap-1 px-4 py-2 rounded-lg font-semibold text-white shadow-md transition hover:shadow-lg whitespace-nowrap"
+                  className="flex items-center gap-1 px-4 py-2 rounded-lg font-semibold text-white shadow-md transition hover:shadow-lg whitespace-nowrap bg-black"
                 >
                   <IoAddCircleOutline size={20} />
                   Create Request
