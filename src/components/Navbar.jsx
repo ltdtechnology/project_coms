@@ -330,7 +330,7 @@ const Navbar = () => {
 
         <div className="flex flex-col h-full gap-4 mb-5 relative">
           {/* admin */}
-          {(user === "pms_admin" || user === "project_head"  ) && (
+          {(user === "pms_admin" || user === "project_head") && (
             <>
               <NavLink
                 className={({ isActive }) =>
@@ -551,7 +551,7 @@ const Navbar = () => {
 
                 {/* Accounting */}
 
-                {feat.includes("accounting")  && (
+                {feat.includes("accounting") && (
                   <NavLink
                     to={"/accounting"}
                     className={({ isActive }) =>
@@ -963,10 +963,9 @@ const Navbar = () => {
                   <NavLink
                     to={"/ors-dashboard"}
                     className={({ isActive }) =>
-                      ` ${
-                        isActive
-                          ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                          : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                      ` ${isActive
+                        ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                        : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
                       }`
                     }
                   >
@@ -974,16 +973,14 @@ const Navbar = () => {
                       {React.createElement(RiReservedLine, { size: "20" })}
                     </div>
                     <h2
-                      className={`whitespace-pre duration-300 ${
-                        !open && "opacity-0 translate-x-28 overflow-hidden"
-                      }`}
+                      className={`whitespace-pre duration-300 ${!open && "opacity-0 translate-x-28 overflow-hidden"
+                        }`}
                     >
                       Additional Services(OSR)
                     </h2>
                     <h2
-                      className={`${
-                        open && "hidden"
-                      } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                      className={`${open && "hidden"
+                        } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                     >
                       Additional Services(OSR)
                     </h2>
@@ -993,10 +990,9 @@ const Navbar = () => {
                   <NavLink
                     to={"/fitout/setup/page"}
                     className={({ isActive }) =>
-                      ` ${
-                        isActive
-                          ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                          : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                      ` ${isActive
+                        ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                        : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
                       }`
                     }
                   >
@@ -1006,16 +1002,14 @@ const Navbar = () => {
                       })}
                     </div>
                     <h2
-                      className={`whitespace-pre duration-300 ${
-                        !open && "opacity-0 translate-x-28 overflow-hidden"
-                      }`}
+                      className={`whitespace-pre duration-300 ${!open && "opacity-0 translate-x-28 overflow-hidden"
+                        }`}
                     >
                       Fit Out
                     </h2>
                     <h2
-                      className={`${
-                        open && "hidden"
-                      } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                      className={`${open && "hidden"
+                        } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                     >
                       Fit Out
                     </h2>
@@ -1846,7 +1840,7 @@ const Navbar = () => {
                   {firstName} {lastName}
                 </h2>
               </NavLink>
-              {(siteId === 10 || siteId === 59 ) && (
+              {(siteId === 10) && (
                 <NavLink
                   to={"/employee/dashboard"}
                   className={({ isActive }) =>
@@ -1872,6 +1866,35 @@ const Navbar = () => {
                     Dashboard
                   </h2>
                 </NavLink>
+              )}
+              {(user === "accounting_emp") && (
+                <>
+                  <NavLink
+                    to={"/dashboard"}
+                    className={({ isActive }) =>
+                      ` ${isActive
+                        ? `text-black bg-white flex p-2  gap-3.5 rounded-md group items-center  font-medium text-sm`
+                        : ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md text-sm`
+                      }`
+                    }
+                  >
+                    <div>
+                      {React.createElement(MdOutlineDashboard, { size: "20" })}
+                    </div>
+                    <h2
+                      className={`whitespace-pre duration-300 ${!open && "opacity-0 translate-x-28 overflow-hidden"
+                        }`}
+                    >
+                      Dashboard
+                    </h2>
+                    <h2
+                      className={`${open && "hidden"
+                        } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                    >
+                      Dashboard
+                    </h2>
+                  </NavLink>
+                </>
               )}
               {user === "accounting_emp" && (
                 <NavLink
