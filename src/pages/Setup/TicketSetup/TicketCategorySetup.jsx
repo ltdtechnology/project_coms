@@ -154,15 +154,19 @@ const TicketCategorySetup = () => {
 
   console.log("category --", categories);
 
-   const handleCatDelete = async (id) => {
+  const handleCatDelete = async (id) => {
     const formData = new FormData();
     formData.append("helpdesk_category[active]", 0);
     formData.append("id", id);
     try {
       const res = deleteHelpDeskCategorySetup(id, formData);
+      toast.success("Category deleted successfully!");
       setCatAdded(true);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
+       toast.error(
+      error?.response?.data?.message || "Failed to delete category"
+    );
     } finally {
       setTimeout(() => {
         setCatAdded(false);
@@ -232,7 +236,7 @@ const TicketCategorySetup = () => {
           <button onClick={() => openCatEditModal(row.id)}>
             <BiEdit size={15} />
           </button>
-            <button onClick={() => handleCatDelete(row.id)}>
+          <button onClick={() => handleCatDelete(row.id)}>
             <FaTrash size={15} />
           </button>
         </div>
@@ -260,7 +264,7 @@ const TicketCategorySetup = () => {
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [catId, setCatId] = useState(null);
   const [subCatId, setSubCatId] = useState(null);
-  
+
   const openCatEditModal = async (id) => {
     const fetchCatDetails = await getHelpDeskCategoriesSetupDetails(id);
     setCatId(id);
@@ -270,7 +274,7 @@ const TicketCategorySetup = () => {
       minTat: fetchCatDetails.data.tat,
       engineer:
         fetchCatDetails.data.complaint_worker &&
-        fetchCatDetails.data.complaint_worker.assign_to
+          fetchCatDetails.data.complaint_worker.assign_to
           ? fetchCatDetails.data.complaint_worker.assign_to
           : [],
     });
@@ -292,7 +296,7 @@ const TicketCategorySetup = () => {
   const closeModal1 = () => setIsModalOpen1(false);
 
   const subCatColumns = [
-       {
+    {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
@@ -347,7 +351,7 @@ const TicketCategorySetup = () => {
     //   selector: (row) => row.Icon,
     //   sortable: true,
     // },
- 
+
   ];
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -385,19 +389,17 @@ const TicketCategorySetup = () => {
       <div className="flex w-full">
         <div className=" flex gap-2 p-2 pb-0 border-b-2 border-gray-200 w-full">
           <h2
-            className={`p-1 ${
-              page === "Category" &&
+            className={`p-1 ${page === "Category" &&
               `bg-white font-medium text-blue-500 shadow-custom-all-sides`
-            } rounded-t-md px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
+              } rounded-t-md px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
             onClick={() => setPage("Category")}
           >
             Category
           </h2>
           <h2
-            className={`p-1 ${
-              page === "Sub Category" &&
+            className={`p-1 ${page === "Sub Category" &&
               "bg-white font-medium text-blue-500 shadow-custom-all-sides"
-            } rounded-t-md px-4 cursor-pointer transition-all duration-300 ease-linear`}
+              } rounded-t-md px-4 cursor-pointer transition-all duration-300 ease-linear`}
             onClick={() => setPage("Sub Category")}
           >
             Sub Category
@@ -622,7 +624,7 @@ const TicketCategorySetup = () => {
                     onClick={handleEditCategory}
                   >
                     {" "}
-                    Submit
+                    Update
                   </button>
                 </div>
               </div>

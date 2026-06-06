@@ -708,7 +708,17 @@ export const getHelpDeskStatusDetailsSetup = async (id) =>
       },
     }
   );
-
+export const updateHelpDeskStatus = async (id, formData) => {
+  return axiosInstance.patch(
+    `pms/admin/helpdesk_categories/update_complaint_statuses/${id}.json?token=${token}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+};
 export const getFitOutStatus = async (id) =>
   axiosInstance.get(`/fitout_statuses/${id}.json`, {
     params: {

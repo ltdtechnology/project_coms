@@ -61,11 +61,12 @@ const initialResolutionEscalationData = {
   },
 };
 
-const TicketEscalationSetup = () => {
+const TicketEscalationSetup = ({ activeSiteId }) => {
   const [showModal, setShowModal] = useState(false);
   const [showModal1, setShowModal1] = useState(false);
   const [showModal3, setShowModal3] = useState(false);
   const [catAdded, setAdded] = useState(false);
+  const [cloneData, setCloneData] = useState(null);
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
   const openModal1 = () => setShowModal1(true);
@@ -89,11 +90,11 @@ const TicketEscalationSetup = () => {
   });
 
   const [page, setPage] = useState("Response");
-  const themeColor = useSelector((state) => state.theme.color);
+const themeColor = "rgb(3,19,37)";
   const [categories, setCategories] = useState([]);
-  const [resEscalationAdded, setResEscalationAdded] = useState(false);
-  const [resolutionEscalationAdded, setResolutionEscalationAdded] =
-    useState(false);
+  // const [resEscalationAdded, setResEscalationAdded] = useState(false);
+  // const [resolutionEscalationAdded, setResolutionEscalationAdded] =
+  //   useState(false);
   const [selectedOptions, setSelectedOptions] = useState({
     categories: [],
     escalations: {
@@ -110,7 +111,7 @@ const TicketEscalationSetup = () => {
   const [responseEscalation, setResponseEscalation] = useState([]);
   const [resolutionEscalation, setResolutionEscalation] = useState([]);
   const [users, setUsers] = useState([]);
-  const siteId = getItemInLocalStorage("SITEID");
+  // activeSiteId is received as prop from parent TicketSetup
 
   /**
    * @param {object} time - {days, hrs, min}
@@ -136,84 +137,85 @@ const TicketEscalationSetup = () => {
     return `${days} day, ${hours} hr, ${minutesLeft} min`;
   };
 
-  useEffect(() => {
-    const fetchAllCategories = async () => {
-      try {
-        const catResp = await getHelpDeskCategoriesSetup();
-        const transformedCategory = catResp.data.map((category) => ({
-          value: category.id,
-          label: category.name,
-        }));
-        setCategories(transformedCategory);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  /* -------- DATA FETCHERS (component-level so handlers can call them) -------- */
 
-    const fetchSetupUsers = async () => {
-      try {
-        const UsersResp = await getSetupUsers();
-        const filteredUser = UsersResp.data;
-        const transformedUsers = filteredUser.map((user) => ({
-          value: user.id,
-          label: `${user.firstname} ${user.lastname}`,
-        }));
-        setUsers(transformedUsers);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    const fetchEscalation = async () => {
-      try {
-        const escResp = await getHelpDeskEscalationSetup();
-        const FilteredResponse = escResp.data.complaint_workers.filter(
-          (res) => res.esc_type === "response",
-        );
-        const FilteredResolution = escResp.data.complaint_workers.filter(
-          (res) => res.esc_type === "resolution",
-        );
-        setResponseEscalation(FilteredResponse);
-        setResolutionEscalation(FilteredResolution);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    if (resEscalationAdded || resolutionEscalationAdded) {
-      fetchEscalation();
-      setResEscalationAdded(false);
-      setResolutionEscalationAdded(false);
+  const fetchAllCategories = async () => {
+    try {
+      const catResp = await getHelpDeskCategoriesSetup();
+      const transformedCategory = catResp.data.map((category) => ({
+        value: category.id,
+        label: category.name,
+      }));
+      setCategories(transformedCategory);
+    } catch (error) {
+      console.log(error);
     }
+  };
 
+  const fetchSetupUsers = async () => {
+    try {
+      const UsersResp = await getSetupUsers();
+      const usersData = UsersResp?.data?.users || UsersResp?.data || [];
+      const transformedUsers = usersData.map((user) => ({
+        value: Number(user.id),
+        label: `${user.firstname} ${user.lastname}`,
+      }));
+      setUsers(transformedUsers);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Exposed at component scope so all CRUD handlers can refresh the list
+ const fetchEscalation = async () => {
+  try {
+    const escResp = await getHelpDeskEscalationSetup();
+
+    const allData = escResp.data.complaint_workers || [];
+
+    const normalize = (val) =>
+      (val || "").toString().toLowerCase().trim();
+
+    setResponseEscalation(
+      allData.filter((res) => normalize(res.esc_type) === "response")
+    );
+
+    setResolutionEscalation(
+      allData.filter((res) => normalize(res.esc_type) === "resolution")
+    );
+
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+  useEffect(() => {
     fetchAllCategories();
     fetchEscalation();
     fetchSetupUsers();
-  }, [resEscalationAdded, resolutionEscalationAdded]);
+  }, [activeSiteId]); // ✅ re-fetch when site changes
+
+
 
   const openEditModal = (rule) => {
-    setEditingRule(rule);
+    // Normalise level key so e1/E1 both map to the same slot
+    const normaliseKey = (name) => (name || "").toUpperCase();
 
-    const initialEscalations = {
-      E1: [],
-      E2: [],
-      E3: [],
-      E4: [],
-      E5: [],
-    };
+    const initialEscalations = { E1: [], E2: [], E3: [], E4: [], E5: [] };
 
-    rule.escalations.forEach((level) => {
-      const userIds = level.escalate_to_users_ids || [];
-      const userNames = level.escalate_to_users_names || [];
+    (rule.escalations || []).forEach((level) => {
+      const key = normaliseKey(level.name);
+      if (!initialEscalations.hasOwnProperty(key)) return;
 
-      initialEscalations[level.name] = userIds.map((id, index) => {
-        const globalUser = users.find((u) => u.value === id);
+      // API returns "escalate_to_users" (array of string IDs), NOT "escalate_to_users_ids"
+      const userIds   = Array.isArray(level.escalate_to_users)       ? level.escalate_to_users       : [];
+      const userNames = Array.isArray(level.escalate_to_users_names) ? level.escalate_to_users_names : [];
 
+      initialEscalations[key] = userIds.map((id, index) => {
+        const matchedUser = users.find((u) => Number(u.value) === Number(id));
         return {
-          value: id,
-          label:
-            userNames[index] ||
-            (globalUser ? globalUser.label : `User ID ${id}`),
+          value: Number(id),
+          label: matchedUser?.label || userNames[index] || `User ${id}`,
         };
       });
     });
@@ -226,51 +228,85 @@ const TicketEscalationSetup = () => {
       },
       escalations: initialEscalations,
     });
-    setShowModal(true);
+
+    setEditingRule(rule); // open modal after data is ready
   };
 
-  const closeEditModal = () => setEditingRule(null);
-  const openCloneModal = (rule) => setCloningRule(rule);
+  const closeEditModal = () => {
+    setEditingRule(null);
+    setEditResponseData({ id: null, category: null, escalations: { E1: [], E2: [], E3: [], E4: [], E5: [] } });
+  };
+const openCloneModal = (rule) => {
+  const normaliseKey = (name) => (name || "").toUpperCase();
+
+  const initialEscalations = { E1: [], E2: [], E3: [], E4: [], E5: [] };
+
+  (rule.escalations || []).forEach((level) => {
+    const key = normaliseKey(level.name);
+
+    const userIds = level.escalate_to_users || [];
+    const userNames = level.escalate_to_users_names || [];
+
+    initialEscalations[key] = userIds.map((id, index) => {
+      const matchedUser = users.find((u) => Number(u.value) === Number(id));
+      return {
+        value: Number(id),
+        label: matchedUser?.label || userNames[index],
+      };
+    });
+  });
+
+  setCloneData({
+    category: {
+      value: rule.category?.id,
+      label: rule.category?.name,
+    },
+    escalations: initialEscalations,
+    esc_type: rule.esc_type,
+  });
+
+  setCloningRule(rule);
+};
   const closeCloneModal = () => setCloningRule(null);
 
   const openResolutionEditModal = (rule) => {
     setEditingResolutionRule(rule);
+
+    const normaliseKey = (name) => (name || "").toUpperCase();
+
     const initialEscalations = JSON.parse(
       JSON.stringify(initialResolutionEscalationData),
     );
 
-    rule.escalations.forEach((level) => {
-      const levelName = level.name;
+    (rule.escalations || []).forEach((level) => {
+      const key = normaliseKey(level.name);
 
-      const userIds = level.escalate_to_users_ids || [];
-      const userNames = level.escalate_to_users_names || [];
+      // API field is "escalate_to_users" (NOT "escalate_to_users_ids")
+      const userIds   = Array.isArray(level.escalate_to_users)       ? level.escalate_to_users       : [];
+      const userNames = Array.isArray(level.escalate_to_users_names) ? level.escalate_to_users_names : [];
 
-      const levelUsers =
-        userIds.map((id, index) => {
-          const globalUser = users.find((u) => u.value === id);
-
-          return {
-            value: id,
-            label:
-              userNames[index] ||
-              (globalUser ? globalUser.label : `User ID ${id}`),
-          };
-        }) || [];
+      const levelUsers = userIds.map((id, index) => {
+        const matchedUser = users.find((u) => Number(u.value) === Number(id));
+        return {
+          value: Number(id),
+          label: matchedUser?.label || userNames[index] || `User ${id}`,
+        };
+      });
 
       const timeFields = {};
       ["p1", "p2", "p3", "p4", "p5"].forEach((pField) => {
         const totalMinutes = level[pField] || 0;
-        const days = Math.floor(totalMinutes / (24 * 60));
-        const hours = Math.floor((totalMinutes % (24 * 60)) / 60);
-        const min = totalMinutes % 60;
+        const days    = Math.floor(totalMinutes / (24 * 60));
+        const hours   = Math.floor((totalMinutes % (24 * 60)) / 60);
+        const minutes = totalMinutes % 60;
         timeFields[pField] = {
           days: String(days),
-          hrs: String(hours),
-          min: String(min),
+          hrs:  String(hours),
+          min:  String(minutes),
         };
       });
 
-      initialEscalations[levelName] = {
+      initialEscalations[key] = {
         users: levelUsers,
         ...timeFields,
       };
@@ -278,11 +314,21 @@ const TicketEscalationSetup = () => {
 
     setEditResolutionData({
       id: rule.id,
-      category: { value: rule.category?.id, label: rule.category?.name },
+      category: {
+        value: rule.category?.id,
+        label: rule.category?.name,
+      },
       escalations: initialEscalations,
     });
+
+    setEditingResolutionRule(rule); // open modal after data is ready
   };
-  const closeResolutionEditModal = () => setEditingResolutionRule(null);
+
+  const closeResolutionEditModal = () => {
+    setEditingResolutionRule(null);
+    // Reset so stale data never leaks into the next edit session
+    setEditResolutionData({ id: null, category: null, escalations: initialResolutionEscalationData });
+  };
 
   const handleChange = (selected, type, level = null) => {
     if (type === "categories") {
@@ -338,7 +384,16 @@ const TicketEscalationSetup = () => {
   // --- Change Handlers for Edit Modals ---
 
   // Handler for Response Escalation Edit Modal select inputs (Users only)
-  const handleEditResponseUserChange = (selected, level) => {
+const handleEditResponseUserChange = (selected, level) => {
+  if (cloningRule) {
+    setCloneData((prev) => ({
+      ...prev,
+      escalations: {
+        ...prev.escalations,
+        [level]: selected,
+      },
+    }));
+  } else {
     setEditResponseData((prev) => ({
       ...prev,
       escalations: {
@@ -346,7 +401,8 @@ const TicketEscalationSetup = () => {
         [level]: selected,
       },
     }));
-  };
+  }
+};
 
   // Handler for Resolution Escalation Edit Modal (Escalation Users select)
   const handleEditResolutionUserChange = (selected, level) => {
@@ -382,6 +438,58 @@ const TicketEscalationSetup = () => {
     }));
   };
 
+ const handleCloneSubmit = async () => {
+  if (!cloneData) return;
+
+  toast.loading("Updating rule...");
+
+  const formData = new FormData();
+
+  // ✅ ADD THIS LINE (IMPORTANT)
+  // formData.append("id", cloningRule.id);
+
+  formData.append("complaint_worker[society_id]", activeSiteId);
+formData.append(
+  "complaint_worker[esc_type]",
+  (cloneData.esc_type || "").toLowerCase().trim()
+);  formData.append("complaint_worker[of_phase]", "pms");
+  formData.append("complaint_worker[of_atype]", "Pms::Site");
+
+  formData.append("category_ids[]", cloneData.category.value);
+
+  Object.entries(cloneData.escalations).forEach(([level, users]) => {
+    if (users.length > 0) {
+      formData.append(
+        `escalation_matrix[${level.toLowerCase()}][name]`,
+        level
+      );
+
+      users.forEach((user) => {
+        formData.append(
+          `escalation_matrix[${level.toLowerCase()}][escalate_to_users][]`,
+          user.value
+        );
+      });
+    }
+  });
+
+  try {
+    await postHelpDeskEscalationSetup(formData);
+   setTimeout(async () => {
+  await fetchEscalation();
+}, 300);
+
+    toast.dismiss();
+    toast.success("Rule Updated Successfully");
+
+    setCloningRule(null);
+    setCloneData(null);
+  } catch (error) {
+    console.error(error);
+    toast.dismiss();
+    toast.error("Update failed");
+  }
+};
   // --- API Call Handlers (Create/Update/Delete) ---
 
   const handleSaveResponseEscalation = async () => {
@@ -390,7 +498,7 @@ const TicketEscalationSetup = () => {
     }
     toast.loading("Creating Response Escalation. Please wait!");
     const formData = new FormData();
-    formData.append("complaint_worker[society_id]", siteId);
+    formData.append("complaint_worker[society_id]", activeSiteId);
     formData.append("complaint_worker[esc_type]", "response");
     formData.append("complaint_worker[of_phase]", "pms");
     formData.append("complaint_worker[of_atype]", "Pms::Site");
@@ -417,7 +525,7 @@ const TicketEscalationSetup = () => {
 
     try {
       await postHelpDeskEscalationSetup(formData);
-      setResEscalationAdded(true);
+      await fetchEscalation();
       toast.dismiss();
       toast.success("Response Escalation Created Successfully");
       // Reset form options
@@ -439,7 +547,7 @@ const TicketEscalationSetup = () => {
 
     const formData = new FormData();
     formData.append("id", editResponseData.id); // Crucial for update
-    formData.append("complaint_worker[society_id]", siteId);
+    formData.append("complaint_worker[society_id]", activeSiteId);
     formData.append("complaint_worker[esc_type]", "response");
     formData.append("complaint_worker[of_phase]", "pms");
     formData.append("complaint_worker[of_atype]", "Pms::Site");
@@ -465,7 +573,7 @@ const TicketEscalationSetup = () => {
     try {
       // Assuming postHelpDeskEscalationSetup handles PUT/PATCH when ID is present
       await postHelpDeskEscalationSetup(formData);
-      setResEscalationAdded(true);
+      await fetchEscalation();
       closeEditModal();
       toast.dismiss();
       toast.success("Response Escalation Updated Successfully");
@@ -482,7 +590,7 @@ const TicketEscalationSetup = () => {
     }
     toast.loading("Creating Resolution Escalation. Please wait!");
     const formData = new FormData();
-    formData.append("complaint_worker[society_id]", siteId);
+    formData.append("complaint_worker[society_id]", activeSiteId);
     formData.append("complaint_worker[esc_type]", "resolution");
     formData.append("complaint_worker[of_phase]", "pms");
     formData.append("complaint_worker[of_atype]", "Pms::Site");
@@ -525,7 +633,7 @@ const TicketEscalationSetup = () => {
 
     try {
       await postHelpDeskResolutionEscalationSetup(formData);
-      setResolutionEscalationAdded(true);
+    await fetchEscalation();
       toast.dismiss();
       toast.success("Resolution Escalation Created Successfully");
       // Reset form options
@@ -550,7 +658,7 @@ const TicketEscalationSetup = () => {
 
     const formData = new FormData();
     formData.append("id", editResolutionData.id); // Crucial for update
-    formData.append("complaint_worker[society_id]", siteId);
+    formData.append("complaint_worker[society_id]", activeSiteId);
     formData.append("complaint_worker[esc_type]", "resolution");
     formData.append("complaint_worker[of_phase]", "pms");
     formData.append("complaint_worker[of_atype]", "Pms::Site");
@@ -591,7 +699,7 @@ const TicketEscalationSetup = () => {
     try {
       // Assuming postHelpDeskResolutionEscalationSetup handles PUT/PATCH when ID is present
       await postHelpDeskResolutionEscalationSetup(formData);
-      setResolutionEscalationAdded(true);
+     await fetchEscalation();
       closeResolutionEditModal();
       toast.dismiss();
       toast.success("Resolution Escalation Updated Successfully");
@@ -612,7 +720,7 @@ const TicketEscalationSetup = () => {
       toast.loading("Deleting Escalation Rule. Please wait!");
       await deleteEscalationRule(id);
       toast.dismiss();
-      setResEscalationAdded(true); // Trigger re-fetch
+      await fetchEscalation();// Trigger re-fetch
       toast.success("Escalation Rule Deleted Successfully");
     } catch (error) {
       console.error(error);
@@ -667,7 +775,7 @@ const TicketEscalationSetup = () => {
 
               <div className=" w-full my-2">
                 <table className=" w-full border-collapse">
-                  <thead className="bg-gray-900">
+                  <thead style={{ background: themeColor }}>
                     <tr>
                       <th className="border border-gray-300  px-4 py-2 text-white">
                         Levels
@@ -704,7 +812,8 @@ const TicketEscalationSetup = () => {
                 &nbsp;
                 <div className="flex justify-center">
                   <button
-                    className="font-semibold bg-black hover:text-white transition-all py-2 px-4 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+                    className="font-semibold hover:bg-black hover:text-white transition-all p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+                    style={{ background: themeColor }}
                     onClick={handleSaveResponseEscalation}
                   >
                     Submit
@@ -749,7 +858,10 @@ const TicketEscalationSetup = () => {
                       </div>
                     </div>
                     <table className="table-auto w-full border-collapse border border-gray-200 rounded-md overflow-x-auto">
-                      <thead className="bg-gray-900 rounded-md">
+                      <thead
+                        style={{ background: themeColor }}
+                        className="bg-gray-100 rounded-md"
+                      >
                         <tr>
                           <th
                             className="border border-gray-200 px-4 py-2 text-white"
@@ -808,7 +920,7 @@ const TicketEscalationSetup = () => {
               />
               <div className=" w-full overflow-auto ">
                 <table className="border-collapse rounded-sm w-full my-2 ">
-                  <thead className="bg-gray-900">
+                  <thead style={{ background: themeColor }}>
                     <tr>
                       {[
                         "Levels",
@@ -921,7 +1033,8 @@ const TicketEscalationSetup = () => {
 
               <div className="flex justify-center my-2">
                 <button
-                  className=" font-semibold bg-black hover:text-white transition-all px-4 p-2 mt-3 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+                  className=" font-semibold hover:bg-black hover:text-white transition-all px-4 p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+                  style={{ background: themeColor }}
                   onClick={handleSaveResolutionEscalation}
                 >
                   Submit
@@ -1082,88 +1195,89 @@ const TicketEscalationSetup = () => {
       )}
 
       {/* --- Response Escalation Edit Modal (showModal) --- */}
-      {editingRule && editingRule.esc_type === "response" && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-5 rounded-lg w-2/3 max-w-xl">
+     {(editingRule || cloningRule) &&
+  (editingRule?.esc_type === "response" ||
+    cloningRule?.esc_type === "response") && (
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white p-5 rounded-lg w-2/3 max-w-xl">
+
+        {(() => {
+          const isClone = !!cloningRule;
+          const currentData = isClone ? cloneData : editResponseData;
+
+          return (
             <div className="flex flex-col gap-2">
               <h1 className="font-semibold mb-2 text-center">
-                Edit Response Escalation:{" "}
-                {editResponseData.category?.label || "N/A"}
+                {isClone ? "Clone" : "Edit"} Response Escalation:{" "}
+                {currentData?.category?.label || "N/A"}
               </h1>
 
               <Select
-                id="edit-category"
-                value={editResponseData.category} // Display the current category
-                onChange={(selected) =>
-                  console.log(
-                    "Category change not implemented for edit:",
-                    selected,
-                  )
-                }
+                value={currentData?.category}
                 options={categories}
-                className="basic-multi-select w-full mb-4"
-                classNamePrefix="select"
-                placeholder="Select Categories"
-                isDisabled={true} // Usually, category is fixed when editing a rule
+                isDisabled={true}
+                className="w-full mb-4"
               />
 
-              <div className=" w-full mb-2">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr>
-                      <th className="border border-gray-300 bg-gray-100 px-4 py-2">
-                        Levels
-                      </th>
-                      <th className="border border-gray-300 bg-gray-100 px-4 py-2">
-                        Escalation To
-                      </th>
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr>
+                    <th className="border px-4 py-2">Levels</th>
+                    <th className="border px-4 py-2">Escalation To</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {["E1", "E2", "E3", "E4", "E5"].map((level) => (
+                    <tr key={level}>
+                      <td className="border px-4 py-2 text-center">
+                        {level}
+                      </td>
+                      <td className="border px-4 py-2">
+                        <Select
+                          isMulti
+                          value={currentData?.escalations?.[level] || []}
+                          options={users}
+                          onChange={(selected) =>
+                            handleEditResponseUserChange(selected, level)
+                          }
+                        />
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {/* Iterate over E1-E5 levels, using editResponseData for state */}
-                    {["E1", "E2", "E3", "E4", "E5"].map((levelName) => (
-                      <tr key={levelName}>
-                        <td className="border border-gray-300 px-4 py-2 text-center">
-                          {levelName}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2 text-center">
-                          <Select
-                            isMulti
-                            value={editResponseData.escalations[levelName]}
-                            options={users}
-                            onChange={(selected) =>
-                              handleEditResponseUserChange(selected, levelName)
-                            }
-                            placeholder="Select Users" // Added placeholder as requested
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <hr />
-                &nbsp;
-                <div className="flex gap-2 justify-center">
-                  <button
-                    className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
-                    style={{ background: themeColor }}
-                    onClick={handleUpdateResponseEscalation} // New Update Logic
-                  >
-                    Update
-                  </button>
-                  <button
-                    onClick={closeEditModal}
-                    className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
-                    style={{ background: themeColor }}
-                  >
-                    Close
-                  </button>
-                </div>
+                  ))}
+                </tbody>
+              </table>
+
+              <div className="flex gap-2 justify-end mt-4">
+                <button
+                  onClick={
+                    isClone
+                      ? handleCloneSubmit
+                      : handleUpdateResponseEscalation
+                  }
+                  className="p-2 text-white rounded-md"
+                  style={{ background: themeColor }}
+                >
+                  {isClone ? "Create Clone" : "Update"}
+                </button>
+
+                <button
+                  onClick={() => {
+                    setEditingRule(null);
+                    setCloningRule(null);
+                  }}
+                  className="p-2 text-white rounded-md"
+                  style={{ background: themeColor }}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          );
+        })()}
+      </div>
+    </div>
+)}
 
       {/* --- Resolution Escalation Edit Modal (showModal3) --- */}
       {editingResolutionRule &&
@@ -1293,7 +1407,7 @@ const TicketEscalationSetup = () => {
                     </tbody>
                   </table>
                 </div>
-                <div className="flex gap-2 justify-center mt-4">
+                <div className="flex gap-2 justify-end mt-4">
                   <button
                     className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
                     style={{ background: themeColor }}
@@ -1306,7 +1420,7 @@ const TicketEscalationSetup = () => {
                     className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
                     style={{ background: themeColor }}
                   >
-                    Close
+                    Cancel
                   </button>
                 </div>
               </div>

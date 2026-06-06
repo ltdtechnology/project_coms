@@ -229,6 +229,9 @@ navigate("/admin/addresses-setup")
               <button onClick={handleAddressSubmit} className="bg-black text-white p-2 px-4 rounded-md font-medium">
                 Submit
               </button>
+              <button onClick={()=>navigate("/admin/addresses-setup")} className="bg-gray-400 text-white p-2 px-4 rounded-md font-medium">
+                Cancel
+              </button>
             </div>
           </div>
         </div>
