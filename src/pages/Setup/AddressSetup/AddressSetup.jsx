@@ -8,6 +8,8 @@ import { getAllAddress } from "../../../api";
 import { IoAddCircleOutline } from "react-icons/io5";
 function AddressesSetup() {
   const [filteredAddress, setFilteredAddress] = useState([]);
+  const [search, setSearch] = useState("");
+  const [addresses, setAddresses] = useState([]);
   const column = [
     {
       name: "Actions",
@@ -47,7 +49,7 @@ function AddressesSetup() {
     const fetchAddress = async () => {
       try {
         const addressResp = await getAllAddress();
-        console.log(addressResp.data);
+        setAddresses(addressResp.data);
         setFilteredAddress(addressResp.data);
       } catch (error) {
         console.log(error);
@@ -55,7 +57,22 @@ function AddressesSetup() {
     };
     fetchAddress();
   }, []);
- 
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearch(value);
+
+    const filtered = addresses.filter((item) =>
+      Object.values(item).some(
+        (field) =>
+          field &&
+          field.toString().toLowerCase().includes(value.toLowerCase())
+      )
+    );
+
+    setFilteredAddress(filtered);
+  };
+
   return (
     <section className="flex">
       <Navbar />
@@ -63,13 +80,15 @@ function AddressesSetup() {
         <div className="flex flex-col sm:flex-row md:justify-between gap-3 mt-10 my-4">
           <input
             type="text"
-            placeholder="search"
-            className="border p-1 w-96 border-gray-400 rounded-md"
+            placeholder="Search By Title, Email, Phone, Building Name, Street Name, City, State, Pin Code"
+            value={search}
+            onChange={handleSearch}
+            className="border p-2 w-[700px] border-gray-400 rounded-md"
           />
           <div className="flex gap-3 sm:flex-row flex-col">
             <Link
               to={`/admin/add-addresses-setup`}
-              className=" font-semibold border-2 justify-center border-black px-4 p-1 flex gap-2 items-center rounded-md"
+              className=" font-semibold border-2 justify-center border-black px-4 p-1 flex gap-2 items-center rounded-md bg-black text-white"
             >
               <IoAddCircleOutline /> Add
             </Link>
