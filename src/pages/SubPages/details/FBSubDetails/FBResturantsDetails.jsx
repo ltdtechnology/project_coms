@@ -81,7 +81,7 @@ const FBRestaurtantDetails = () => {
     },
   ];
 
-  
+
 
   const data = [
     {
@@ -231,12 +231,12 @@ const FBRestaurtantDetails = () => {
                 (attachment, i) => (
                   <img
                     key={i}
-                    src={domainPrefix + attachment.image_url}
+                    src={attachment.image_url}
                     alt={`Attachment ${i + 1}`}
                     className="w-40 h-28 object-cover rounded-md"
                     onClick={() =>
                       window.open(
-                        domainPrefix + attachment.image_url,
+                        attachment.image_url,
                         "_blank"
                       )
                     }
@@ -259,12 +259,12 @@ const FBRestaurtantDetails = () => {
                 (attachment, i) => (
                   <img
                     key={i}
-                    src={domainPrefix + attachment.image_url}
+                    src={attachment.image_url}
                     alt={`Attachment ${i + 1}`}
                     className="w-40 h-28 object-cover rounded-md"
                     onClick={() =>
                       window.open(
-                        domainPrefix + attachment.image_url,
+                        attachment.image_url,
                         "_blank"
                       )
                     }
@@ -302,12 +302,12 @@ const FBRestaurtantDetails = () => {
                 (attachment, i) => (
                   <img
                     key={i}
-                    src={domainPrefix + attachment.image_url}
+                    src={attachment.image_url}
                     alt={`Attachment ${i + 1}`}
                     className="w-40 h-28 object-cover rounded-md"
                     onClick={() =>
                       window.open(
-                        domainPrefix + attachment.image_url,
+                        attachment.image_url,
                         "_blank"
                       )
                     }
