@@ -1275,7 +1275,7 @@ const handleChange1 = (selected) => {
               formData.cover_image.map((img, idx) => (
                 <img
                   key={idx}
-                  src={domainPrefix + img.image_url}
+                  src={img.image_url}
                   alt="cover"
                   className="w-24 h-24 object-cover rounded border"
                 />
@@ -1295,7 +1295,7 @@ const handleChange1 = (selected) => {
               formData.menu.map((img, idx) => (
                 <img
                   key={idx}
-                  src={domainPrefix + img.image_url}
+                  src={img.image_url}
                   alt="cover"
                   className="w-24 h-24 object-cover rounded border"
                 />
@@ -1315,7 +1315,7 @@ const handleChange1 = (selected) => {
               formData.gallery.map((img, idx) => (
                 <img
                   key={idx}
-                  src={domainPrefix + img.image_url}
+                  src={img.image_url}
                   alt="cover"
                   className="w-24 h-24 object-cover rounded border"
                 />

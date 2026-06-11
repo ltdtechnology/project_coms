@@ -108,7 +108,7 @@ const FacilityDetails = () => {
               </div>
             ))}
             <div className='border p-2 rounded-md'>
-              <p className="font-medium text-bold capitalize gap-5">Fixed Price: {facilityData?.fixed_amount || "NA"}</p> 
+              <p className="font-medium text-bold capitalize gap-5">Fixed Price: {facilityData?.fixed_amount || "NA"}</p>
             </div>
           </div>
           <div className='border-b border-black'>
@@ -207,12 +207,12 @@ const FacilityDetails = () => {
               <h2 className="font-medium text-lg mb-2">Cover Images</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {facilityData.covers && facilityData.covers.length > 0 ? (
-                  facilityData.covers.map((image_url, index) => (
-                    <div key={index} className="rounded-lg border overflow-hidden">
+                  facilityData.covers.map((cover) => (
+                    <div key={cover.id} className="rounded-lg border overflow-hidden">
                       <img
-                        src={domainPrefix + image_url.image_url}
-                        alt={`Cover ${index + 1}`}
-                        className="object-cover rounded-md w-full h-40 transition-transform transform hover:scale-110"
+                        src={cover.image_url}
+                        alt="Cover"
+                        className="w-full h-40 object-cover rounded-md"
                       />
                     </div>
                   ))
@@ -235,15 +235,13 @@ const FacilityDetails = () => {
               <h2 className="font-medium text-lg mb-2">Attachments</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {facilityData.attachments && facilityData.attachments.length > 0 ? (
-                  facilityData.attachments.map((doc, index) => (
-                    <div key={index} className="rounded-lg border overflow-hidden">
-
+                  facilityData.attachments.map((attachment) => (
+                    <div key={attachment.id} className="rounded-lg border overflow-hidden">
                       <img
-                        src={domainPrefix + doc.image_url}
-                        alt={`Attachment`}
-                        className="object-cover rounded-md w-full h-40 transition-transform transform hover:scale-110"
+                        src={attachment.image_url}
+                        alt="Attachment"
+                        className="w-full h-40 object-cover rounded-md"
                       />
-
                     </div>
                   ))
                 ) : (
