@@ -10,8 +10,9 @@ import { BsEye } from "react-icons/bs";
 // import { getItemInLocalStorage } from "../../utils/localStorage";
 import { BiEdit, BiUser } from "react-icons/bi";
 import { DNA } from "react-loader-spinner";
-import { FaDownload, FaUsers } from "react-icons/fa";
+import { FaCheck, FaDownload, FaTimes, FaUsers } from "react-icons/fa";
 import { MdApartment, MdDevices } from "react-icons/md";
+import toast from "react-hot-toast";
 
 const UserSetup = () => {
   const [users, setUsers] = useState([]);
@@ -46,20 +47,20 @@ const UserSetup = () => {
   }, []);
 
   const tabFilteredUsers = useMemo(() => {
-  if (activeTab === "approved") {
-    return users.filter((user) => user.is_admin_approved === true);
-  }
+    if (activeTab === "approved") {
+      return users.filter((user) => user.is_admin_approved === true);
+    }
 
-  if (activeTab === "pending") {
-    return users.filter((user) => user.is_admin_approved === null);
-  }
+    if (activeTab === "pending") {
+      return users.filter((user) => user.is_admin_approved === null);
+    }
 
-  if (activeTab === "rejected") {
-    return users.filter((user) => user.is_admin_approved === false);
-  }
+    if (activeTab === "rejected") {
+      return users.filter((user) => user.is_admin_approved === false);
+    }
 
-  return users;
-}, [users, activeTab]);
+    return users;
+  }, [users, activeTab]);
 
   console.log("count", count);
 
@@ -132,51 +133,60 @@ const UserSetup = () => {
   // ).length;
   // const pendingUsers = users.filter((user) => user.status === "pending").length;
 
-const handleApproval = async (id, status) => {
-  try {
-    const payload = {
-      is_admin_approved: status,
-    };
+  const handleApproval = async (id, status) => {
+    try {
+      const payload = {
+        is_admin_approved: status,
+      };
 
-    const token = localStorage.getItem("token"); // or your method
+      const token = localStorage.getItem("token");
 
-    await updateUserAdminApproval(id, payload, token);
+      await updateUserAdminApproval(id, payload, token);
 
-    // ✅ Update UI instantly
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.id === id ? { ...user, is_admin_approved: status } : user
-      )
-    );
-  } catch (error) {
-    console.log("Approval Error:", error);
-  }
-};
+      setUsers((prev) =>
+        prev.map((user) =>
+          user.id === id
+            ? { ...user, is_admin_approved: status }
+            : user
+        )
+      );
 
-const handleStatusToggle = async (row) => {
-  try {
-    const token = localStorage.getItem("token");
+      if (status) {
+        toast.success("User approved successfully");
+      } else {
+        toast.error("User rejected successfully");
+      }
+    } catch (error) {
+      console.log("Approval Error:", error);
 
-    const newStatus = !row.user_status; // toggle once
+      toast.error("Something went wrong");
+    }
+  };
 
-    const payload = {
-      user_status: newStatus,
-    };
+  const handleStatusToggle = async (row) => {
+    try {
+      const token = localStorage.getItem("token");
 
-    await updateUserStatus(row.id, payload, token);
+      const newStatus = !row.user_status; // toggle once
 
-    // ✅ Update UI using SAME value (not toggling again)
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.id === row.id
-          ? { ...user, user_status: newStatus }
-          : user
-      )
-    );
-  } catch (error) {
-    console.log("Status Update Error:", error);
-  }
-};
+      const payload = {
+        user_status: newStatus,
+      };
+
+      await updateUserStatus(row.id, payload, token);
+
+      // ✅ Update UI using SAME value (not toggling again)
+      setUsers((prev) =>
+        prev.map((user) =>
+          user.id === row.id
+            ? { ...user, user_status: newStatus }
+            : user
+        )
+      );
+    } catch (error) {
+      console.log("Status Update Error:", error);
+    }
+  };
 
   const userColumn = [
     {
@@ -259,53 +269,71 @@ const handleStatusToggle = async (row) => {
       sortable: true,
       wrap: true,
     },
-   ...(activeTab === "pending"
-    ? [
-        {
-          name: "Approval",
-          cell: (row) => (
-            <div className="flex gap-2">
-              {/* APPROVE */}
-              <button
-                onClick={() => handleApproval(row.id, true)}
-                className="bg-green-500 hover:bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center"
-              >
-                ✓
-              </button>
+       {
+      name: "Approval",
+      cell: (row) =>
+        activeTab === "pending" ? (
+          <div className="flex gap-2">
+            <button
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-green-500 text-white hover:bg-green-600"
+              onClick={() =>
+                handleApproval(row.id, true)
+              }
+            >
+              <FaCheck size={14} />
+            </button>
 
-              {/* REJECT */}
-              <button
-                onClick={() => handleApproval(row.id, false)}
-                className="bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center"
-              >
-                ✕
-              </button>
-            </div>
-          ),
-        },
-      ]
-    : []),
+            <button
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-600"
+              onClick={() =>
+                handleApproval(row.id, false)
+              }
+            >
+              <FaTimes size={14} />
+            </button>
+          </div>
+        ) : row.is_admin_approved === true ? (
+          <span className="text-green-600 font-semibold">
+            Approved
+          </span>
+        ) : row.is_admin_approved === false ? (
+          <span className="text-red-600 font-semibold">
+            Rejected
+          </span>
+        ) : (
+          <span className="text-yellow-600 font-semibold">
+            Pending
+          </span>
+        ),
+      sortable: true,
+    },
     {
-  name: "Status",
-  cell: (row) => (
-    <div
-      onClick={() => handleStatusToggle(row)}
-      className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition ${
-        row.user_status ? "bg-green-500" : "bg-red-500"
-      }`}
-    >
-      <div
-        className={`bg-white w-4 h-4 rounded-full shadow-md transform transition ${
-          row.user_status ? "translate-x-6" : "translate-x-0"
-        }`}
-      />
-    </div>
-  ),
-  sortable: true,
-}
+      name: "Status",
+      cell: (row) => (
+        <div
+          onClick={() => handleStatusToggle(row)}
+          className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition ${row.user_status ? "bg-green-500" : "bg-red-500"
+            }`}
+        >
+          <div
+            className={`bg-white w-4 h-4 rounded-full shadow-md transform transition ${row.user_status ? "translate-x-6" : "translate-x-0"
+              }`}
+          />
+        </div>
+      ),
+      sortable: true,
+    },
+    {
+      name: "Created At",
+      selector: (row) =>
+        new Date(row.created_at).toLocaleDateString(
+          "en-GB"
+        ),
+      sortable: true,
+    },
   ];
 
-    const totalDownloads = users?.filter(user => user.is_downloaded).length || 0;
+  const totalDownloads = users?.filter(user => user.is_downloaded).length || 0;
 
   const dashboardCards = [
     {
@@ -316,7 +344,7 @@ const handleStatusToggle = async (row) => {
     },
     {
       title: "Total App Downloads",
-      value: totalDownloads|| 0,
+      value: totalDownloads || 0,
       icon: <FaDownload size={28} />,
       bg: "from-green-500 to-green-700",
     },
@@ -346,42 +374,39 @@ const handleStatusToggle = async (row) => {
       <Navbar />
       <div className="w-full flex mx-3 flex-col gap-4 overflow-hidden mb-5">
         {/* ---------- TABS ---------- */}
-       <div className="flex bg-gray-100 py-2 rounded-full shadow-inner justify-center mt-4 ">
+        <div className="flex bg-gray-100 py-2 rounded-full shadow-inner justify-center mt-4 ">
 
-    <button
-      onClick={() => setActiveTab("approved")}
-      className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
-        activeTab === "approved"
-          ? "bg-green-300 text-black shadow-md scale-105"
-          : "text-gray-600 hover:text-green-600"
-      }`}
-    >
-      Approved Users
-    </button>
+          <button
+            onClick={() => setActiveTab("approved")}
+            className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${activeTab === "approved"
+                ? "bg-green-300 text-black shadow-md scale-105"
+                : "text-gray-600 hover:text-green-600"
+              }`}
+          >
+            Approved Users
+          </button>
 
-    <button
-      onClick={() => setActiveTab("pending")}
-      className={`px-8 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
-        activeTab === "pending"
-          ? "bg-yellow-500 text-black shadow-md scale-105"
-          : "text-gray-600 hover:text-yellow-600"
-      }`}
-    >
-      Pending Users
-    </button>
+          <button
+            onClick={() => setActiveTab("pending")}
+            className={`px-8 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${activeTab === "pending"
+                ? "bg-yellow-500 text-black shadow-md scale-105"
+                : "text-gray-600 hover:text-yellow-600"
+              }`}
+          >
+            Pending Users
+          </button>
 
-    <button
-      onClick={() => setActiveTab("rejected")}
-      className={`px-8 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
-        activeTab === "rejected"
-          ? "bg-red-400 text-black shadow-md scale-105"
-          : "text-gray-600 hover:text-red-600"
-      }`}
-    >
-      Rejected Users
-    </button>
+          <button
+            onClick={() => setActiveTab("rejected")}
+            className={`px-8 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${activeTab === "rejected"
+                ? "bg-red-400 text-black shadow-md scale-105"
+                : "text-gray-600 hover:text-red-600"
+              }`}
+          >
+            Rejected Users
+          </button>
 
-  </div>
+        </div>
 
         <div className="mt-5 flex md:flex-row flex-col justify-between md:items-center gap-4">
           <input

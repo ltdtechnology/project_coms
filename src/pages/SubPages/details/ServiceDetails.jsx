@@ -254,56 +254,58 @@ const ServiceDetails = () => {
           <h1 className="border-b border-black font-semibold my-5">
             Attachments
           </h1>
-          <div className="flex gap-4 flex-wrap my-4 items-center  text-center">
-            {details.attachments && details.attachments.length > 0 ? (
-              details.attachments.map((doc, index) => (
-                <div key={doc.id} className="">
-                  {isImage(domainPrefix + doc.document) ? (
-                    <img
-                      src={domainPrefix + doc.document}
-                      alt={`Attachment ${index + 1}`}
-                      className="w-40 h-28 object-cover rounded-md"
-                      onClick={() =>
-                        window.open(domainPrefix + doc.document, "_blank")
-                      }
-                    />
-                  ) : (
-                    <a
-                      href={domainPrefix + doc.document}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className=" hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center"
-                    >
-                      <FaRegFileAlt size={50} />
-                      {getFileName(doc.document)}
-                    </a>
-                  )}
-                </div>
-              ))
-            ) : (
-              <p className="text-center w-full">No Attachments</p>
-            )}
-          </div>
+          <div className="flex gap-4 flex-wrap my-4 items-center text-center">
+  {details?.soft_service_attach?.length > 0 ? (
+    details.soft_service_attach.map((doc, index) => (
+      <div key={doc.id}>
+        {isImage(doc.document) ? (
+          <img
+            src={doc.document}
+            alt={`Attachment ${index + 1}`}
+            className="w-40 h-28 object-cover rounded-md cursor-pointer border"
+            loading="lazy"
+            onClick={() => window.open(doc.document, "_blank")}
+            onError={(e) => {
+              console.error("Failed image:", doc.document);
+              e.target.src =
+                "https://via.placeholder.com/160x112?text=Image+Not+Found";
+            }}
+          />
+        ) : (
+          <a
+            href={doc.document}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-blue-500 flex flex-col items-center"
+          >
+            <FaRegFileAlt size={50} />
+            {getFileName(doc.document)}
+          </a>
+        )}
+      </div>
+    ))
+  ) : (
+    <p className="text-center w-full">No Attachments</p>
+  )}
+</div>
 
           <div className="flex justify-center items-center  md:p-0 p-2">
             <div className="w-full my-2">
               <div className="flex items-center gap-4 border-b border-gray-200">
                 <button
-                  className={`font-medium ${
-                    serviceFor === "schedule"
+                  className={`font-medium ${serviceFor === "schedule"
                       ? "text-black border-b border-black"
                       : "text-gray-400"
-                  }`}
+                    }`}
                   onClick={() => setserviceFor("schedule")}
                 >
                   Schedule
                 </button>
                 <button
-                  className={`font-medium ${
-                    serviceFor === "logs"
+                  className={`font-medium ${serviceFor === "logs"
                       ? "border-b border-black text-black"
                       : "text-gray-400"
-                  }`}
+                    }`}
                   onClick={() => setserviceFor("logs")}
                 >
                   Logs
@@ -410,7 +412,7 @@ const ServiceDetails = () => {
                                 </span>
                                 <div className="flex gap-4 flex-wrap my-4 items-center text-center">
                                   {submission.question_attachments?.length >
-                                  0 ? (
+                                    0 ? (
                                     submission.question_attachments.map(
                                       (attachment, i) => (
                                         <img
@@ -423,7 +425,7 @@ const ServiceDetails = () => {
                                           onClick={() =>
                                             window.open(
                                               domainPrefix +
-                                                attachment.document,
+                                              attachment.document,
                                               "_blank"
                                             )
                                           }
