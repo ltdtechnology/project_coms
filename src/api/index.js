@@ -446,6 +446,13 @@ export const getFitoutChecklist = async () =>
     },
   });
 
+  export const getFitoutChecklistById = async (id) =>
+  axiosInstance.get(`/snag_checklists/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+
 //FitOut Request
 export const postFitoutRequest = async (data) =>
   axiosInstance.post(`/fitout_request.json`, data, {
@@ -2951,6 +2958,42 @@ export const getSoftServices = async () =>
       token: token,
     },
   });
+
+
+export const exportSoftServices = (startDate, endDate) => {
+  return axiosInstance.get(
+    `/soft_services/export_soft_service.xlsx`,
+    {
+      params: {
+        token: token,
+        start_date: startDate,
+        end_date: endDate,
+      },
+      responseType: "blob",
+    }
+  );
+};
+export const importSoftServices = (file) => {
+  const formData = new FormData();
+  formData.append("file", file); 
+
+  return axiosInstance.post("/soft_services/import.json", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+export const downloadSoftServiceSample = async () => {
+  return axiosInstance.get(
+    `/soft_services/sample_file.xlsx`,
+    {
+      params: {
+        token: token, 
+      },
+      responseType: "blob", 
+    }
+  );
+};
 export const getServicesChecklist = async () =>
   axiosInstance.get("/checklists.json?q[ctype_eq]=soft_service", {
     params: {
