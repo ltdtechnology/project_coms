@@ -32,7 +32,7 @@ function VisitorSetup() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [added, setAdded] = useState(false);
   const token = getItemInLocalStorage("TOKEN");
-const siteId = getItemInLocalStorage("SITEID");
+  const siteId = getItemInLocalStorage("SITEID");
 
 
   /* ================= FETCH DATA ================= */
@@ -52,11 +52,11 @@ const siteId = getItemInLocalStorage("SITEID");
       }
 
       if (page === "visitorCategories") {
-        res = await getVisitorCategories(1, 1000,siteId,token);
+        res = await getVisitorCategories(1, 1000, siteId, token);
         data = res?.data?.visitor_categories || res?.data || [];
       }
       if (page === "visitorSubCategories") {
-        res = await getVisitorSubCategories(1, 1000,siteId,token);
+        res = await getVisitorSubCategories(1, 1000, siteId, token);
 
         data =
           res?.data?.visitor_sub_categories ||
@@ -64,7 +64,7 @@ const siteId = getItemInLocalStorage("SITEID");
           res?.data ||
           [];
 
-        const catRes = await getVisitorCategories(1, 1000,siteId,token);
+        const catRes = await getVisitorCategories(1, 1000, siteId, token);
         const categoryList =
           catRes?.data?.visitor_categories || catRes?.data || [];
 
@@ -108,19 +108,19 @@ const siteId = getItemInLocalStorage("SITEID");
     }
   };
   const renderIcon = (row) => {
-    if (!row.icon) {
-      return <span className="text-gray-400 text-xs">No Icon</span>;
-    }
+    console.log("Row Icon:", row.icon);
 
-    const iconSrc = `${domainPrefix}${row.icon}?t=${row.updated_at ? new Date(row.updated_at).getTime() : Date.now()}`;
+    if (!row.icon) {
+      return <span>No Icon</span>;
+    }
 
     return (
       <img
-        src={iconSrc}
+        src={row.icon}
         alt="icon"
         className="w-8 h-8 object-contain rounded"
         onError={(e) => {
-          e.target.style.display = "none";
+          console.log("Image Failed:", row.icon);
         }}
       />
     );
@@ -174,7 +174,10 @@ const siteId = getItemInLocalStorage("SITEID");
     { name: "Sr No", selector: (row, i) => i + 1, width: "80px" },
     { name: "Name", selector: (row) => row.name },
     { name: "Code", selector: (row) => row.code },
-    { name: "Icon", selector: (row) => renderIcon(row) },
+    {
+      name: "Icon",
+      cell: (row) => renderIcon(row),
+    },
 
     {
       name: "Action",
@@ -203,17 +206,16 @@ const siteId = getItemInLocalStorage("SITEID");
     },
     {
       name: "Icon",
-      selector: (row) => {
-        if (!row.iconv2) return <span className="text-gray-400 text-xs">No Icon</span>;
-        const subIconSrc = `${domainPrefix}${row.iconv2}?t=${row.updated_at ? new Date(row.updated_at).getTime() : Date.now()}`;
+      cell: (row) => {
+        if (!row.iconv2) {
+          return <span>No Icon</span>;
+        }
+
         return (
           <img
-            src={subIconSrc}
+            src={row.iconv2}
             alt="icon"
             className="w-8 h-8 object-contain rounded"
-            onError={(e) => {
-              e.target.style.display = "none";
-            }}
           />
         );
       },
