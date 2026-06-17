@@ -137,22 +137,22 @@ const RVehiclesTable = ({
             row.registered_vehicle?.vehicle_category ||
             "-",
         },
-        {
-          name: "Status",
-          selector: (row) => (
-            <span
-              className={
-                getStatus(row) === "Approved"
-                  ? "text-green-600 font-medium"
-                  : getStatus(row) === "Rejected"
-                  ? "text-red-600 font-medium"
-                  : "text-gray-600"
-              }
-            >
-              {getStatus(row)}
-            </span>
-          ),
-        },
+        // {
+        //   name: "Status",
+        //   selector: (row) => (
+        //     <span
+        //       className={
+        //         getStatus(row) === "Approved"
+        //           ? "text-green-600 font-medium"
+        //           : getStatus(row) === "Rejected"
+        //           ? "text-red-600 font-medium"
+        //           : "text-gray-600"
+        //       }
+        //     >
+        //       {getStatus(row)}
+        //     </span>
+        //   ),
+        // },
         {
           name: "Action Date",
           selector: (row) =>
