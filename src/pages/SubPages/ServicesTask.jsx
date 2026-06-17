@@ -18,7 +18,6 @@ const ServicesTask = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [filteredRoutineData, setFilteredRoutineData] = useState([]);
   const [routines, setRoutines] = useState([]);
-
   const [searchRoutineText, setSearchRoutineText] = useState("");
 
   const [pageNo, setPageNo] = useState(1);
@@ -35,7 +34,7 @@ const ServicesTask = () => {
   const [endDate, setEndDate] = useState(formatDate(tomorrow));
 
   const themeColor = useSelector((state) => state.theme.color);
- 
+
 
   /* ================= DATE FORMAT ================= */
   const dateFormat = (dateString) => {
@@ -201,9 +200,10 @@ const ServicesTask = () => {
   };
 
   /* ================= SEARCH ================= */
- const handleRoutineSearch = async (e) => {
+  const handleRoutineSearch = async (e) => {
   const value = e.target.value;
   setSearchRoutineText(value);
+  setPageNo(1);
 
   try {
     const start = startDate ? `${startDate}T00:00:00` : "";
@@ -230,13 +230,17 @@ const ServicesTask = () => {
         .includes(value.toLowerCase())
     );
 
-    setFilteredRoutineData(filtered);
+    // Store all searched records
+    setRoutines(filtered);
+
+    // Show only first page records
+    setFilteredRoutineData(filtered.slice(0, perPage));
+
     setTotal(filtered.length);
   } catch (error) {
     console.log(error);
   }
 };
-
   /* ================= DATE FILTER ================= */
   const handleApplyDateFilter = () => {
     setPageNo(1);
@@ -321,10 +325,31 @@ const ServicesTask = () => {
     }
   };
   /* ================= PAGINATION ================= */
-  const handlePageChange = (page, pageSize) => {
-    setPageNo(page);
-    setPerPage(pageSize);
-  };
+ const handlePageChange = (page, pageSize) => {
+  setPageNo(page);
+  setPerPage(pageSize);
+
+  // When search is active
+  if (searchRoutineText) {
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+
+    setFilteredRoutineData(
+      routines.slice(startIndex, endIndex)
+    );
+  }
+};
+
+useEffect(() => {
+  if (searchRoutineText && routines.length > 0) {
+    const startIndex = (pageNo - 1) * perPage;
+    const endIndex = startIndex + perPage;
+
+    setFilteredRoutineData(
+      routines.slice(startIndex, endIndex)
+    );
+  }
+}, [pageNo, perPage, routines, searchRoutineText]);
 
   return (
     <section className="flex">
@@ -356,10 +381,10 @@ const ServicesTask = () => {
           {/* 🔹 LEFT: Search */}
           <input
             type="text"
-            placeholder="Search..."
+            placeholder="Search By Service, Checklist, Status, Assigned To..."
             value={searchRoutineText}
             onChange={handleRoutineSearch}
-            className="border p-2 rounded w-96"
+            className="border p-2 rounded w-[500px]"
           />
 
           {/* 🔹 RIGHT: Filters */}
@@ -380,8 +405,7 @@ const ServicesTask = () => {
 
             <button
               onClick={handleApplyDateFilter}
-              style={{ background: themeColor }}
-              className="text-white p-2 rounded"
+              className="text-white p-2 rounded bg-black"
             >
               Apply
             </button>

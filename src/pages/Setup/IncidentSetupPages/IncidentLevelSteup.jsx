@@ -57,21 +57,14 @@ const IncidenceLevelSetup = () => {
     }
   };
   const [levels, setLevels] = useState([]);
-const fetchIncidentLevels = async () => {
-  try {
-    const res = await getIncidentTags("IncidentLevel", companyId);
-
-    const tags =
-      res?.data?.incidence_tags?.data ||
-      res?.data?.incidence_tags ||
-      [];
-
-    setLevels(tags);
-  } catch (error) {
-    console.log("Fetch error:", error);
-  }
-};
-
+  const fetchIncidentLevels = async () => {
+    try {
+      const res = await getIncidentTags("IncidentLevel");
+      setLevels(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     fetchIncidentLevels();
   }, []);
@@ -89,13 +82,13 @@ const fetchIncidentLevels = async () => {
                 onChange={(e) => setLevel(e.target.value)}
               />
               <button
-                className="bg-indigo-700 text-white p-2 flex gap-2 items-center rounded-md"
+                className="bg-green-500 text-white p-2 flex gap-2 items-center rounded-md"
                 onClick={handleAddLevel}
               >
                 <FaCheck /> Submit
               </button>
               <button
-                className="bg-gray-800 text-white flex items-center gap-2 p-2 rounded-md"
+                className="bg-red-400 text-white flex items-center gap-2 p-2 rounded-md"
                 onClick={() => setAddLevel(false)}
               >
                 <MdClose /> Cancel
@@ -104,7 +97,7 @@ const fetchIncidentLevels = async () => {
           )}
           {!addLevel && (
             <button
-              className="bg-indigo-700 p-2 rounded-md text-white flex items-center gap-2"
+              className="bg-green-500 p-2 rounded-md text-white flex items-center gap-2"
               onClick={() => setAddLevel(true)}
             >
               <PiPlusCircle /> Add
@@ -112,16 +105,9 @@ const fetchIncidentLevels = async () => {
           )}
         </div>
         {/* </div> */}
-       <div>
-  {levels.length === 0 ? (
-    <p className="text-center text-gray-500 mt-4">
-      No Incident Levels Found
-    </p>
-  ) : (
-    <Table columns={column} data={levels} isPagination={true} />
-  )}
-</div>
-
+        <div>
+          <Table columns={column} data={levels} isPagination={true} />
+        </div>
       </div>
       {modal && <IncidenceLevelSetupModal onclose={() => showModal(false)} />}
     </section>

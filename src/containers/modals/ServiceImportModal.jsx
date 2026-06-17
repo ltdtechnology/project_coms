@@ -121,8 +121,7 @@ const ServiceImportModal = ({ onclose, fetchService }) => {
           <button
             onClick={handleImportExcel}
             disabled={loading}
-            className="px-4 py-2 rounded-md text-white font-medium"
-            style={{ background: themeColor }}
+            className="px-4 py-2 rounded-md text-white font-medium bg-black"
           >
             {loading ? "Uploading..." : "Submit"}
           </button>

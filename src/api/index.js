@@ -7781,11 +7781,9 @@ export const editIncidentCatDetails = async (id, data) =>
     },
   });
 
-export const getIncidentTags = async (tagType, companyId) =>
-  axiosInstance.get("/incidence_tags.json", {
+export const getIncidentTags = async (tagType) =>
+  axiosInstance.get(`/incidence_tags.json?q[tag_type_cont]=${tagType}`, {
     params: {
-      "q[tag_type_eq]": tagType,
-      "q[resource_id_eq]": companyId,
       token: token,
     },
   });
