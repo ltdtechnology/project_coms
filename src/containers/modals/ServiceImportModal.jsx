@@ -3,42 +3,40 @@ import ModalWrapper from "./ModalWrapper";
 import { useSelector } from "react-redux";
 import { FaDownload } from "react-icons/fa";
 import toast from "react-hot-toast";
-// import {
-//   downloadServiceImportSample,
-//   uploadServiceImport,
-// } from "../../api";
+import { downloadSoftServiceSample, getSoftServices, importSoftServices } from "../../api";
 
-const ServiceImportModal = ({ onclose, fetchCamBilling }) => {
+
+const ServiceImportModal = ({ onclose, fetchService }) => {
   const themeColor = useSelector((state) => state.theme.color);
-  const [upload, setUpload] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [importFile, setImportFile] = useState(null);
 
   // ✅ DOWNLOAD SAMPLE FORMAT
-//   const handleDownload = async () => {
-//     toast.loading("Downloading sample file...");
-//     try {
-//       const resp = await downloadServiceImportSample();
+  const handleDownload = async () => {
+    toast.loading("Downloading sample file...");
+    try {
+      const resp = await downloadSoftServiceSample();
 
-//       const blob = new Blob([resp.data], {
-//         type: resp.headers["content-type"],
-//       });
+      const blob = new Blob([resp.data], {
+        type: resp.headers["content-type"],
+      });
 
-//       const url = window.URL.createObjectURL(blob);
-//       const link = document.createElement("a");
-//       link.href = url;
-//       link.setAttribute("download", "service_import_sample.xlsx");
-//       document.body.appendChild(link);
-//       link.click();
-//       link.remove();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "service_import_sample.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
 
-//       toast.dismiss();
-//       toast.success("Sample downloaded successfully");
-//     } catch (error) {
-//       toast.dismiss();
-//       console.error("Download error:", error);
-//       toast.error("Failed to download sample file");
-//     }
-//   };
+      toast.dismiss();
+      toast.success("Sample downloaded successfully");
+    } catch (error) {
+      toast.dismiss();
+      console.error("Download error:", error);
+      toast.error("Failed to download sample file");
+    }
+  };
 
   // ✅ HANDLE FILE CHANGE
   const handleFileChange = (event) => {
@@ -54,37 +52,43 @@ const ServiceImportModal = ({ onclose, fetchCamBilling }) => {
       return;
     }
 
-    setUpload(file);
+    setImportFile(file);
   };
 
   // ✅ SUBMIT IMPORT
-  // const handleSubmit = async () => {
-  //   if (!upload) {
-  //     return toast.error("Please select a file first");
-  //   }
+  const handleImportExcel = async () => {
+    if (!importFile) {
+      toast.error("Please select file");
+      return;
+    }
 
-  //   const sendData = new FormData();
-  //   sendData.append("file", upload);
+    setLoading(true);
+    const toastId = toast.loading("Uploading...");
 
-  //   try {
-  //     setLoading(true);
-  //     toast.loading("Uploading file...");
+    try {
+      const response = await importSoftServices(importFile);
 
-  //     await uploadServiceImport(sendData);
+      toast.success("File Imported Successfully", {
+        id: toastId,
+      });
 
-  //     toast.dismiss();
-  //     toast.success("Service imported successfully");
+     if (fetchService) {
+      await fetchService();
+    }
+      onclose();
 
-  //     onclose();
-  //     fetchCamBilling(); // refresh list
-  //   } catch (error) {
-  //     toast.dismiss();
-  //     console.error("Upload error:", error);
-  //     toast.error("Import failed. Please check file format.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        "Import failed",
+        { id: toastId }
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <ModalWrapper onclose={onclose}>
@@ -115,10 +119,9 @@ const ServiceImportModal = ({ onclose, fetchCamBilling }) => {
 
         <div className="flex justify-end border-t pt-4">
           <button
-            onClick={handleSubmit}
+            onClick={handleImportExcel}
             disabled={loading}
-            className="px-4 py-2 rounded-md text-white font-medium"
-            style={{ background: themeColor }}
+            className="px-4 py-2 rounded-md text-white font-medium bg-black"
           >
             {loading ? "Uploading..." : "Submit"}
           </button>

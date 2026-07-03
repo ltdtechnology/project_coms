@@ -36,6 +36,20 @@ const PatrollingDetails = () => {
     };
     fetchDetails();
   }, [id]);
+
+   const formatPatrollingTime = (dateTime) => {
+        if (!dateTime) return "-";
+
+        const date = new Date(dateTime);
+
+        return date.toLocaleTimeString("en-IN", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+          timeZone: "UTC", // Important
+        });
+      };
+
   const handlePrintQRCode = async () => {
     const doc = new jsPDF();
     const logoText = "Myciti.life";
@@ -66,6 +80,7 @@ const PatrollingDetails = () => {
         qrCodeSize
       );
 
+     
       // Load the Vibe logo image
       const logoResponse = await axios.get(vibeLogo, { responseType: "blob" });
       const logoBlob = logoResponse.data;
@@ -223,11 +238,11 @@ const PatrollingDetails = () => {
             )}
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Start Time : </p>
-              <p className="">{convertToIST(details.start_time)}</p>
+              <p className="">{formatPatrollingTime(details.start_time)}</p>
             </div>
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">End Time : </p>
-              <p className="">{convertToIST(details.end_time)}</p>
+              <p className="">{formatPatrollingTime(details.end_time)}</p>
             </div>
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Created on : </p>
@@ -269,7 +284,7 @@ const PatrollingDetails = () => {
               <button
                 className="px-4 w-full border-2 border-black rounded-md flex justify-center items-center gap-2 py-1"
                 onClick={handlePrintQRCode}
-                // onClick={() => downloadFile(QR)}
+              // onClick={() => downloadFile(QR)}
               >
                 <FaQrcode />
                 Print QR Code

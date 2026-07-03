@@ -9,8 +9,14 @@ import {
 } from "../../api/accountingApi";
 import AccountGroupModal from "./AccountGroupModal";
 import Navbar from "../../components/Navbar";
+import { getItemInLocalStorage } from "../../utils/localStorage";
 
 const AccountGroups = () => {
+  const userType = getItemInLocalStorage("USERTYPE");
+  const isAdmin = userType === "pms_admin";
+  const isAccountingUser = userType === "accounting_emp";
+  const canCreate = isAdmin || isAccountingUser;
+  const canEditDelete = isAdmin; // only pms_admin can edit/delete
   const [accountGroups, setAccountGroups] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -107,20 +113,39 @@ const AccountGroups = () => {
       <Navbar />
       <div className="w-full flex mx-3 mb-10 flex-col overflow-hidden p-6 bg-white/80 mt-2">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Account Groups</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold">Account Groups</h1>
+            {isAdmin && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
+                Full Access
+              </span>
+            )}
+            {isAccountingUser && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-200">
+                Create Only
+              </span>
+            )}
+          </div>
           <div className="flex gap-3">
             <button
-              onClick={handleSeedDefaults}
-              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+              onClick={canEditDelete ? handleSeedDefaults : undefined}
+              disabled={!canEditDelete}
+              title={!canEditDelete ? "Only Admin can seed defaults" : ""}
+              className={`px-4 py-2 rounded text-white ${canEditDelete
+                  ? "bg-gray-500 hover:bg-gray-600 cursor-pointer"
+                  : "bg-gray-300 cursor-not-allowed opacity-60"
+                }`}
             >
               Seed Defaults
             </button>
-            <button
-              onClick={handleCreate}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              + Add Account Group
-            </button>
+            {canCreate && (
+              <button
+                onClick={handleCreate}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                + Add Account Group
+              </button>
+            )}
           </div>
         </div>
 
@@ -216,15 +241,25 @@ const AccountGroups = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <button
-                            onClick={() => handleEdit(group)}
-                            className="text-blue-600 hover:text-blue-900 mr-3"
+                            onClick={() => canEditDelete ? handleEdit(group) : undefined}
+                            disabled={!canEditDelete}
+                            title={!canEditDelete ? "Only Admin can edit" : "Edit"}
+                            className={canEditDelete
+                              ? "text-blue-600 hover:text-blue-900 mr-3"
+                              : "text-gray-300 cursor-not-allowed mr-3"
+                            }
                           >
                             Edit
                           </button>
                           <button
                             type="button"
-                            onClick={() => handleDelete(group.id)}
-                            className="text-red-600 hover:text-red-900"
+                            onClick={() => canEditDelete ? handleDelete(group.id) : undefined}
+                            disabled={!canEditDelete}
+                            title={!canEditDelete ? "Only Admin can delete" : "Delete"}
+                            className={canEditDelete
+                              ? "text-red-600 hover:text-red-900"
+                              : "text-gray-300 cursor-not-allowed"
+                            }
                           >
                             Delete
                           </button>

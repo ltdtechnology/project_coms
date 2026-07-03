@@ -134,7 +134,7 @@ const Services = () => {
       {/* <Navbar /> */}
       {/* <div className="p-4 overflow-hidden w-full my-2 flex mx-3 flex-col">
         */}
-        <div className="flex justify-center w-full"> 
+        <div className="flex justify-center w-full mt-3"> 
       <div className="sm:flex grid grid-cols-2 text-sm md:text-base sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200 ">
         <NavLink
           to={"/services/soft-service"}

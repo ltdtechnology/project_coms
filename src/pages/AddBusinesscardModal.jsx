@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { postBusinesscard } from "../api";
 // import { postBusinesscard } from "../../api"; // adjust path if needed
 
-const AddBusinesscardModal = ({ onClose }) => {
+const AddBusinesscardModal = ({ onClose, refreshCards }) => {
   const themeColor = useSelector((state) => state.theme.color);
 
   const [formData, setFormData] = useState({
@@ -28,36 +28,36 @@ const AddBusinesscardModal = ({ onClose }) => {
     }));
   };
 
-const validateForm = () => {
-  if (!formData.full_name.trim()) {
-    toast.error("Full name is required");
-    return false;
-  }
+  const validateForm = () => {
+    if (!formData.full_name.trim()) {
+      toast.error("Full name is required");
+      return false;
+    }
 
-  if (!formData.contact_number.trim()) {
-    toast.error("Contact number is required");
-    return false;
-  }
+    if (!formData.contact_number.trim()) {
+      toast.error("Contact number is required");
+      return false;
+    }
 
-  if (!/^\d{10}$/.test(formData.contact_number)) {
-    toast.error("Contact number must be exactly 10 digits");
-    return false;
-  }
+    if (!/^\d{10}$/.test(formData.contact_number)) {
+      toast.error("Contact number must be exactly 10 digits");
+      return false;
+    }
 
-  if (!formData.email_id.trim()) {
-    toast.error("Email is required");
-    return false;
-  }
+    if (!formData.email_id.trim()) {
+      toast.error("Email is required");
+      return false;
+    }
 
-  // ✅ Email format validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(formData.email_id)) {
-    toast.error("Please enter a valid email address");
-    return false;
-  }
+    // ✅ Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email_id)) {
+      toast.error("Please enter a valid email address");
+      return false;
+    }
 
-  return true;
-};
+    return true;
+  };
 
 
 
@@ -74,7 +74,7 @@ const validateForm = () => {
 
     if (formData.profile_image) {
       payload.append(
-        "business_card[profile_image]",
+        "business_card[document_url]",
         formData.profile_image
       );
     }
@@ -82,6 +82,7 @@ const validateForm = () => {
     try {
       await postBusinesscard(payload);
       toast.success("Business card added successfully");
+      await refreshCards();
       onClose();
     } catch (error) {
       console.error(error);
@@ -128,6 +129,8 @@ const validateForm = () => {
               name="contact_number"
               className="border-b border-gray-600 p-1 focus:outline-none"
               placeholder="Contact number"
+              maxLength={10}
+              minLength={10}
               value={formData.contact_number}
               onChange={handleChange}
             />

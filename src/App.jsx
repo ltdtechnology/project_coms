@@ -7,6 +7,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./pages/Dashboard.jsx";
@@ -833,253 +834,253 @@ function App() {
   return (
     <>
       {/* <Router> */}
-        <Toaster />
-        {/* <Navbar/> */}
-        <Routes>
-          {/* <Route path="/" element={<Navigate to="/login" />} /> */}
-          <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedAdminRoutes>
-                <Dashboard />
-              </ProtectedAdminRoutes>
-            }
-          />
+      <Toaster />
+      {/* <Navbar/> */}
+      <Routes>
+        {/* <Route path="/" element={<Navigate to="/login" />} /> */}
+        <Route path="/login" element={<Login />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedAdminRoutes>
+              <Dashboard />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/settings"
-            element={
-              <ProtectedRoute>
-                {" "}
-                <User />{" "}
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/attendance"
-            element={
-              <ProtectedAdminRoutes>
-                {" "}
-                <Attendance />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* setup */}
-          <Route
-            path="/setup"
-            element={
-              <ProtectedAdminRoutes>
-                <Setup />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              {" "}
+              <User />{" "}
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/attendance"
+          element={
+            <ProtectedAdminRoutes>
+              {" "}
+              <Attendance />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* setup */}
+        <Route
+          path="/setup"
+          element={
+            <ProtectedAdminRoutes>
+              <Setup />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/setup/account"
-            element={
-              <ProtectedAdminRoutes>
-                <Account />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/account/organisation"
-            element={
-              <ProtectedAdminRoutes>
-                <Organisation />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/setup/account"
+          element={
+            <ProtectedAdminRoutes>
+              <Account />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/account/organisation"
+          element={
+            <ProtectedAdminRoutes>
+              <Organisation />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/setup/account/company"
-            element={
-              <ProtectedAdminRoutes>
-                <Company />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/account/country"
-            element={
-              <ProtectedAdminRoutes>
-                <Country />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/account/region"
-            element={
-              <ProtectedAdminRoutes>
-                <Region />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/account/zone"
-            element={
-              <ProtectedAdminRoutes>
-                <Zone />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/account/site"
-            element={
-              <ProtectedAdminRoutes>
-                <Site />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/standard-unit"
-            element={
-              <ProtectedAdminRoutes>
-                <StandardUnit />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/account/site/create-new-site"
-            element={
-              <ProtectedAdminRoutes>
-                <AddSite />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/account/site/site-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <SiteDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/account/site/edit-site/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditSite />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/account/entity"
-            element={
-              <ProtectedAdminRoutes>
-                <Entity />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/account/building"
-            element={
-              <ProtectedAdminRoutes>
-                <Building />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/account/wing"
-            element={
-              <ProtectedAdminRoutes>
-                <Wing />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/account/area"
-            element={
-              <ProtectedAdminRoutes>
-                <Area />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/account/floor"
-            element={
-              <ProtectedAdminRoutes>
-                <Floor />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/account/unit"
-            element={
-              <ProtectedAdminRoutes>
-                <Unit />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/account/room"
-            element={
-              <ProtectedAdminRoutes>
-                <Room />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/User-role"
-            element={
-              <ProtectedRoute>
-                <UserRole />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/setup/add-role/"
-            element={
-              <ProtectedAdminRoutes>
-                <AddRole />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/users-tree"
-            element={
-              <ProtectedAdminRoutes>
-                <UserSetupTree />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/users-tree/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <UserSetupTreeView />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/users-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <UserSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/users-setup/add-new-user"
-            element={
-              <ProtectedAdminRoutes>
-                <AddUser />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/users-setup/delete-user"
-            element={<DeleteUsers />}
-          />
-          <Route
-            path="/setup/users-details/:id"
-            element={<SetupUserDetails />}
-          />
-          <Route path="/setup/users-edit-page/:id" element={<EditPageUser />} />
-          <Route path="/setup/forgot-password" element={<ForgotPassword />} />
-          {/* <Route
+        <Route
+          path="/setup/account/company"
+          element={
+            <ProtectedAdminRoutes>
+              <Company />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/account/country"
+          element={
+            <ProtectedAdminRoutes>
+              <Country />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/account/region"
+          element={
+            <ProtectedAdminRoutes>
+              <Region />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/account/zone"
+          element={
+            <ProtectedAdminRoutes>
+              <Zone />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/account/site"
+          element={
+            <ProtectedAdminRoutes>
+              <Site />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/standard-unit"
+          element={
+            <ProtectedAdminRoutes>
+              <StandardUnit />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/account/site/create-new-site"
+          element={
+            <ProtectedAdminRoutes>
+              <AddSite />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/account/site/site-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <SiteDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/account/site/edit-site/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditSite />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/account/entity"
+          element={
+            <ProtectedAdminRoutes>
+              <Entity />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/account/building"
+          element={
+            <ProtectedAdminRoutes>
+              <Building />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/account/wing"
+          element={
+            <ProtectedAdminRoutes>
+              <Wing />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/account/area"
+          element={
+            <ProtectedAdminRoutes>
+              <Area />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/account/floor"
+          element={
+            <ProtectedAdminRoutes>
+              <Floor />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/account/unit"
+          element={
+            <ProtectedAdminRoutes>
+              <Unit />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/account/room"
+          element={
+            <ProtectedAdminRoutes>
+              <Room />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/User-role"
+          element={
+            <ProtectedRoute>
+              <UserRole />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/setup/add-role/"
+          element={
+            <ProtectedAdminRoutes>
+              <AddRole />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/users-tree"
+          element={
+            <ProtectedAdminRoutes>
+              <UserSetupTree />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/users-tree/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <UserSetupTreeView />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/users-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <UserSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/users-setup/add-new-user"
+          element={
+            <ProtectedAdminRoutes>
+              <AddUser />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/users-setup/delete-user"
+          element={<DeleteUsers />}
+        />
+        <Route
+          path="/setup/users-details/:id"
+          element={<SetupUserDetails />}
+        />
+        <Route path="/setup/users-edit-page/:id" element={<EditPageUser />} />
+        <Route path="/setup/forgot-password" element={<ForgotPassword />} />
+        {/* <Route
             path="/setup/users-details"
             element={
               <ProtectedAdminRoutes>
@@ -1088,468 +1089,468 @@ function App() {
             }
           /> */}
 
-          <Route
-            path="/setup/asset-group"
-            element={
-              <ProtectedAdminRoutes>
-                <AssetGroup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/meter-category-type"
-            element={
-              <ProtectedAdminRoutes>
-                <MeterCategoryType />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/assets/routine-task-details/:assetId/:activityId"
-            element={
-              <ProtectedAdminRoutes>
-                <AssetRoutineDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/asset/add-asset-ppm"
-            element={
-              <ProtectedAdminRoutes>
-                <AddPPMActivity />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/setup/asset-group"
+          element={
+            <ProtectedAdminRoutes>
+              <AssetGroup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/meter-category-type"
+          element={
+            <ProtectedAdminRoutes>
+              <MeterCategoryType />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/assets/routine-task-details/:assetId/:activityId"
+          element={
+            <ProtectedAdminRoutes>
+              <AssetRoutineDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/asset/add-asset-ppm"
+          element={
+            <ProtectedAdminRoutes>
+              <AddPPMActivity />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/asset/ppm-activity-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <PPMChecklistDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/asset/asset-amc/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <AssetAmcDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="assets/asset-utilities"
-            element={
-              <ProtectedAdminRoutes>
-                <AssetUtilities />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/asset/ppm-activity-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <PPMChecklistDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/asset/asset-amc/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <AssetAmcDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="assets/asset-utilities"
+          element={
+            <ProtectedAdminRoutes>
+              <AssetUtilities />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          {/* Service */}
-          <Route
-            path="/service/checklist/:serviceId/:activityId"
-            element={
-              <ProtectedAdminRoutes>
-                <ServiceTaskDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* tickets -Admin*/}
-          <Route path="/tickets" element={<Ticket />} />
-          <Route
-            path="/tickets/details/:id"
-            element={
-              <ProtectedRoute>
-                <TicketDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/tickets/create-ticket"
-            element={
-              <ProtectedAdminRoutes>
-                <CreateTicket />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* <Route path="/tickets/create-ticket" element={<CreateTicket /> } /> */}
-          <Route
-            path="/tickets/user-details/:id"
-            element={
-              <ProtectedRoute>
-                <UserDetails />
-              </ProtectedRoute>
-            }
-          />
-          {/* Edit Details */}
-          <Route
-            path="/edit/:id"
-            element={
-              <ProtectedRoute>
-                <DetailsEdit />
-              </ProtectedRoute>
-            }
-          />
-          {/* tickets- user */}
-          <Route
-            path="/mytickets"
-            element={
-              <ProtectedRoute>
-                <MyTickets />{" "}
-              </ProtectedRoute>
-            }
-          />
-          {/* Additional Services */}
-          {/* <Route path="/additional-services" element={<AdditionalServices />} /> */}
-          <Route
-            path="/additional-services"
-            element={
-              <ProtectedRoute>
-                <AdditionalServices />{" "}
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/mytickets/userticket"
-            element={
-              <ProtectedRoute>
-                {" "}
-                <UserTicket />{" "}
-              </ProtectedRoute>
-            }
-          />
-          {/* business */}
-          <Route
-            path="/business"
-            element={
-              <ProtectedAdminRoutes>
-                <Business />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/business/details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <BusinessDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/business/edit-contact/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditContactBook />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/business/add-business"
-            element={
-              <ProtectedAdminRoutes>
-                <AddBusiness />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/business/setup-category"
-            element={
-              <ProtectedAdminRoutes>
-                <BusinessSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
+        {/* Service */}
+        <Route
+          path="/service/checklist/:serviceId/:activityId"
+          element={
+            <ProtectedAdminRoutes>
+              <ServiceTaskDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* tickets -Admin*/}
+        <Route path="/tickets" element={<Ticket />} />
+        <Route
+          path="/tickets/details/:id"
+          element={
+            <ProtectedRoute>
+              <TicketDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tickets/create-ticket"
+          element={
+            <ProtectedAdminRoutes>
+              <CreateTicket />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* <Route path="/tickets/create-ticket" element={<CreateTicket /> } /> */}
+        <Route
+          path="/tickets/user-details/:id"
+          element={
+            <ProtectedRoute>
+              <UserDetails />
+            </ProtectedRoute>
+          }
+        />
+        {/* Edit Details */}
+        <Route
+          path="/edit/:id"
+          element={
+            <ProtectedRoute>
+              <DetailsEdit />
+            </ProtectedRoute>
+          }
+        />
+        {/* tickets- user */}
+        <Route
+          path="/mytickets"
+          element={
+            <ProtectedRoute>
+              <MyTickets />{" "}
+            </ProtectedRoute>
+          }
+        />
+        {/* Additional Services */}
+        {/* <Route path="/additional-services" element={<AdditionalServices />} /> */}
+        <Route
+          path="/additional-services"
+          element={
+            <ProtectedRoute>
+              <AdditionalServices />{" "}
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mytickets/userticket"
+          element={
+            <ProtectedRoute>
+              {" "}
+              <UserTicket />{" "}
+            </ProtectedRoute>
+          }
+        />
+        {/* business */}
+        <Route
+          path="/business"
+          element={
+            <ProtectedAdminRoutes>
+              <Business />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/business/details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <BusinessDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/business/edit-contact/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditContactBook />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/business/add-business"
+          element={
+            <ProtectedAdminRoutes>
+              <AddBusiness />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/business/setup-category"
+          element={
+            <ProtectedAdminRoutes>
+              <BusinessSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          {/* Pets */}
-          <Route path="/setup/pets" element={<ViewPets />} />
-          <Route path="/setup/pets-add" element={<AddPets />} />
-          <Route path="/setup/pets-edit/:id" element={<EditPets />} />
-          <Route path="/setup/pets-details/:id" element={<PetDetails />} />
-          {/* materials */}
+        {/* Pets */}
+        <Route path="/setup/pets" element={<ViewPets />} />
+        <Route path="/setup/pets-add" element={<AddPets />} />
+        <Route path="/setup/pets-edit/:id" element={<EditPets />} />
+        <Route path="/setup/pets-details/:id" element={<PetDetails />} />
+        {/* materials */}
 
-          {/* AboutUS Pages */}
-          <Route path="/setup/about_us" element={<AboutUs />} />
-          <Route path="/logicon-privacy-policy" element={<PrivacyPolicy />} />
-          <Route
-            path="/logicon-jiological-location"
-            element={<PrivacyPolicyJiologicalLocation />}
-          />
-          <Route path="/setup/other_projects" element={<OtherProject />} />
-          <Route path="/extra" element={<Slideshow />} />
-          <Route
-            path="/capital-privacy-policy"
-            element={<PrivacyPolicyCapital />}
-          />
-          <Route
-            path="/privacy-policy-bhoomi-celestia"
-            element={<PrivacyPolicyBhoomiCelestia />}
-          />
-          <Route
-            path="/capital-privacy-policy-contact_us"
-            element={<PrivacyPolicyContact />}
-          />
-          <Route
-            path="/bhoomi-privacy-policy-contact_us"
-            element={<PrivacyPolicyBhoomi />}
-          />
-          <Route
-            path="/privacy-policy-myciti-life"
-            element={<PrivacyPolicyMycitiLife />}
-          />
-          <Route
-            path="/adani-policy-myciti-life"
-            element={<AdaniPrivacyPolicy />}
-          />
-          {/* booking */}
-          <Route path="/bookings" element={<Booking />} />
-          <Route
-            path="/bookings/new-facility-booking"
-            element={<AmenitiesBooking />}
-          />
-          {/* hotel booking */}
-          <Route
-            path="/bookings/new-hotel-booking"
-            element={<HotelBooking />}
-          />
-          <Route
-            path="/bookings/booking-details/:id"
-            element={<BookingDetails />}
-          />
-          <Route
-            path="/bookings/hotelbooking-details/:id"
-            element={<HotelBookingDetails />}
-          />
-          <Route
-            path="/setup/facility"
-            element={
-              <ProtectedAdminRoutes>
-                <SetupBookingFacility />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/facility-details/:id"
-            element={<BookingFacilityDetails />}
-          />
-          <Route
-            path="/setup/facility-details/edit/:id"
-            element={<EditAmenitySetup />}
-          />
-          <Route
-            path="/setup/hotel-details/:id"
-            element={<BookingFacilityDetails />}
-          />
+        {/* AboutUS Pages */}
+        <Route path="/setup/about_us" element={<AboutUs />} />
+        <Route path="/logicon-privacy-policy" element={<PrivacyPolicy />} />
+        <Route
+          path="/logicon-jiological-location"
+          element={<PrivacyPolicyJiologicalLocation />}
+        />
+        <Route path="/setup/other_projects" element={<OtherProject />} />
+        <Route path="/extra" element={<Slideshow />} />
+        <Route
+          path="/capital-privacy-policy"
+          element={<PrivacyPolicyCapital />}
+        />
+        <Route
+          path="/privacy-policy-bhoomi-celestia"
+          element={<PrivacyPolicyBhoomiCelestia />}
+        />
+        <Route
+          path="/capital-privacy-policy-contact_us"
+          element={<PrivacyPolicyContact />}
+        />
+        <Route
+          path="/bhoomi-privacy-policy-contact_us"
+          element={<PrivacyPolicyBhoomi />}
+        />
+        <Route
+          path="/privacy-policy-myciti-life"
+          element={<PrivacyPolicyMycitiLife />}
+        />
+        <Route
+          path="/adani-policy-myciti-life"
+          element={<AdaniPrivacyPolicy />}
+        />
+        {/* booking */}
+        <Route path="/bookings" element={<Booking />} />
+        <Route
+          path="/bookings/new-facility-booking"
+          element={<AmenitiesBooking />}
+        />
+        {/* hotel booking */}
+        <Route
+          path="/bookings/new-hotel-booking"
+          element={<HotelBooking />}
+        />
+        <Route
+          path="/bookings/booking-details/:id"
+          element={<BookingDetails />}
+        />
+        <Route
+          path="/bookings/hotelbooking-details/:id"
+          element={<HotelBookingDetails />}
+        />
+        <Route
+          path="/setup/facility"
+          element={
+            <ProtectedAdminRoutes>
+              <SetupBookingFacility />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/facility-details/:id"
+          element={<BookingFacilityDetails />}
+        />
+        <Route
+          path="/setup/facility-details/edit/:id"
+          element={<EditAmenitySetup />}
+        />
+        <Route
+          path="/setup/hotel-details/:id"
+          element={<BookingFacilityDetails />}
+        />
 
-          <Route
-            path="/setup/hotel-details/edit/:id"
-            element={<EditHotelSetup />}
-          />
-          <Route
-            path="/setup/facility/create-facility"
-            element={
-              <ProtectedAdminRoutes>
-                <SetupFacility />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* Admin hotel booking */}
-          <Route
-            path="/setup/facility/create-hotelbooking"
-            element={
-              <ProtectedAdminRoutes>
-                <SetupHotelBooking />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/seat-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <SetupSeat />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route path="/seat-booking" element={<BookSeat />} />
-          <Route path="/employees/booking" element={<EmployeeBooking />} />
-          <Route
-            path="/employees/facility-booking"
-            element={
-              <ProtectedRoute>
-                <EmployeeFacilityBooking />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employees/seat-booking"
-            element={
-              <ProtectedRoute>
-                <EmployeeSeatBooking />
-              </ProtectedRoute>
-            }
-          />
-          {/* employee Communication */}
-          {/* employee Communication */}
-          <Route
-            path="/employee/employee-communication"
-            element={
-              <ProtectedRoute>
-                <EmployeeCommunication />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/communication/events"
-            element={
-              <ProtectedRoute>
-                <EmployeeEvents />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/communication/broadcast"
-            element={
-              <ProtectedRoute>
-                <EmployeeBroadcast />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/communication/polls"
-            element={
-              <ProtectedRoute>
-                <EmployeePolls />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/communication/forum"
-            element={
-              <ProtectedRoute>
-                <EmployeeForum />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/communication/groups"
-            element={
-              <ProtectedRoute>
-                <EmployeeGroup />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/communication/events"
-            element={
-              <ProtectedRoute>
-                <EmployeeEvents />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/communication/broadcast"
-            element={
-              <ProtectedRoute>
-                <EmployeeBroadcast />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/communication/polls"
-            element={
-              <ProtectedRoute>
-                <EmployeePolls />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/communication/forum"
-            element={
-              <ProtectedRoute>
-                <EmployeeForum />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/communication/groups"
-            element={
-              <ProtectedRoute>
-                <EmployeeGroup />
-              </ProtectedRoute>
-            }
-          />
-          {/* employee Communication create forum */}
-          <Route
-            path="/employee/employee-communication-create-forum"
-            element={
-              <ProtectedRoute>
-                <CreateEmployeeForum />
-              </ProtectedRoute>
-            }
-          />
-          {/* employee Communication chatbot */}
-          <Route
-            path="/employee/employee-communication-chatbot"
-            element={
-              <ProtectedRoute>
-                <EmployeeChatBot />
-              </ProtectedRoute>
-            }
-          />
-          {/* employee Communication group detail */}
-          <Route
-            path="/employee/communication-groupdetail"
-            element={
-              <ProtectedRoute>
-                <EmployeeGroupJoinDetails />
-              </ProtectedRoute>
-            }
-          />
-          {/* communication */}
+        <Route
+          path="/setup/hotel-details/edit/:id"
+          element={<EditHotelSetup />}
+        />
+        <Route
+          path="/setup/facility/create-facility"
+          element={
+            <ProtectedAdminRoutes>
+              <SetupFacility />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* Admin hotel booking */}
+        <Route
+          path="/setup/facility/create-hotelbooking"
+          element={
+            <ProtectedAdminRoutes>
+              <SetupHotelBooking />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/seat-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <SetupSeat />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route path="/seat-booking" element={<BookSeat />} />
+        <Route path="/employees/booking" element={<EmployeeBooking />} />
+        <Route
+          path="/employees/facility-booking"
+          element={
+            <ProtectedRoute>
+              <EmployeeFacilityBooking />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employees/seat-booking"
+          element={
+            <ProtectedRoute>
+              <EmployeeSeatBooking />
+            </ProtectedRoute>
+          }
+        />
+        {/* employee Communication */}
+        {/* employee Communication */}
+        <Route
+          path="/employee/employee-communication"
+          element={
+            <ProtectedRoute>
+              <EmployeeCommunication />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/communication/events"
+          element={
+            <ProtectedRoute>
+              <EmployeeEvents />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/communication/broadcast"
+          element={
+            <ProtectedRoute>
+              <EmployeeBroadcast />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/communication/polls"
+          element={
+            <ProtectedRoute>
+              <EmployeePolls />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/communication/forum"
+          element={
+            <ProtectedRoute>
+              <EmployeeForum />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/communication/groups"
+          element={
+            <ProtectedRoute>
+              <EmployeeGroup />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/communication/events"
+          element={
+            <ProtectedRoute>
+              <EmployeeEvents />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/communication/broadcast"
+          element={
+            <ProtectedRoute>
+              <EmployeeBroadcast />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/communication/polls"
+          element={
+            <ProtectedRoute>
+              <EmployeePolls />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/communication/forum"
+          element={
+            <ProtectedRoute>
+              <EmployeeForum />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/communication/groups"
+          element={
+            <ProtectedRoute>
+              <EmployeeGroup />
+            </ProtectedRoute>
+          }
+        />
+        {/* employee Communication create forum */}
+        <Route
+          path="/employee/employee-communication-create-forum"
+          element={
+            <ProtectedRoute>
+              <CreateEmployeeForum />
+            </ProtectedRoute>
+          }
+        />
+        {/* employee Communication chatbot */}
+        <Route
+          path="/employee/employee-communication-chatbot"
+          element={
+            <ProtectedRoute>
+              <EmployeeChatBot />
+            </ProtectedRoute>
+          }
+        />
+        {/* employee Communication group detail */}
+        <Route
+          path="/employee/communication-groupdetail"
+          element={
+            <ProtectedRoute>
+              <EmployeeGroupJoinDetails />
+            </ProtectedRoute>
+          }
+        />
+        {/* communication */}
 
-          {/* employee Communication group detail */}
-          <Route
-            path="/employee/communication-employee-profile"
-            element={
-              <ProtectedRoute>
-                <EmployeeProfile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/communication-edit-employee-profile"
-            element={
-              <ProtectedRoute>
-                <EditEmployeeProfile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/edit-profile"
-            element={
-              <ProtectedRoute>
-                <EditProfile />
-              </ProtectedRoute>
-            }
-          />
+        {/* employee Communication group detail */}
+        <Route
+          path="/employee/communication-employee-profile"
+          element={
+            <ProtectedRoute>
+              <EmployeeProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/communication-edit-employee-profile"
+          element={
+            <ProtectedRoute>
+              <EditEmployeeProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/edit-profile"
+          element={
+            <ProtectedRoute>
+              <EditProfile />
+            </ProtectedRoute>
+          }
+        />
 
-          {/* <Route
+        {/* <Route
             path="/communication"
             element={
               <ProtectedAdminRoutes>
@@ -1557,152 +1558,152 @@ function App() {
               </ProtectedAdminRoutes>
             }
           /> */}
-          <Route
-            path="/communication/events"
-            element={
-              <ProtectedAdminRoutes>
-                <Events />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/communication/broadcast"
-            element={
-              <ProtectedAdminRoutes>
-                <Broadcast />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/communication/polls"
-            element={
-              <ProtectedAdminRoutes>
-                <Polls />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/communication/forum"
-            element={
-              <ProtectedAdminRoutes>
-                <Forum />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/communication/groups"
-            element={
-              <ProtectedAdminRoutes>
-                <Groups />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/communication/create-event"
-            element={
-              <ProtectedAdminRoutes>
-                <CreateEvent />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/communication/event/edit-events/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditEvent />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/communication/event/event-details/:id"
-            element={
-              <ProtectedRoute>
-                <EventDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/communication/broadcast/create-broadcast"
-            element={
-              <ProtectedAdminRoutes>
-                <CreateBroadcast />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/communication/broadcast/broadcast-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <BroadcastDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/communication/broadcast/edit-broadcast/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditBroadcast />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/*  */}
-          <Route
-            path="/admin/create-polls"
-            element={
-              <ProtectedAdminRoutes>
-                <CreatePolls />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/create-forum"
-            element={
-              <ProtectedAdminRoutes>
-                <CreateForum />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/communication/forum/hidden_forum"
-            element={
-              <ProtectedAdminRoutes>
-                <HiddenForums />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/communication/forum/reported_forum"
-            element={
-              <ProtectedAdminRoutes>
-                <ReportForum />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/communication/forum/saved_forum"
-            element={
-              <ProtectedAdminRoutes>
-                <SavedForums />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/communication-charbot"
-            element={
-              <ProtectedAdminRoutes>
-                <ChatBot />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/communication-create-group"
-            element={
-              <ProtectedAdminRoutes>
-                <CreateGroup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* <Route
+        <Route
+          path="/communication/events"
+          element={
+            <ProtectedAdminRoutes>
+              <Events />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/communication/broadcast"
+          element={
+            <ProtectedAdminRoutes>
+              <Broadcast />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/communication/polls"
+          element={
+            <ProtectedAdminRoutes>
+              <Polls />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/communication/forum"
+          element={
+            <ProtectedAdminRoutes>
+              <Forum />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/communication/groups"
+          element={
+            <ProtectedAdminRoutes>
+              <Groups />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/communication/create-event"
+          element={
+            <ProtectedAdminRoutes>
+              <CreateEvent />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/communication/event/edit-events/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditEvent />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/communication/event/event-details/:id"
+          element={
+            <ProtectedRoute>
+              <EventDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/communication/broadcast/create-broadcast"
+          element={
+            <ProtectedAdminRoutes>
+              <CreateBroadcast />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/communication/broadcast/broadcast-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <BroadcastDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/communication/broadcast/edit-broadcast/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditBroadcast />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/*  */}
+        <Route
+          path="/admin/create-polls"
+          element={
+            <ProtectedAdminRoutes>
+              <CreatePolls />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/create-forum"
+          element={
+            <ProtectedAdminRoutes>
+              <CreateForum />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/communication/forum/hidden_forum"
+          element={
+            <ProtectedAdminRoutes>
+              <HiddenForums />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/communication/forum/reported_forum"
+          element={
+            <ProtectedAdminRoutes>
+              <ReportForum />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/communication/forum/saved_forum"
+          element={
+            <ProtectedAdminRoutes>
+              <SavedForums />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/communication-charbot"
+          element={
+            <ProtectedAdminRoutes>
+              <ChatBot />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/communication-create-group"
+          element={
+            <ProtectedAdminRoutes>
+              <CreateGroup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* <Route
             path="/admin/communication-group-details"
             element={
               <ProtectedAdminRoutes>
@@ -1710,118 +1711,118 @@ function App() {
               </ProtectedAdminRoutes>
             }
           /> */}
-          <Route
-            path="/admin/communication-group-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <GroupJoinDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* mail room */}
-          <Route path="/mail-room" element={<MailRoom />} />
-          <Route
-            path="/mail-room/inbound/create-inbound"
-            element={<CreateInbound />}
-          />
-          <Route
-            path="/mail-room/inbound/inbound-details"
-            element={<InBoundDetails />}
-          />
-          <Route
-            path="/mail-room/outbound/create-outbound"
-            element={<CreateOutbound />}
-          />
-          <Route
-            path="/mail-room/outbound/outbound-details"
-            element={<OutBoundDetails />}
-          />
-          {/* Asset */}
-          <Route
-            path="/assets"
-            element={<Navigate to="/assets/all-assets" replace />}
-          />
-          <Route
-            path="/assets/all-assets"
-            element={
-              <ProtectedAdminRoutes>
-                <Asset />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/assets/amc"
-            element={
-              <ProtectedAdminRoutes>
-                <AMC />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/assets/meter"
-            element={
-              <ProtectedAdminRoutes>
-                <Meter />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/assets/checklist"
-            element={
-              <ProtectedAdminRoutes>
-                <Checklist />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/assets/routine-task"
-            element={
-              <ProtectedAdminRoutes>
-                <RoutineTask />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/assets/ppm"
-            element={
-              <ProtectedAdminRoutes>
-                <PPMActivity />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/assets/ppm-task"
-            element={
-              <ProtectedAdminRoutes>
-                <PPMTask />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/assets/ppm-calendar"
-            element={
-              <ProtectedAdminRoutes>
-                <PPMCalendar />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/assets/stock-items"
-            element={
-              <ProtectedAdminRoutes>
-                <Inventory />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-masters/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditMasters />
-              </ProtectedAdminRoutes>
-            }
-          />
-           <Route
+        <Route
+          path="/admin/communication-group-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <GroupJoinDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* mail room */}
+        <Route path="/mail-room" element={<MailRoom />} />
+        <Route
+          path="/mail-room/inbound/create-inbound"
+          element={<CreateInbound />}
+        />
+        <Route
+          path="/mail-room/inbound/inbound-details"
+          element={<InBoundDetails />}
+        />
+        <Route
+          path="/mail-room/outbound/create-outbound"
+          element={<CreateOutbound />}
+        />
+        <Route
+          path="/mail-room/outbound/outbound-details"
+          element={<OutBoundDetails />}
+        />
+        {/* Asset */}
+        <Route
+          path="/assets"
+          element={<Navigate to="/assets/all-assets" replace />}
+        />
+        <Route
+          path="/assets/all-assets"
+          element={
+            <ProtectedAdminRoutes>
+              <Asset />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/assets/amc"
+          element={
+            <ProtectedAdminRoutes>
+              <AMC />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/assets/meter"
+          element={
+            <ProtectedAdminRoutes>
+              <Meter />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/assets/checklist"
+          element={
+            <ProtectedAdminRoutes>
+              <Checklist />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/assets/routine-task"
+          element={
+            <ProtectedAdminRoutes>
+              <RoutineTask />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/assets/ppm"
+          element={
+            <ProtectedAdminRoutes>
+              <PPMActivity />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/assets/ppm-task"
+          element={
+            <ProtectedAdminRoutes>
+              <PPMTask />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/assets/ppm-calendar"
+          element={
+            <ProtectedAdminRoutes>
+              <PPMCalendar />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/assets/stock-items"
+          element={
+            <ProtectedAdminRoutes>
+              <Inventory />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-masters/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditMasters />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
           path="/admin/master-details/:id"
           element={
             <ProtectedAdminRoutes>
@@ -1829,412 +1830,412 @@ function App() {
             </ProtectedAdminRoutes>
           }
         />
-          <Route
-            path="/admin/stock-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <InventoryDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/assets/add-asset"
-            element={
-              <ProtectedAdminRoutes>
+        <Route
+          path="/admin/stock-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <InventoryDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/assets/add-asset"
+          element={
+            <ProtectedAdminRoutes>
               <AddAsset />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/assets/asset-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <AssetDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/assets/edit-asset/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditAsset />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/assets/add-amc"
-            element={
-              <ProtectedAdminRoutes>
-                <AddAMC />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/assets/edit-amc/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditAssetAMC />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/assets/associate-checklist/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <AssociateAssetChecklist />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/assets/overview"
-            element={
-              <ProtectedAdminRoutes>
-                <AssetWidgets />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/*services*/}
-          <Route
-            path="/services"
-            element={<Navigate to="/services/soft-service" replace />}
-          />
-          <Route
-            path="/services/soft-service"
-            element={
-              <ProtectedAdminRoutes>
-                <ServicePage />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/services/overview"
-            element={
-              <ProtectedAdminRoutes>
-                <SoftServiceWidgets />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/services/tasks"
-            element={
-              <ProtectedAdminRoutes>
-                <ServicesTask />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/services/checklist"
-            element={
-              <ProtectedAdminRoutes>
-                <ServiceChecklist />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/services/add-service"
-            element={
-              <ProtectedAdminRoutes>
-                <AddService />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/services/service-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                {" "}
-                <ServiceDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/soft-service/schedule-task-details/:sId/:activityId"
-            element={
-              <ProtectedAdminRoutes>
-                <SoftServiceScheduleDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/services/edit-service/:id"
-            element={
-              <ProtectedAdminRoutes>
-                {" "}
-                <EditService />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/services/add-service-checklist"
-            element={
-              <ProtectedAdminRoutes>
-                <AddServicesChecklist />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/services/edit-service-checklist/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditServiceChecklist />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/services/associate-checklist/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <AssociateServiceChecklist />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/services/edit-ppm/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditServicePPM />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/services/edit-routine/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditServiceRoutine />
-              </ProtectedAdminRoutes>
-            }
-          />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/assets/asset-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <AssetDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/assets/edit-asset/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditAsset />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/assets/add-amc"
+          element={
+            <ProtectedAdminRoutes>
+              <AddAMC />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/assets/edit-amc/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditAssetAMC />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/assets/associate-checklist/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <AssociateAssetChecklist />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/assets/overview"
+          element={
+            <ProtectedAdminRoutes>
+              <AssetWidgets />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/*services*/}
+        <Route
+          path="/services"
+          element={<Navigate to="/services/soft-service" replace />}
+        />
+        <Route
+          path="/services/soft-service"
+          element={
+            <ProtectedAdminRoutes>
+              <ServicePage />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/services/overview"
+          element={
+            <ProtectedAdminRoutes>
+              <SoftServiceWidgets />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/services/tasks"
+          element={
+            <ProtectedAdminRoutes>
+              <ServicesTask />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/services/checklist"
+          element={
+            <ProtectedAdminRoutes>
+              <ServiceChecklist />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/services/add-service"
+          element={
+            <ProtectedAdminRoutes>
+              <AddService />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/services/service-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              {" "}
+              <ServiceDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/soft-service/schedule-task-details/:sId/:activityId"
+          element={
+            <ProtectedAdminRoutes>
+              <SoftServiceScheduleDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/services/edit-service/:id"
+          element={
+            <ProtectedAdminRoutes>
+              {" "}
+              <EditService />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/services/add-service-checklist"
+          element={
+            <ProtectedAdminRoutes>
+              <AddServicesChecklist />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/services/edit-service-checklist/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditServiceChecklist />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/services/associate-checklist/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <AssociateServiceChecklist />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/services/edit-ppm/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditServicePPM />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/services/edit-routine/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditServiceRoutine />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          {/* Supplier */}
-          <Route
-            path="/suppliers"
-            element={
-              <ProtectedAdminRoutes>
-                <Suppliers />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/suppliers/add-supplier"
-            element={
-              <ProtectedAdminRoutes>
-                <AddSupplier />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/suppliers/edit-supplier/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditSuppliers />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/suppliers/supplier-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <SupplierDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/supplier-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <SupplierSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
+        {/* Supplier */}
+        <Route
+          path="/suppliers"
+          element={
+            <ProtectedAdminRoutes>
+              <Suppliers />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/suppliers/add-supplier"
+          element={
+            <ProtectedAdminRoutes>
+              <AddSupplier />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/suppliers/edit-supplier/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditSuppliers />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/suppliers/supplier-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <SupplierDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/supplier-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <SupplierSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          {/* Employee Attendance */}
-          <Route
-            path="/employee-attendance"
-            element={
-              <ProtectedRoute>
-                <EmployeeAttendance />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee-salary"
-            element={
-              <ProtectedRoute>
-                <Salary />
-              </ProtectedRoute>
-            }
-          />
-          {/* employee Business card */}
-          <Route
-            path="/employees/businesscard"
-            element={
-              <ProtectedRoute>
-                <EmployeeBusinessCard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/business-card"
-            element={
-              <ProtectedAdminRoutes>
-                <BusinessCard />
-              </ProtectedAdminRoutes>
-            }
-          />
+        {/* Employee Attendance */}
+        <Route
+          path="/employee-attendance"
+          element={
+            <ProtectedRoute>
+              <EmployeeAttendance />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee-salary"
+          element={
+            <ProtectedRoute>
+              <Salary />
+            </ProtectedRoute>
+          }
+        />
+        {/* employee Business card */}
+        <Route
+          path="/employees/businesscard"
+          element={
+            <ProtectedRoute>
+              <EmployeeBusinessCard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/business-card"
+          element={
+            <ProtectedAdminRoutes>
+              <BusinessCard />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/employees/transportation"
-            element={
-              <ProtectedRoute>
-                <EmployeeTransportation />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employees/book-outstation"
-            element={
-              <ProtectedRoute>
-                <BookOutstation />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employees/book-pickup"
-            element={
-              <ProtectedRoute>
-                <BookPickup />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employees/pickup-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeePickupDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employees/outstation-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeOutstationDetails />
-              </ProtectedRoute>
-            }
-          />
-          {/* Admin transport */}
-          <Route
-            path="/admin/transportation"
-            element={
-              <ProtectedAdminRoutes>
-                <Transportation />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/book-pickup"
-            element={
-              <ProtectedAdminRoutes>
-                <AdminBookDailypickup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/book-outstation"
-            element={
-              <ProtectedAdminRoutes>
-                <AdminBookOutstation />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/pickup-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <AdminPickupDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/outstation-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <AdminOutstationDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* Admin parking */}
-          <Route
-            path="/admin/parking"
-            element={
-              <ProtectedAdminRoutes>
-                <Parkings />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/book-parking"
-            element={
-              <ProtectedAdminRoutes>
-                <AddParking />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/employees/transportation"
+          element={
+            <ProtectedRoute>
+              <EmployeeTransportation />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employees/book-outstation"
+          element={
+            <ProtectedRoute>
+              <BookOutstation />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employees/book-pickup"
+          element={
+            <ProtectedRoute>
+              <BookPickup />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employees/pickup-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeePickupDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employees/outstation-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeOutstationDetails />
+            </ProtectedRoute>
+          }
+        />
+        {/* Admin transport */}
+        <Route
+          path="/admin/transportation"
+          element={
+            <ProtectedAdminRoutes>
+              <Transportation />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/book-pickup"
+          element={
+            <ProtectedAdminRoutes>
+              <AdminBookDailypickup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/book-outstation"
+          element={
+            <ProtectedAdminRoutes>
+              <AdminBookOutstation />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/pickup-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <AdminPickupDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/outstation-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <AdminOutstationDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* Admin parking */}
+        <Route
+          path="/admin/parking"
+          element={
+            <ProtectedAdminRoutes>
+              <Parkings />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/book-parking"
+          element={
+            <ProtectedAdminRoutes>
+              <AddParking />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/admin/parking-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <ParkingDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/parking-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <ParkingSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-parking-config"
-            element={
-              <ProtectedAdminRoutes>
-                <AddParkingConfig />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/admin/parking-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <ParkingDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/parking-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <ParkingSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-parking-config"
+          element={
+            <ProtectedAdminRoutes>
+              <AddParkingConfig />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/admin/edit-park-config/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditParkingConfiguration />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/admin/edit-park-config/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditParkingConfiguration />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          {/* employee parking */}
+        {/* employee parking */}
 
-          <Route
-            path="/employees/parking"
-            element={
-              <ProtectedRoute>
-                <EmployeeParking />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employees/book-parking"
-            element={
-              <ProtectedRoute>
-                <EmployeeBookParking />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/employees/parking"
+          element={
+            <ProtectedRoute>
+              <EmployeeParking />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employees/book-parking"
+          element={
+            <ProtectedRoute>
+              <EmployeeBookParking />
+            </ProtectedRoute>
+          }
+        />
 
-  <Route
+        <Route
           path="/admin/copy-checklist/service/:id"
           element={
             <ProtectedAdminRoutes>
@@ -2243,252 +2244,252 @@ function App() {
           }
         />
 
-          {/*parking setup */}
-          <Route
-            path="/admin/parking-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <ParkingSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/modern-parking-config"
-            element={
-              <ProtectedAdminRoutes>
-                <ModernParkingConfig />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/employees/pantry"
-            element={
-              <ProtectedRoute>
-                <EmployeePantry />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employees/pantry-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeePantryDetails />
-              </ProtectedRoute>
-            }
-          />
+        {/*parking setup */}
+        <Route
+          path="/admin/parking-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <ParkingSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/modern-parking-config"
+          element={
+            <ProtectedAdminRoutes>
+              <ModernParkingConfig />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/employees/pantry"
+          element={
+            <ProtectedRoute>
+              <EmployeePantry />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employees/pantry-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeePantryDetails />
+            </ProtectedRoute>
+          }
+        />
 
-          {/* admin pantry */}
-          <Route
-            path="/admin/pantry"
-            element={
-              <ProtectedAdminRoutes>
-                <Pantry />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-pantry"
-            element={
-              <ProtectedAdminRoutes>
-                <AddPantry />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* employee doc appointment */}
-          <Route
-            path="/employee/doc-appointment"
-            element={
-              <ProtectedRoute>
-                <EmployeeDoctorAppointment />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/book-doc-appointment"
-            element={
-              <ProtectedRoute>
-                <EmployeeBookAppointment />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/doc-appointment-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeDocDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/fitness"
-            element={
-              <ProtectedRoute>
-                <EmployeeFitness />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/book-fitness"
-            element={
-              <ProtectedRoute>
-                <EmployeeBookFitness />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/fitness-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeFitnessDetails />
-              </ProtectedRoute>
-            }
-          />
-          {/* admin doc appointment */}
-          <Route
-            path="/doctor-appointments"
-            element={
-              <ProtectedRoute>
-                <DoctorAppointment />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/doctor-appointments/book-doc-appointment"
-            element={
-              <ProtectedRoute>
-                <BookDocAppointment />
-              </ProtectedRoute>
-            }
-          />
-          {/* admin fitness */}
-          <Route
-            path="/admin/fitness"
-            element={
-              <ProtectedAdminRoutes>
-                <Fitness />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/book-fitness"
-            element={
-              <ProtectedAdminRoutes>
-                <BookFitness />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/book-fitness/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <FitnessDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* employee birthday */}
-          <Route
-            path="/employee/birthday"
-            element={
-              <ProtectedRoute>
-                <EmployeeBirthday />
-              </ProtectedRoute>
-            }
-          />
-          {/* admin birthday */}
-          <Route
-            path="/birthday"
-            element={
-              <ProtectedRoute>
-                <Birthday />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/insurance"
-            element={
-              <ProtectedRoute>
-                <EmployeeInsurance />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/insurance/add-policy"
-            element={
-              <ProtectedRoute>
-                <EmployeeAddInsurance />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/add-policy/policy-list"
-            element={
-              <ProtectedRoute>
-                <EmployeePolicyList />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/add-policy/policy-details"
-            element={
-              <ProtectedRoute>
-                <EmployeePolicyDetails />
-              </ProtectedRoute>
-            }
-          />
-          {/* admin Insurance */}
-          <Route
-            path="/insurance"
-            element={
-              <ProtectedRoute>
-                <Insurance />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/insurance/add-policy"
-            element={
-              <ProtectedRoute>
-                <AddPolicy />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/insurance/add-existing-policy"
-            element={
-              <ProtectedRoute>
-                <AddExistingPolicy />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/insurance/add-policy/policy-list"
-            element={
-              <ProtectedAdminRoutes>
-                <PolicyList />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/insurance/add-policy/policy-details"
-            element={
-              <ProtectedAdminRoutes>
-                <PolicyDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
+        {/* admin pantry */}
+        <Route
+          path="/admin/pantry"
+          element={
+            <ProtectedAdminRoutes>
+              <Pantry />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-pantry"
+          element={
+            <ProtectedAdminRoutes>
+              <AddPantry />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* employee doc appointment */}
+        <Route
+          path="/employee/doc-appointment"
+          element={
+            <ProtectedRoute>
+              <EmployeeDoctorAppointment />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/book-doc-appointment"
+          element={
+            <ProtectedRoute>
+              <EmployeeBookAppointment />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/doc-appointment-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeDocDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/fitness"
+          element={
+            <ProtectedRoute>
+              <EmployeeFitness />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/book-fitness"
+          element={
+            <ProtectedRoute>
+              <EmployeeBookFitness />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/fitness-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeFitnessDetails />
+            </ProtectedRoute>
+          }
+        />
+        {/* admin doc appointment */}
+        <Route
+          path="/doctor-appointments"
+          element={
+            <ProtectedRoute>
+              <DoctorAppointment />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/doctor-appointments/book-doc-appointment"
+          element={
+            <ProtectedRoute>
+              <BookDocAppointment />
+            </ProtectedRoute>
+          }
+        />
+        {/* admin fitness */}
+        <Route
+          path="/admin/fitness"
+          element={
+            <ProtectedAdminRoutes>
+              <Fitness />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/book-fitness"
+          element={
+            <ProtectedAdminRoutes>
+              <BookFitness />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/book-fitness/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <FitnessDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* employee birthday */}
+        <Route
+          path="/employee/birthday"
+          element={
+            <ProtectedRoute>
+              <EmployeeBirthday />
+            </ProtectedRoute>
+          }
+        />
+        {/* admin birthday */}
+        <Route
+          path="/birthday"
+          element={
+            <ProtectedRoute>
+              <Birthday />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/insurance"
+          element={
+            <ProtectedRoute>
+              <EmployeeInsurance />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/insurance/add-policy"
+          element={
+            <ProtectedRoute>
+              <EmployeeAddInsurance />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/add-policy/policy-list"
+          element={
+            <ProtectedRoute>
+              <EmployeePolicyList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/add-policy/policy-details"
+          element={
+            <ProtectedRoute>
+              <EmployeePolicyDetails />
+            </ProtectedRoute>
+          }
+        />
+        {/* admin Insurance */}
+        <Route
+          path="/insurance"
+          element={
+            <ProtectedRoute>
+              <Insurance />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/insurance/add-policy"
+          element={
+            <ProtectedRoute>
+              <AddPolicy />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/insurance/add-existing-policy"
+          element={
+            <ProtectedRoute>
+              <AddExistingPolicy />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/insurance/add-policy/policy-list"
+          element={
+            <ProtectedAdminRoutes>
+              <PolicyList />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/insurance/add-policy/policy-details"
+          element={
+            <ProtectedAdminRoutes>
+              <PolicyDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          {/* INventory */}
-          <Route
-            path="/admin/add-masters"
-            element={
-              <ProtectedAdminRoutes>
-                <AddMasters />
-              </ProtectedAdminRoutes>
-            }
-          />
+        {/* INventory */}
+        <Route
+          path="/admin/add-masters"
+          element={
+            <ProtectedAdminRoutes>
+              <AddMasters />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          {/* employee meeting */}
-          {/* <Route
+        {/* employee meeting */}
+        {/* <Route
             path="/meetings"
             element={
               <ProtectedRoute>
@@ -2513,370 +2514,370 @@ function App() {
             }
           /> */}
 
-          {/*  Meetings */}
+        {/*  Meetings */}
 
-          <Route
-            path="/meetings"
-            element={
-              <ProtectedRoute>
-                <Meetings />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/meetings/create-meeting"
-            element={
-              <ProtectedRoute>
-                <CreateMeeting />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/meetings/meeting-details/:id"
-            element={
-              <ProtectedRoute>
-                <MeetingDetails />
-              </ProtectedRoute>
-            }
-          />
-          {/*admin project management */}
-          <Route
-            path="/project-management"
-            element={
-              <ProtectedRoute>
-                <ProjectManagement />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/project-management/create-project"
-            element={
-              <ProtectedRoute>
-                <CreateProject />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/project-management/customBoard"
-            element={
-              <ProtectedRoute>
-                <ProjectCustomBoard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/project-management/project-details/:id"
-            element={
-              <ProtectedRoute>
-                <ProjectDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/edit-project/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditProject />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/meetings"
+          element={
+            <ProtectedRoute>
+              <Meetings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/meetings/create-meeting"
+          element={
+            <ProtectedRoute>
+              <CreateMeeting />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/meetings/meeting-details/:id"
+          element={
+            <ProtectedRoute>
+              <MeetingDetails />
+            </ProtectedRoute>
+          }
+        />
+        {/*admin project management */}
+        <Route
+          path="/project-management"
+          element={
+            <ProtectedRoute>
+              <ProjectManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/project-management/create-project"
+          element={
+            <ProtectedRoute>
+              <CreateProject />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/project-management/customBoard"
+          element={
+            <ProtectedRoute>
+              <ProjectCustomBoard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/project-management/project-details/:id"
+          element={
+            <ProtectedRoute>
+              <ProjectDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/edit-project/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditProject />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/admin/project-management/add-task/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <AddProjectTask />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* INventory */}
-          <Route
-            path="/admin/add-stock"
-            element={
-              <ProtectedAdminRoutes>
-                <AddInventory />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-stock/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditStocks />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* checklist */}
-          <Route
-            path="/admin/add-checklist"
-            element={
-              <ProtectedAdminRoutes>
-                <AddChecklist />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-checklist/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditChecklist />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/asset/edit-ppm/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditPPMChecklist />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/admin/project-management/add-task/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <AddProjectTask />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* INventory */}
+        <Route
+          path="/admin/add-stock"
+          element={
+            <ProtectedAdminRoutes>
+              <AddInventory />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-stock/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditStocks />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* checklist */}
+        <Route
+          path="/admin/add-checklist"
+          element={
+            <ProtectedAdminRoutes>
+              <AddChecklist />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-checklist/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditChecklist />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/asset/edit-ppm/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditPPMChecklist />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          {/* Fit Out */}
+        {/* Fit Out */}
 
-          <Route
-            path="/fitout/list"
-            element={
-              <ProtectedRoute>
-                <FitOutList />
-              </ProtectedRoute>
-            }
-          />
-          
-          <Route path="/additional-service" element={<Osr />} />
-          <Route path="/ors-dashboard" element={<OSRDashboard />} />
-          <Route path="/ors-setups" element={<OrsSetup />} />
-          <Route path="/service-booking" element={<ServiceBooking />} />
-          <Route
-            path="/admin/unit-configurations"
-            element={<UnitConfigurations />}
-          />
-          <Route path="/admin/bookings" element={<AdminBookings />} />
-          <Route path="/residential/bookings" element={<MyBookings />} />
-          <Route path="/fitout/setup" element={<FitOutSetup />} />
-          <Route path="/fitout/setup/page" element={<FitOutSetup />} />
-          <Route
-            path="/fitout/request/create"
-            element={<FitOutRequestPage />}
-          />
-          <Route path="/fitout/request/list" element={<RequestListPage />} />
-          <Route
-            path="/fitout/checklist/create"
-            element={<FitOutChecklistPage />}
-          />
-          <Route
-            path="/fitout/checklist/form/:id"
-            element={<ChecklistForm />}
-          />
-          <Route
-            path="/fitout/checklist/answer-details/:id"
-            element={<SnagAnswerDetails />}
-          />
-          <Route
-            path="/fitout/snag-answer-details/:id"
-            element={<SnagAnswerDetails />}
-          />
+        <Route
+          path="/fitout/list"
+          element={
+            <ProtectedRoute>
+              <FitOutList />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/fitout/checklist/list"
-            element={<FitoutChecklistList />}
-          />
+        <Route path="/additional-service" element={<Osr />} />
+        <Route path="/ors-dashboard" element={<OSRDashboard />} />
+        <Route path="/ors-setups" element={<OrsSetup />} />
+        <Route path="/service-booking" element={<ServiceBooking />} />
+        <Route
+          path="/admin/unit-configurations"
+          element={<UnitConfigurations />}
+        />
+        <Route path="/admin/bookings" element={<AdminBookings />} />
+        <Route path="/residential/bookings" element={<MyBookings />} />
+        <Route path="/fitout/setup" element={<FitOutSetup />} />
+        <Route path="/fitout/setup/page" element={<FitOutSetup />} />
+        <Route
+          path="/fitout/request/create"
+          element={<FitOutRequestPage />}
+        />
+        <Route path="/fitout/request/list" element={<RequestListPage />} />
+        <Route
+          path="/fitout/checklist/create"
+          element={<FitOutChecklistPage />}
+        />
+        <Route
+          path="/fitout/checklist/form/:id"
+          element={<ChecklistForm />}
+        />
+        <Route
+          path="/fitout/checklist/answer-details/:id"
+          element={<SnagAnswerDetails />}
+        />
+        <Route
+          path="/fitout/snag-answer-details/:id"
+          element={<SnagAnswerDetails />}
+        />
 
-          {/* document */}
-          <Route
-            path="/documents"
-            element={
-              <ProtectedRoute>
-                <DocumentMain />
-              </ProtectedRoute>
-            }
-          />
-          {/* Employee project */}
-          <Route
-            path="/employee/project-management"
-            element={
-              <ProtectedRoute>
-                <EmployeeProjectManagement />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/create-project"
-            element={
-              <ProtectedRoute>
-                <EmployeeCreateProject />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/project-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeProjectDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/project-add-task/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeProjectAddTask />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/edit-project/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeEditProject />
-              </ProtectedRoute>
-            }
-          />
-          {/* Admin PO*/}
+        <Route
+          path="/fitout/checklist/list"
+          element={<FitoutChecklistList />}
+        />
 
-          <Route
-            path="/admin/purchase"
-            element={<Navigate to={"/admin/purchase/loi"} />}
-          />
+        {/* document */}
+        <Route
+          path="/documents"
+          element={
+            <ProtectedRoute>
+              <DocumentMain />
+            </ProtectedRoute>
+          }
+        />
+        {/* Employee project */}
+        <Route
+          path="/employee/project-management"
+          element={
+            <ProtectedRoute>
+              <EmployeeProjectManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/create-project"
+          element={
+            <ProtectedRoute>
+              <EmployeeCreateProject />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/project-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeProjectDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/project-add-task/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeProjectAddTask />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/edit-project/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeEditProject />
+            </ProtectedRoute>
+          }
+        />
+        {/* Admin PO*/}
 
-          <Route
-            path="/admin/purchase/loi"
-            element={
-              <ProtectedAdminRoutes>
-                <LOIPOTable />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/purchase/material-pr"
-            element={
-              <ProtectedAdminRoutes>
-                <MaterialPR />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/purchase/po"
-            element={
-              <ProtectedAdminRoutes>
-                <PO />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/loi-proceed"
-            element={
-              <ProtectedAdminRoutes>
-                <LOIProceed />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/PO"
-            element={
-              <ProtectedAdminRoutes>
-                <PO />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* Admin PO*/}
-          <Route
-            path="/admin/po-detail/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <PoDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/admin/purchase"
+          element={<Navigate to={"/admin/purchase/loi"} />}
+        />
 
-          {/* Admin WO detail*/}
-          <Route
-            path="/admin/Wo"
-            element={
-              <ProtectedAdminRoutes>
-                <Wo />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/wo-detail/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <WoDetail />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* Audit */}
-          <Route
-            path="/admin/audit"
-            element={
-              <ProtectedAdminRoutes>
-                <Audit />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/audit/schedule-audit"
-            element={
-              <ProtectedAdminRoutes>
-                <AddScheduleAudit />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/admin/purchase/loi"
+          element={
+            <ProtectedAdminRoutes>
+              <LOIPOTable />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/purchase/material-pr"
+          element={
+            <ProtectedAdminRoutes>
+              <MaterialPR />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/purchase/po"
+          element={
+            <ProtectedAdminRoutes>
+              <PO />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/loi-proceed"
+          element={
+            <ProtectedAdminRoutes>
+              <LOIProceed />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/PO"
+          element={
+            <ProtectedAdminRoutes>
+              <PO />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* Admin PO*/}
+        <Route
+          path="/admin/po-detail/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <PoDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/admin/audit/edit-schedule-audit/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditOpsScheduleAudit />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-audit-checklist"
-            element={
-              <ProtectedAdminRoutes>
-                <AddAuditChecklist />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/*  */}
-          <Route
-            path="/admin/scheduled-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <ScheduleAuditDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/audit/add-schedule-audit"
-            element={
-              <ProtectedAdminRoutes>
-                <AddScheduleAudit />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="edit-scheduled/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditOpsScheduleAudit />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/checklist-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <ChecklistDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
+        {/* Admin WO detail*/}
+        <Route
+          path="/admin/Wo"
+          element={
+            <ProtectedAdminRoutes>
+              <Wo />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/wo-detail/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <WoDetail />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* Audit */}
+        <Route
+          path="/admin/audit"
+          element={
+            <ProtectedAdminRoutes>
+              <Audit />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/audit/schedule-audit"
+          element={
+            <ProtectedAdminRoutes>
+              <AddScheduleAudit />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          {/*  */}
+        <Route
+          path="/admin/audit/edit-schedule-audit/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditOpsScheduleAudit />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-audit-checklist"
+          element={
+            <ProtectedAdminRoutes>
+              <AddAuditChecklist />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/*  */}
+        <Route
+          path="/admin/scheduled-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <ScheduleAuditDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/audit/add-schedule-audit"
+          element={
+            <ProtectedAdminRoutes>
+              <AddScheduleAudit />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="edit-scheduled/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditOpsScheduleAudit />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/checklist-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <ChecklistDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          {/*
+        {/*  */}
+
+        {/*
            <Route
             path="/employee/rvehiclesdetails/:id"
             element={
@@ -2934,252 +2935,252 @@ function App() {
               </ProtectedRoute>
             }
           /> */}
-          {/*  */}
+        {/*  */}
 
-          {/* grn */}
-          <Route
-            path="/admin/Grn"
-            element={
-              <ProtectedAdminRoutes>
-                <GRN />
-              </ProtectedAdminRoutes>
-            }
-          />
+        {/* grn */}
+        <Route
+          path="/admin/Grn"
+          element={
+            <ProtectedAdminRoutes>
+              <GRN />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/admin/grn-detail/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <GrnDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-grn"
-            element={
-              <ProtectedAdminRoutes>
-                <AddGrn />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/admin/grn-detail/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <GrnDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-grn"
+          element={
+            <ProtectedAdminRoutes>
+              <AddGrn />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          {/* admin passess */}
-          <Route path="/otp-qr" element={<OtpAndQr />} />
-          <Route
-            path="/admin/passes"
-            element={<Navigate to="/admin/passes/visitors" replace />}
-          />
-          <Route
-            path="/admin/passes/visitors/visitor-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <VisitorDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/passes/visitors"
-            element={
-              <ProtectedAdminRoutes>
-                <VisitorPage />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/passes/visitors/edit-visitor/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditVisitor />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/passes/registered-vehicles"
-            element={
-              <ProtectedAdminRoutes>
-                <RVehicles />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/passes/guest-vehicles"
-            element={
-              <ProtectedAdminRoutes>
-                <GVehicles />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/passes/staff"
-            element={
-              <ProtectedAdminRoutes>
-                <Staff />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/passes/materials"
-            element={
-              <ProtectedAdminRoutes>
-                <Materials />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/passes/goods-in-out"
-            element={
-              <ProtectedAdminRoutes>
-                <GoodsInOut />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/passes/edit/goods-in-out/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditGoodsInOut />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-new-visitor"
-            element={
-              <ProtectedAdminRoutes>
-                <AddNewVisitor />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-rvehicles"
-            element={
-              <ProtectedAdminRoutes>
-                <AddRVehicles />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-rvehicles/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditRVehicle />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/rvehicles-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <RVehiclesDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-gvehicles"
-            element={
-              <ProtectedAdminRoutes>
-                <AddGVehicles />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-gvehicles/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditGVehicles />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/gvehicles-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <GVehiclesDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/passes/add-staff"
-            element={
-              <ProtectedAdminRoutes>
-                <AddStaff />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/passes/staff-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <StaffDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-staff/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditStaff />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/material-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <MaterialDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/passes/patrolling"
-            element={
-              <ProtectedAdminRoutes>
-                <Patrolling />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-patrolling/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditPatrolling />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/passes/patrolling-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <PatrollingDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/inwards-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <InwardPassDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
+        {/* admin passess */}
+        <Route path="/otp-qr" element={<OtpAndQr />} />
+        <Route
+          path="/admin/passes"
+          element={<Navigate to="/admin/passes/visitors" replace />}
+        />
+        <Route
+          path="/admin/passes/visitors/visitor-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <VisitorDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/passes/visitors"
+          element={
+            <ProtectedAdminRoutes>
+              <VisitorPage />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/passes/visitors/edit-visitor/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditVisitor />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/passes/registered-vehicles"
+          element={
+            <ProtectedAdminRoutes>
+              <RVehicles />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/passes/guest-vehicles"
+          element={
+            <ProtectedAdminRoutes>
+              <GVehicles />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/passes/staff"
+          element={
+            <ProtectedAdminRoutes>
+              <Staff />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/passes/materials"
+          element={
+            <ProtectedAdminRoutes>
+              <Materials />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/passes/goods-in-out"
+          element={
+            <ProtectedAdminRoutes>
+              <GoodsInOut />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/passes/edit/goods-in-out/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditGoodsInOut />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-new-visitor"
+          element={
+            <ProtectedAdminRoutes>
+              <AddNewVisitor />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-rvehicles"
+          element={
+            <ProtectedAdminRoutes>
+              <AddRVehicles />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-rvehicles/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditRVehicle />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/rvehicles-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <RVehiclesDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-gvehicles"
+          element={
+            <ProtectedAdminRoutes>
+              <AddGVehicles />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-gvehicles/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditGVehicles />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/gvehicles-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <GVehiclesDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/passes/add-staff"
+          element={
+            <ProtectedAdminRoutes>
+              <AddStaff />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/passes/staff-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <StaffDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-staff/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditStaff />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/material-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <MaterialDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/passes/patrolling"
+          element={
+            <ProtectedAdminRoutes>
+              <Patrolling />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-patrolling/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditPatrolling />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/passes/patrolling-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <PatrollingDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/inwards-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <InwardPassDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/admin/outward-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <OutwardPassDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-  <Route
-            path="/admin/passes/add-self-registration"
-            element={
-              <ProtectedAdminRoutes>
-              <AddSelfRegistration/>
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/admin/outward-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <OutwardPassDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="add-self-registration/:id"
+          element={
+            // <ProtectedAdminRoutes>
+            <AddSelfRegistration />
+            // </ProtectedAdminRoutes>
+          }
+        />
 
-            {/* <Route
+        {/* <Route
             path="/admin/passes/visitors/visitor-details/:id"
             element={
               <ProtectedAdminRoutes>
@@ -3196,2420 +3197,2420 @@ function App() {
               </ProtectedAdminRoutes>
             }
           /> */}
-          {/* employee passes */}
-          <Route
-            path="/employee/passes"
-            element={<Navigate to="/employee/passes/visitors" replace />}
-          />
-          <Route
-            path="/employee/passes/visitors"
-            element={
-              <ProtectedRoute>
-                <EmployeeVisitor />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/add-new-visitor"
-            element={
-              <ProtectedRoute>
-                <EmployeeAddVisitor />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/addgvehicles"
-            element={
-              <ProtectedRoute>
-                <EmployeeAddGVehicles />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/gvehiclesdetails/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeGVehiclesDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/addrvehicles"
-            element={
-              <ProtectedRoute>
-                <EmployeeAddRVehicles />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/addstaff"
-            element={
-              <ProtectedRoute>
-                <EmployeeAddStaff />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/passes/visitors/visitor-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeVisitorDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/passes/visitors/edit-visitor/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeVisitorEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/passes/registered-vehicles"
-            element={
-              <ProtectedRoute>
-                <EmployeeRVehicles />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/rvehicles-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeRVehiclesDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/rvehicles-edit/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeRVehiclesEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/passes/guest-vehicles"
-            element={
-              <ProtectedRoute>
-                <EmployeeGVehicle />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/passes/gvehicles-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeGVehiclesDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/passes/staff"
-            element={
-              <ProtectedRoute>
-                <EmployeeStaff />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/passes/staff-edit/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeEditStaff />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/passes/staff-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeStaffDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/passes/materials"
-            element={
-              <ProtectedRoute>
-                <EmployeeMaterials />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/passes/material-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeMaterialDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/passes/patrolling-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeePatrollingDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/passes/patrolling"
-            element={
-              <ProtectedRoute>
-                <EmployeePatrolling />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/passes/goods-in-out"
-            element={
-              <ProtectedRoute>
-                <EmployeeGoodsInOut />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* GDN*/}
-          <Route
-            path="/admin/Gdn"
-            element={
-              <ProtectedAdminRoutes>
-                <GDN />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/add-gdn/"
-            element={
-              <ProtectedAdminRoutes>
-                <AddGdn />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/gdn-detail/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <GdnViewDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* calendar */}
-          <Route
-            path="/calendar"
-            element={
-              <ProtectedRoute>
-                <Calender />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/calendar/employeeSchedule"
-            element={
-              // <ProtectedAdminRoutes>
-              <Schedule />
-              // </ProtectedAdminRoutes>
-            }
-          />
-
-          {/* other bills */}
-          <Route
-            path="/admin/other-bills"
-            element={
-              <ProtectedAdminRoutes>
-                <Bills />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/add-other-bills"
-            element={
-              <ProtectedAdminRoutes>
-                <AddBills />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/-other-bills-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <OtherBillsDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/other-bills-edit/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditOtherBills />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* add id to it */}
-          <Route
-            path="/admin/-other-bills-feed"
-            element={
-              <ProtectedAdminRoutes>
-                <OtherFeedsBill />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          {/* Design Insights*/}
-          <Route
-            path="/admin/Insights"
-            element={
-              <ProtectedAdminRoutes>
-                <Insights />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/Add-insights"
-            element={
-              <ProtectedAdminRoutes>
-                <AddInsights />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/insights-detail/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <InsightsDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-insight/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditInsights />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/insights/"
-            element={
-              <ProtectedAdminRoutes>
-                <InsightSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          {/* permit */}
-          {/* admin permit */}
-          <Route
-            path="/admin/permit"
-            element={
-              <ProtectedAdminRoutes>
-                <Permit />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-new-permit"
-            element={
-              <ProtectedAdminRoutes>
-                <AddNewPermit />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-permit/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <PermitListEdit />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/permit-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <PermitListDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/pending-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <PermitPendingApprovalDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/setup/permit-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <PermitSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          {/* LOI */}
-
-          <Route
-            path="/admin/letterofindent"
-            element={
-              <ProtectedAdminRoutes>
-                <LetterOfIndent />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/purchase/add-loi"
-            element={
-              <ProtectedAdminRoutes>
-                <AddLoi />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-Loi-po/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditLoiPO />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/loi-po-detail/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <LOIPoDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-Loi-wo/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditLoiWO />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/loi-wo-detail/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <LOIWoDetail />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          {/* CAR */}
-          <Route
-            path="/admin/car"
-            element={
-              <ProtectedAdminRoutes>
-                <CAR />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-CAR"
-            element={
-              <ProtectedAdminRoutes>
-                <EditCAR />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-CAR"
-            element={
-              <ProtectedAdminRoutes>
-                <AddCAR />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/car-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <CARDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/car-tag-vendors"
-            element={
-              <ProtectedAdminRoutes>
-                <CARTagVendor />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/car-feeds"
-            element={
-              <ProtectedAdminRoutes>
-                <CARFeeds />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* F&B */}
-          <Route
-            path="/admin/fb"
-            element={
-              <ProtectedAdminRoutes>
-                <FoodsBeverage />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-fb"
-            element={
-              <ProtectedAdminRoutes>
-                <AddFB />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/fb-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <FBDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/fb-edit/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <FBEdit />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/fnb/status-setup/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <FBStatusSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/fnb/sub-category-setup/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditSubCategorySetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/restaurtant-bookings/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditRestaurtantBooking />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/restaurtant-orders/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditRestaurtantOrders />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/fnb/restaurtant-menu/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <FBRestaurtantMenu />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/fnb/category-setup/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditCategorySetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/restaurant/details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <FBRestaurtantDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/pantry-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <PantryDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/fb-res-menu/"
-            element={
-              <ProtectedAdminRoutes>
-                <AddResMenu />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-resmenu/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditResMenu />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/fb-resmenudetails/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <ResMenuDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/res-order-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <ResOrderDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* incident */}
-          <Route
-            path="/admin/incidents"
-            element={
-              <ProtectedAdminRoutes>
-                <Incidents />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-incidents"
-            element={
-              <ProtectedAdminRoutes>
-                <AddIncident />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-incidents/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditIncident />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/incidents-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <IncidentsDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/setup-incidents"
-            element={
-              <ProtectedAdminRoutes>
-                <IncidentSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* Meter Types */}
-          <Route
-            path="/admin/setup-meter-type"
-            element={
-              <ProtectedAdminRoutes>
-                <MeterTypeSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* CheckList Group */}
-          <Route
-            path="/admin/checklist-group"
-            element={
-              <ProtectedAdminRoutes>
-                <CheckListGroupSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          {/* FmUSer */}
-          <Route
-            path="/admin/fm-user"
-            element={
-              <ProtectedAdminRoutes>
-                <FmUserSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-fm-user"
-            element={
-              <ProtectedAdminRoutes>
-                <AddFmUserSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/fm-user-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditFmUserSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* Occupant User */}
-          <Route
-            path="/admin/occupant-user-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <OccupantUserSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-occupant-user-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <AddOccupantUserSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/occupant-user-setup-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditOccupantUserSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/billing-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <BillingSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          {/* Cam Billings */}
-          <Route
-            path="/admin/cam-billing"
-            element={
-              <ProtectedAdminRoutes>
-                <CAMBilling />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* New CAM Pages */}
-          <Route
-            path="/admin/cam/bills"
-            element={
-              <ProtectedAdminRoutes>
-                <CAMBills />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/accounting/bills"
-            element={
-              <ProtectedAdminRoutes>
-                <CAMBills />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/cam/setup/monthly-expenses"
-            element={
-              <ProtectedAdminRoutes>
-                <MonthlyExpenseSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/accounting"
-            element={
-              <ProtectedAdminRoutes>
-                <AccountingSetupTabs />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/accounting/monthly-expenses"
-            element={
-              <ProtectedAdminRoutes>
-                <MonthlyExpenseSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/accounting/unit-config"
-            element={
-              <ProtectedAdminRoutes>
-                <CAMSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/cam_bill/add"
-            element={
-              <ProtectedAdminRoutes>
-                <AddCAMBilling />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/cam_bill/billing"
-            element={
-              <ProtectedAdminRoutes>
-                <CAMBilling />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/cam_bill/details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <CAMBillingDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/cam_bill/reciept-invoice"
-            element={
-              <ProtectedAdminRoutes>
-                <ReceiptInvoiceCam />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/cam_bill/create-invoice-receipt/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <CreateInvoiceReceipt />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/billing-address"
-            element={
-              <ProtectedAdminRoutes>
-                <BillingAddress />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/edit-billing-address/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditBillingAddress />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/cam_bill/receipt-invoice/add"
-            element={
-              <ProtectedAdminRoutes>
-                <AddReceiptInvoiceCamBilling />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/cam_bill/receipt-invoice/details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <ReceiptInvoiceDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          {/* Invoice Approvals */}
-          <Route
-            path="/admin/invoice-approval-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <InvoiceApprovalSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-invoice-approval-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <AddInvoiceApprovalsSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/edit-invoice-approval-setup/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditInvoiceApprovalsSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/ticket-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <TicketSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* task-management */}
-          <Route
-            path="/Task-management"
-            element={
-              <ProtectedRoute>
-                <TaskManagement />
-              </ProtectedRoute>
-            }
-          />
-          {/* Email Rule */}
-          <Route
-            path="/admin/email-rule"
-            element={
-              <ProtectedAdminRoutes>
-                <EmailRuleSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* Fm Groups */}
-          <Route
-            path="/admin/fm-groups-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <FmGroupsSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/fm-groups-setup-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <FmGroupSetupDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* SAC/HSN Setup */}
-          <Route
-            path="/admin/sac-hsn-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <SACHSNSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-sac-hsn-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <AddSACHSNSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/sac-hsn-setup-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <SACHSNSetupDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* Admin MaterialPR */}
-          <Route
-            path="/admin/material-pr"
-            element={
-              <ProtectedAdminRoutes>
-                <MaterialPR />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/purchase/add-material-pr"
-            element={
-              <ProtectedAdminRoutes>
-                <AddMatertialPR />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/edit-materialpr/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditMatertialPR />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/materialpr-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <MaterialPRDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* service PR */}
-
-          <Route
-            path="/admin/service-pr"
-            element={
-              <ProtectedAdminRoutes>
-                <ServicePR />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-service-pr"
-            element={
-              <ProtectedAdminRoutes>
-                <AddServicePR />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-servicepr/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditServicePR />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/servicepr-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <ServicePRDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          {/* Addresses */}
-          <Route
-            path="/admin/addresses-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <AddressesSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-addresses-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <AddAddressesSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/edit-addresses-setup/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditAddressesSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          {/* booking & Req */}
-          <Route
-            path="/employee/booking-request"
-            element={
-              <Navigate to="/employee/booking-request/hotel-request" replace />
-            }
-          />
-          <Route
-            path="/employee/booking-request/hotel-request"
-            element={
-              <ProtectedRoute>
-                {" "}
-                <EmployeeHotelRequest />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/booking-request"
-            element={
-              <ProtectedRoute>
-                <EmployeeBookingRequest />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/employee/booking-request/add-hotel-request"
-            element={
-              <ProtectedRoute>
-                <EmployeeAddHotelRequest />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/employee/hotel-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeHotelRequestDetails />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/employee/booking-request/flight-ticket-request"
-            element={
-              <ProtectedRoute>
-                {" "}
-                <EmployeeFlightRequest />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/flight-request"
-            element={
-              <ProtectedRoute>
-                <EmployeeFlightRequest />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/employee/add-flight-request"
-            element={
-              <ProtectedRoute>
-                <EmployeeAddFlightRequest />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/flight-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeFlightRequestDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/booking-request/cab-bus-request"
-            element={
-              <ProtectedRoute>
-                {" "}
-                <EmployeeCabRequest />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/add-cab-request"
-            element={
-              <ProtectedRoute>
-                <EmployeeAddCabRequest />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/cab-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeCabRequestDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/booking-request/transportation-request"
-            element={
-              <ProtectedRoute>
-                {" "}
-                <EmployeeTransportationRequest />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/add-transport-request"
-            element={
-              <ProtectedRoute>
-                <EmployeeAddTransportRequest />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/transport-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeTransportRequestDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/booking-request/traveling-allowance-request"
-            element={
-              <ProtectedRoute>
-                <EmployeeTravellingAllowanceRequest />{" "}
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/add-travelallowance-request"
-            element={
-              <ProtectedRoute>
-                <EmployeeAddTravellingAllowanceRequest />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/employee/travelling-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeTravelingAllowanceDetails />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* admin booking & req */}
-          <Route
-            path="/admin/booking-request"
-            element={
-              <Navigate to="/admin/booking-request/hotel-request" replace />
-            }
-          />
-          <Route
-            path="/admin/booking-request/hotel-request"
-            element={
-              <ProtectedAdminRoutes>
-                <HotelRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-hotel-request"
-            element={
-              <ProtectedAdminRoutes>
-                <AddHotelRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hotel-edit/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditHotelRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hotel-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <HotelRequestDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/booking-request/flight-ticket-request"
-            element={
-              <ProtectedAdminRoutes>
-                <FlightRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-flight-request"
-            element={
-              <ProtectedAdminRoutes>
-                <AddFlightRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/flight-edit/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditFlightRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/flight-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <FlightRequestDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/booking-request/cab-bus-request"
-            element={
-              <ProtectedAdminRoutes>
-                <CabRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/add-cab-request"
-            element={
-              <ProtectedAdminRoutes>
-                <AddCabRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/cab-edit/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditCabRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/cab-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <CabRequestDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/booking-request/transportation-request"
-            element={
-              <ProtectedAdminRoutes>
-                <TransportationRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/add-transport-request"
-            element={
-              <ProtectedAdminRoutes>
-                <AddTransportRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/transport-edit/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditTransportRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/transport-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <TransportRequestDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/booking-request/traveling-allowance-request"
-            element={
-              <ProtectedAdminRoutes>
-                <TravellingAllowanceRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-travelallowance-request"
-            element={
-              <ProtectedAdminRoutes>
-                <AddTravellingAllowanceRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/travelling-edit/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditTravellingAllowanceRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/travelling-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <TravelingAllowanceDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* Master CheckList */}
-          <Route
-            path="/admin/master-checklist-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <MasterCheckListSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-master-checklist-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <AddMasterCheckListSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          {/* employee hrms */}
-          <Route
-            path="/hrms-onboarding"
-            element={
-              <ProtectedRoute>
-                <Onboarding />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/add-onboarding"
-            element={
-              <ProtectedRoute>
-                <AddOnBoarding />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/employee-onboarding-details/:id"
-            element={
-              <ProtectedRoute>
-                <OnboardingDetails />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/employee/hrms-attendance-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeHRMSAttendanceDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/hrms-salary-slip-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeHRMSSalarySlipDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/hrms-salary-auto-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeAutoSalaryBreakupDetails />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/employee/hrms-attendance"
-            element={
-              <ProtectedRoute>
-                <AttendanceHRMS />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/hrms-salary-slip"
-            element={
-              <ProtectedRoute>
-                <EmployeeHRMSSalarySlip />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="employee/auto-salary-breakup"
-            element={
-              <ProtectedRoute>
-                <EmployeeAutoSalaryBreakup />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/hrms"
-            element={
-              <ProtectedAdminRoutes>
-                <AdminHRMS />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/dashboard"
-            element={
-              <ProtectedAdminRoutes>
-                <HRMSDashboard />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/hrms/alerts"
-            element={
-              <ProtectedAdminRoutes>
-                <HRMSAlert />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/leave-setting"
-            element={
-              <ProtectedAdminRoutes>
-                <GeneralSettings />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/general-settings"
-            element={
-              <ProtectedAdminRoutes>
-                <GeneralSettings />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/leave-categories"
-            element={
-              <ProtectedAdminRoutes>
-                <LeaveCategories />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/templates"
-            element={
-              <ProtectedAdminRoutes>
-                <Templates />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/templates-assignments"
-            element={
-              <ProtectedAdminRoutes>
-                <TemplateAssignment />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/leave-categories"
-            element={
-              <ProtectedAdminRoutes>
-                <AddLeaveCategory />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/templates/leave-templates"
-            element={
-              <ProtectedAdminRoutes>
-                <AddTemplates />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/leave-application"
-            element={
-              <ProtectedAdminRoutes>
-                <LeaveApplication />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/leave-balance"
-            element={
-              <ProtectedAdminRoutes>
-                <LeaveBalance />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/rollover"
-            element={
-              <ProtectedAdminRoutes>
-                <Rollover />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="admin/leave-categories/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditLeaveCategory />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="admin/edit-templates/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditTemplates />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="admin/hrms-leavebalance-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <LeaveBalanceDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/hrms/organization-setting"
-            element={
-              <ProtectedAdminRoutes>
-                <BasicInformation />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/company-profile/basic-information"
-            element={
-              <ProtectedAdminRoutes>
-                <BasicInformation />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/company-profile/address-information"
-            element={
-              <ProtectedAdminRoutes>
-                <AddressInformation />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/geographical-settings"
-            element={
-              <ProtectedAdminRoutes>
-                <GeographicalSetting />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/locations"
-            element={
-              <ProtectedAdminRoutes>
-                <Location />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/department"
-            element={
-              <ProtectedAdminRoutes>
-                <Department />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/associated-sites"
-            element={
-              <ProtectedAdminRoutes>
-                <AssociatedSites />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/company-holidays"
-            element={
-              <ProtectedAdminRoutes>
-                <Holiday />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/bank-accounts"
-            element={
-              <ProtectedAdminRoutes>
-                <BankAccount />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/calendar-milestones-events"
-            element={
-              <ProtectedAdminRoutes>
-                <CalendarEvent />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-fields/personal-details"
-            element={
-              <ProtectedAdminRoutes>
-                <PersonalInformation />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-fields/employment-details"
-            element={
-              <ProtectedAdminRoutes>
-                <EmployeeAddress />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-fields/documents"
-            element={
-              <ProtectedAdminRoutes>
-                <Document />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/user-setting"
-            element={
-              <ProtectedAdminRoutes>
-                <ManageAdmin />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/manage-admin"
-            element={
-              <ProtectedAdminRoutes>
-                <ManageAdmin />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/third-party"
-            element={
-              <ProtectedAdminRoutes>
-                <ThirdParty />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-fields/permission"
-            element={
-              <ProtectedAdminRoutes>
-                <PermissionsField />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-fields/news-feed-permission"
-            element={
-              <ProtectedAdminRoutes>
-                <NewsFeedPermission />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/document-letter"
-            element={
-              <ProtectedAdminRoutes>
-                <CompanyDocuments />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/company-documents"
-            element={
-              <ProtectedAdminRoutes>
-                <CompanyDocuments />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/document/letter-template"
-            element={
-              <ProtectedAdminRoutes>
-                <LetterTemplate />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-letter-template"
-            element={
-              <ProtectedAdminRoutes>
-                <AddLetterTemplate />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/document/old-letter-template"
-            element={
-              <ProtectedAdminRoutes>
-                <OldLetterTemplate />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/workflow-setting"
-            element={
-              <ProtectedAdminRoutes>
-                <AddOnboardingSetting />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/onboarding-setting"
-            element={
-              <ProtectedAdminRoutes>
-                <AddOnboardingSetting />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/workflow-trigger"
-            element={
-              <ProtectedAdminRoutes>
-                <WorkflowTrigger />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/emailid-mapping"
-            element={
-              <ProtectedAdminRoutes>
-                <EmailIdMapping />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/communication-template"
-            element={
-              <ProtectedAdminRoutes>
-                <CommunicationTemplate />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/hrms/investment-setting"
-            element={
-              <ProtectedAdminRoutes>
-                <InvestmentSetting />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/reports"
-            element={
-              <ProtectedAdminRoutes>
-                <ImportExport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/report-generation"
-            element={
-              <ProtectedAdminRoutes>
-                <ReportGeneration />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/audit-reports"
-            element={
-              <ProtectedAdminRoutes>
-                <AuditReports />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/Payroll-Reports"
-            element={
-              <ProtectedAdminRoutes>
-                <PayrollReports />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/Compliance-reports"
-            element={
-              <ProtectedAdminRoutes>
-                <ComplianceReports />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/income-tax-report"
-            element={
-              <ProtectedAdminRoutes>
-                <IncomeTaxReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/bank-report"
-            element={
-              <ProtectedAdminRoutes>
-                <BankReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/leave-report"
-            element={
-              <ProtectedAdminRoutes>
-                <LeaveReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/attendance-report"
-            element={
-              <ProtectedAdminRoutes>
-                <AttendanceReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/expense-report"
-            element={
-              <ProtectedAdminRoutes>
-                <ExpenseReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/form16"
-            element={
-              <ProtectedAdminRoutes>
-                <Form16 />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/custom-report"
-            element={
-              <ProtectedAdminRoutes>
-                <CustomReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hr-report"
-            element={
-              <ProtectedAdminRoutes>
-                <HRReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/investment-report"
-            element={
-              <ProtectedAdminRoutes>
-                <InvestmentReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/OnBoarding"
-            element={
-              <ProtectedAdminRoutes>
-                <OnBoarding />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/OffBoarding"
-            element={
-              <ProtectedAdminRoutes>
-                <OffBoarding />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/add-challan"
-            element={
-              <ProtectedAdminRoutes>
-                <AddChallan />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/view/form16/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <ViewForm16 />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/hrms/roaster"
-            element={
-              <ProtectedAdminRoutes>
-                <Roster />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/roaster-shift"
-            element={
-              <ProtectedAdminRoutes>
-                <RosterShift />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/*  */}
-          <Route
-            path="/admin/hrms/run-payroll"
-            element={
-              <ProtectedAdminRoutes>
-                <RunPayroll />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/pay-slip"
-            element={
-              <ProtectedAdminRoutes>
-                <Payslip />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/payroll/form-16"
-            element={
-              <ProtectedAdminRoutes>
-                <PayrollForm16 />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/loan-app"
-            element={
-              <ProtectedAdminRoutes>
-                <LoanApplication />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/payroll-setting"
-            element={
-              <ProtectedAdminRoutes>
-                <PayrollSettings />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/location-master"
-            element={
-              <ProtectedAdminRoutes>
-                <LocationMaster />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/fixed-allowance"
-            element={
-              <ProtectedAdminRoutes>
-                <FixedAllowance />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/fixed-deduction"
-            element={
-              <ProtectedAdminRoutes>
-                <FixedDeduction />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/variable-allowance"
-            element={
-              <ProtectedAdminRoutes>
-                <VariableAllowance />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/variable-deduction"
-            element={
-              <ProtectedAdminRoutes>
-                <VariableDeduction />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/other-benefit"
-            element={
-              <ProtectedAdminRoutes>
-                <OtherBenefit />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/loans"
-            element={
-              <ProtectedAdminRoutes>
-                <Loans />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-loan"
-            element={
-              <ProtectedAdminRoutes>
-                <AddLoan />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/tax-setting"
-            element={
-              <ProtectedAdminRoutes>
-                <TaxSettings />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/payslip-setting"
-            element={
-              <ProtectedAdminRoutes>
-                <PayslipSetting />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/CTC-Template"
-            element={
-              <ProtectedAdminRoutes>
-                <CTCTemplate />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/NPS"
-            element={
-              <ProtectedAdminRoutes>
-                <NPS />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/Gratuity"
-            element={
-              <ProtectedAdminRoutes>
-                <Gratuity />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/Leave-Recovery"
-            element={
-              <ProtectedAdminRoutes>
-                <LeaveRecovery />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="admin/Notice-Recovery"
-            element={
-              <ProtectedAdminRoutes>
-                <NoticeRecovery />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="admin/Minimum-Wage"
-            element={
-              <ProtectedAdminRoutes>
-                <MinimumWage />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="admin/PF"
-            element={
-              <ProtectedAdminRoutes>
-                <PF />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="admin/daily-wage"
-            element={
-              <ProtectedAdminRoutes>
-                <DailyWage />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          {/*  */}
-          <Route
-            path="/admin/hrms/attendance-records"
-            element={
-              <ProtectedAdminRoutes>
-                {/* <AttendanceRecords /> */}
-                <AttendanceRec />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/Attendance-Process"
-            element={
-              <ProtectedAdminRoutes>
-                <AttendanceProcess />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/Regularization-Requests"
-            element={
-              <ProtectedAdminRoutes>
-                <RegularizationRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/Attendance-Audit"
-            element={
-              <ProtectedAdminRoutes>
-                <AttendanceAudit />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/Device-Request"
-            element={
-              <ProtectedAdminRoutes>
-                <DeviceRegistration />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/Attendance-Validation"
-            element={
-              <ProtectedAdminRoutes>
-                <AttendanceValidation />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/Attendance-Log"
-            element={
-              <ProtectedAdminRoutes>
-                <AttendanceLogs />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/setting"
-            element={
-              <ProtectedAdminRoutes>
-                <AttendanceGeneralSetting />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/attendance/Regularization-Reason"
-            element={
-              <ProtectedAdminRoutes>
-                <RegularizationReason />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/att/template"
-            element={
-              <ProtectedAdminRoutes>
-                <AttendanceTemplate />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/att/template-assign"
-            element={
-              <ProtectedAdminRoutes>
-                <AttendanceTemplateAssign />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/att/template/add"
-            element={
-              <ProtectedAdminRoutes>
-                <AttAddTemplate />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/admin/hrms/employee-directory"
-            element={
-              <ProtectedAdminRoutes>
-                <EmployeeDirectory />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-employee"
-            element={
-              <ProtectedAdminRoutes>
-                <AddEmployee />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/hrms/investment"
-            element={
-              <ProtectedAdminRoutes>
-                <InvestmentApproval />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/fitout/request/details/:id"
-            element={<FitOutRequestDetails />}
-          />
-          <Route
-            path="/hrms/calendar"
-            element={
-              <ProtectedAdminRoutes>
-                <Calender />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/hrms/generated-letter"
-            element={
-              <ProtectedAdminRoutes>
-                <GenerationLetter />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/hrms/organization-tree-setting"
-            element={
-              <ProtectedAdminRoutes>
-                {/* <OrganizationTree /> */}
-                <OrganizationChart />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/hrms/employee-transaction"
-            element={
-              <ProtectedAdminRoutes>
-                <DataChangeRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/ctc-basket"
-            element={
-              <ProtectedAdminRoutes>
-                <CTCBasket />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/hrms/onboarding"
-            element={
-              <ProtectedAdminRoutes>
-                <EmpOnboarding />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/hrms/separation-request"
-            element={
-              <ProtectedAdminRoutes>
-                <SeparationApplication />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          {/* paused */}
-          {/* admin HRMS */}
-          <Route
-            path="admin/hrms/employee-onboarding"
-            element={
-              <ProtectedAdminRoutes>
-                <EmployeeOnboarding />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-employee-onboarding"
-            element={
-              <ProtectedAdminRoutes>
-                <AddEmployeeOnBoarding />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-onboarding-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EmployeeOnboardingDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-onboarding-edit/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditEmployeeOnBoarding />
-              </ProtectedAdminRoutes>
-            }
-          />
-
-          <Route
-            path="/employee/hrms-leaves-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeLeavesDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/leaves"
-            element={
-              <ProtectedRoute>
-                <EmployeeHRMSLeaves />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* <Route
+        {/* employee passes */}
+        <Route
+          path="/employee/passes"
+          element={<Navigate to="/employee/passes/visitors" replace />}
+        />
+        <Route
+          path="/employee/passes/visitors"
+          element={
+            <ProtectedRoute>
+              <EmployeeVisitor />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/add-new-visitor"
+          element={
+            <ProtectedRoute>
+              <EmployeeAddVisitor />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/addgvehicles"
+          element={
+            <ProtectedRoute>
+              <EmployeeAddGVehicles />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/gvehiclesdetails/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeGVehiclesDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/addrvehicles"
+          element={
+            <ProtectedRoute>
+              <EmployeeAddRVehicles />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/addstaff"
+          element={
+            <ProtectedRoute>
+              <EmployeeAddStaff />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/passes/visitors/visitor-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeVisitorDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/passes/visitors/edit-visitor/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeVisitorEdit />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/passes/registered-vehicles"
+          element={
+            <ProtectedRoute>
+              <EmployeeRVehicles />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/rvehicles-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeRVehiclesDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/rvehicles-edit/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeRVehiclesEdit />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/passes/guest-vehicles"
+          element={
+            <ProtectedRoute>
+              <EmployeeGVehicle />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/passes/gvehicles-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeGVehiclesDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/passes/staff"
+          element={
+            <ProtectedRoute>
+              <EmployeeStaff />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/passes/staff-edit/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeEditStaff />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/passes/staff-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeStaffDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/passes/materials"
+          element={
+            <ProtectedRoute>
+              <EmployeeMaterials />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/passes/material-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeMaterialDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/passes/patrolling-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeePatrollingDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/passes/patrolling"
+          element={
+            <ProtectedRoute>
+              <EmployeePatrolling />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/passes/goods-in-out"
+          element={
+            <ProtectedRoute>
+              <EmployeeGoodsInOut />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* GDN*/}
+        <Route
+          path="/admin/Gdn"
+          element={
+            <ProtectedAdminRoutes>
+              <GDN />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/add-gdn/"
+          element={
+            <ProtectedAdminRoutes>
+              <AddGdn />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/gdn-detail/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <GdnViewDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* calendar */}
+        <Route
+          path="/calendar"
+          element={
+            <ProtectedRoute>
+              <Calender />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/calendar/employeeSchedule"
+          element={
+            // <ProtectedAdminRoutes>
+            <Schedule />
+            // </ProtectedAdminRoutes>
+          }
+        />
+
+        {/* other bills */}
+        <Route
+          path="/admin/other-bills"
+          element={
+            <ProtectedAdminRoutes>
+              <Bills />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/add-other-bills"
+          element={
+            <ProtectedAdminRoutes>
+              <AddBills />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/-other-bills-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <OtherBillsDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/other-bills-edit/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditOtherBills />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* add id to it */}
+        <Route
+          path="/admin/-other-bills-feed"
+          element={
+            <ProtectedAdminRoutes>
+              <OtherFeedsBill />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        {/* Design Insights*/}
+        <Route
+          path="/admin/Insights"
+          element={
+            <ProtectedAdminRoutes>
+              <Insights />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/Add-insights"
+          element={
+            <ProtectedAdminRoutes>
+              <AddInsights />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/insights-detail/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <InsightsDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-insight/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditInsights />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/insights/"
+          element={
+            <ProtectedAdminRoutes>
+              <InsightSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        {/* permit */}
+        {/* admin permit */}
+        <Route
+          path="/admin/permit"
+          element={
+            <ProtectedAdminRoutes>
+              <Permit />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-new-permit"
+          element={
+            <ProtectedAdminRoutes>
+              <AddNewPermit />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-permit/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <PermitListEdit />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/permit-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <PermitListDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/pending-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <PermitPendingApprovalDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/setup/permit-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <PermitSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        {/* LOI */}
+
+        <Route
+          path="/admin/letterofindent"
+          element={
+            <ProtectedAdminRoutes>
+              <LetterOfIndent />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/purchase/add-loi"
+          element={
+            <ProtectedAdminRoutes>
+              <AddLoi />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-Loi-po/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditLoiPO />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/loi-po-detail/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <LOIPoDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-Loi-wo/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditLoiWO />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/loi-wo-detail/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <LOIWoDetail />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        {/* CAR */}
+        <Route
+          path="/admin/car"
+          element={
+            <ProtectedAdminRoutes>
+              <CAR />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-CAR"
+          element={
+            <ProtectedAdminRoutes>
+              <EditCAR />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-CAR"
+          element={
+            <ProtectedAdminRoutes>
+              <AddCAR />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/car-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <CARDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/car-tag-vendors"
+          element={
+            <ProtectedAdminRoutes>
+              <CARTagVendor />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/car-feeds"
+          element={
+            <ProtectedAdminRoutes>
+              <CARFeeds />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* F&B */}
+        <Route
+          path="/admin/fb"
+          element={
+            <ProtectedAdminRoutes>
+              <FoodsBeverage />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-fb"
+          element={
+            <ProtectedAdminRoutes>
+              <AddFB />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/fb-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <FBDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/fb-edit/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <FBEdit />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/fnb/status-setup/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <FBStatusSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/fnb/sub-category-setup/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditSubCategorySetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/restaurtant-bookings/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditRestaurtantBooking />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/restaurtant-orders/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditRestaurtantOrders />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/fnb/restaurtant-menu/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <FBRestaurtantMenu />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/fnb/category-setup/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditCategorySetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/restaurant/details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <FBRestaurtantDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/pantry-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <PantryDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/fb-res-menu/"
+          element={
+            <ProtectedAdminRoutes>
+              <AddResMenu />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-resmenu/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditResMenu />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/fb-resmenudetails/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <ResMenuDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/res-order-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <ResOrderDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* incident */}
+        <Route
+          path="/admin/incidents"
+          element={
+            <ProtectedAdminRoutes>
+              <Incidents />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-incidents"
+          element={
+            <ProtectedAdminRoutes>
+              <AddIncident />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-incidents/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditIncident />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/incidents-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <IncidentsDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/setup-incidents"
+          element={
+            <ProtectedAdminRoutes>
+              <IncidentSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* Meter Types */}
+        <Route
+          path="/admin/setup-meter-type"
+          element={
+            <ProtectedAdminRoutes>
+              <MeterTypeSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* CheckList Group */}
+        <Route
+          path="/admin/checklist-group"
+          element={
+            <ProtectedAdminRoutes>
+              <CheckListGroupSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        {/* FmUSer */}
+        <Route
+          path="/admin/fm-user"
+          element={
+            <ProtectedAdminRoutes>
+              <FmUserSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-fm-user"
+          element={
+            <ProtectedAdminRoutes>
+              <AddFmUserSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/fm-user-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditFmUserSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* Occupant User */}
+        <Route
+          path="/admin/occupant-user-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <OccupantUserSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-occupant-user-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <AddOccupantUserSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/occupant-user-setup-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditOccupantUserSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/billing-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <BillingSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        {/* Cam Billings */}
+        <Route
+          path="/admin/cam-billing"
+          element={
+            <ProtectedAdminRoutes>
+              <CAMBilling />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* New CAM Pages */}
+        <Route
+          path="/admin/cam/bills"
+          element={
+            <ProtectedAdminRoutes>
+              <CAMBills />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/accounting/bills"
+          element={
+            <ProtectedAdminRoutes>
+              <CAMBills />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/cam/setup/monthly-expenses"
+          element={
+            <ProtectedAdminRoutes>
+              <MonthlyExpenseSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/accounting"
+          element={
+            <ProtectedAdminRoutes>
+              <AccountingSetupTabs />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/accounting/monthly-expenses"
+          element={
+            <ProtectedAdminRoutes>
+              <MonthlyExpenseSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/accounting/unit-config"
+          element={
+            <ProtectedAdminRoutes>
+              <CAMSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/cam_bill/add"
+          element={
+            <ProtectedAdminRoutes>
+              <AddCAMBilling />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/cam_bill/billing"
+          element={
+            <ProtectedAdminRoutes>
+              <CAMBilling />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/cam_bill/details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <CAMBillingDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/cam_bill/reciept-invoice"
+          element={
+            <ProtectedAdminRoutes>
+              <ReceiptInvoiceCam />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/cam_bill/create-invoice-receipt/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <CreateInvoiceReceipt />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/billing-address"
+          element={
+            <ProtectedAdminRoutes>
+              <BillingAddress />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/edit-billing-address/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditBillingAddress />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/cam_bill/receipt-invoice/add"
+          element={
+            <ProtectedAdminRoutes>
+              <AddReceiptInvoiceCamBilling />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/cam_bill/receipt-invoice/details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <ReceiptInvoiceDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        {/* Invoice Approvals */}
+        <Route
+          path="/admin/invoice-approval-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <InvoiceApprovalSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-invoice-approval-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <AddInvoiceApprovalsSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/edit-invoice-approval-setup/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditInvoiceApprovalsSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/ticket-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <TicketSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* task-management */}
+        <Route
+          path="/Task-management"
+          element={
+            <ProtectedRoute>
+              <TaskManagement />
+            </ProtectedRoute>
+          }
+        />
+        {/* Email Rule */}
+        <Route
+          path="/admin/email-rule"
+          element={
+            <ProtectedAdminRoutes>
+              <EmailRuleSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* Fm Groups */}
+        <Route
+          path="/admin/fm-groups-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <FmGroupsSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/fm-groups-setup-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <FmGroupSetupDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* SAC/HSN Setup */}
+        <Route
+          path="/admin/sac-hsn-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <SACHSNSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-sac-hsn-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <AddSACHSNSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/sac-hsn-setup-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <SACHSNSetupDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* Admin MaterialPR */}
+        <Route
+          path="/admin/material-pr"
+          element={
+            <ProtectedAdminRoutes>
+              <MaterialPR />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/purchase/add-material-pr"
+          element={
+            <ProtectedAdminRoutes>
+              <AddMatertialPR />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/edit-materialpr/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditMatertialPR />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/materialpr-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <MaterialPRDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* service PR */}
+
+        <Route
+          path="/admin/service-pr"
+          element={
+            <ProtectedAdminRoutes>
+              <ServicePR />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-service-pr"
+          element={
+            <ProtectedAdminRoutes>
+              <AddServicePR />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-servicepr/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditServicePR />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/servicepr-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <ServicePRDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        {/* Addresses */}
+        <Route
+          path="/admin/addresses-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <AddressesSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-addresses-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <AddAddressesSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/edit-addresses-setup/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditAddressesSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        {/* booking & Req */}
+        <Route
+          path="/employee/booking-request"
+          element={
+            <Navigate to="/employee/booking-request/hotel-request" replace />
+          }
+        />
+        <Route
+          path="/employee/booking-request/hotel-request"
+          element={
+            <ProtectedRoute>
+              {" "}
+              <EmployeeHotelRequest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/booking-request"
+          element={
+            <ProtectedRoute>
+              <EmployeeBookingRequest />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/employee/booking-request/add-hotel-request"
+          element={
+            <ProtectedRoute>
+              <EmployeeAddHotelRequest />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/employee/hotel-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeHotelRequestDetails />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/employee/booking-request/flight-ticket-request"
+          element={
+            <ProtectedRoute>
+              {" "}
+              <EmployeeFlightRequest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/flight-request"
+          element={
+            <ProtectedRoute>
+              <EmployeeFlightRequest />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/employee/add-flight-request"
+          element={
+            <ProtectedRoute>
+              <EmployeeAddFlightRequest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/flight-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeFlightRequestDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/booking-request/cab-bus-request"
+          element={
+            <ProtectedRoute>
+              {" "}
+              <EmployeeCabRequest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/add-cab-request"
+          element={
+            <ProtectedRoute>
+              <EmployeeAddCabRequest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/cab-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeCabRequestDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/booking-request/transportation-request"
+          element={
+            <ProtectedRoute>
+              {" "}
+              <EmployeeTransportationRequest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/add-transport-request"
+          element={
+            <ProtectedRoute>
+              <EmployeeAddTransportRequest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/transport-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeTransportRequestDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/booking-request/traveling-allowance-request"
+          element={
+            <ProtectedRoute>
+              <EmployeeTravellingAllowanceRequest />{" "}
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/add-travelallowance-request"
+          element={
+            <ProtectedRoute>
+              <EmployeeAddTravellingAllowanceRequest />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/employee/travelling-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeTravelingAllowanceDetails />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* admin booking & req */}
+        <Route
+          path="/admin/booking-request"
+          element={
+            <Navigate to="/admin/booking-request/hotel-request" replace />
+          }
+        />
+        <Route
+          path="/admin/booking-request/hotel-request"
+          element={
+            <ProtectedAdminRoutes>
+              <HotelRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-hotel-request"
+          element={
+            <ProtectedAdminRoutes>
+              <AddHotelRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hotel-edit/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditHotelRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hotel-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <HotelRequestDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/booking-request/flight-ticket-request"
+          element={
+            <ProtectedAdminRoutes>
+              <FlightRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-flight-request"
+          element={
+            <ProtectedAdminRoutes>
+              <AddFlightRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/flight-edit/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditFlightRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/flight-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <FlightRequestDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/booking-request/cab-bus-request"
+          element={
+            <ProtectedAdminRoutes>
+              <CabRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/add-cab-request"
+          element={
+            <ProtectedAdminRoutes>
+              <AddCabRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/cab-edit/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditCabRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/cab-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <CabRequestDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/booking-request/transportation-request"
+          element={
+            <ProtectedAdminRoutes>
+              <TransportationRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/add-transport-request"
+          element={
+            <ProtectedAdminRoutes>
+              <AddTransportRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/transport-edit/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditTransportRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/transport-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <TransportRequestDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/booking-request/traveling-allowance-request"
+          element={
+            <ProtectedAdminRoutes>
+              <TravellingAllowanceRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-travelallowance-request"
+          element={
+            <ProtectedAdminRoutes>
+              <AddTravellingAllowanceRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/travelling-edit/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditTravellingAllowanceRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/travelling-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <TravelingAllowanceDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* Master CheckList */}
+        <Route
+          path="/admin/master-checklist-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <MasterCheckListSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-master-checklist-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <AddMasterCheckListSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        {/* employee hrms */}
+        <Route
+          path="/hrms-onboarding"
+          element={
+            <ProtectedRoute>
+              <Onboarding />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/add-onboarding"
+          element={
+            <ProtectedRoute>
+              <AddOnBoarding />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/employee-onboarding-details/:id"
+          element={
+            <ProtectedRoute>
+              <OnboardingDetails />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/employee/hrms-attendance-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeHRMSAttendanceDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/hrms-salary-slip-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeHRMSSalarySlipDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/hrms-salary-auto-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeAutoSalaryBreakupDetails />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/employee/hrms-attendance"
+          element={
+            <ProtectedRoute>
+              <AttendanceHRMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/hrms-salary-slip"
+          element={
+            <ProtectedRoute>
+              <EmployeeHRMSSalarySlip />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="employee/auto-salary-breakup"
+          element={
+            <ProtectedRoute>
+              <EmployeeAutoSalaryBreakup />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/hrms"
+          element={
+            <ProtectedAdminRoutes>
+              <AdminHRMS />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/dashboard"
+          element={
+            <ProtectedAdminRoutes>
+              <HRMSDashboard />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/hrms/alerts"
+          element={
+            <ProtectedAdminRoutes>
+              <HRMSAlert />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/leave-setting"
+          element={
+            <ProtectedAdminRoutes>
+              <GeneralSettings />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/general-settings"
+          element={
+            <ProtectedAdminRoutes>
+              <GeneralSettings />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/leave-categories"
+          element={
+            <ProtectedAdminRoutes>
+              <LeaveCategories />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/templates"
+          element={
+            <ProtectedAdminRoutes>
+              <Templates />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/templates-assignments"
+          element={
+            <ProtectedAdminRoutes>
+              <TemplateAssignment />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/leave-categories"
+          element={
+            <ProtectedAdminRoutes>
+              <AddLeaveCategory />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/templates/leave-templates"
+          element={
+            <ProtectedAdminRoutes>
+              <AddTemplates />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/leave-application"
+          element={
+            <ProtectedAdminRoutes>
+              <LeaveApplication />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/leave-balance"
+          element={
+            <ProtectedAdminRoutes>
+              <LeaveBalance />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/rollover"
+          element={
+            <ProtectedAdminRoutes>
+              <Rollover />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="admin/leave-categories/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditLeaveCategory />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="admin/edit-templates/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditTemplates />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="admin/hrms-leavebalance-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <LeaveBalanceDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/hrms/organization-setting"
+          element={
+            <ProtectedAdminRoutes>
+              <BasicInformation />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/company-profile/basic-information"
+          element={
+            <ProtectedAdminRoutes>
+              <BasicInformation />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/company-profile/address-information"
+          element={
+            <ProtectedAdminRoutes>
+              <AddressInformation />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/geographical-settings"
+          element={
+            <ProtectedAdminRoutes>
+              <GeographicalSetting />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/locations"
+          element={
+            <ProtectedAdminRoutes>
+              <Location />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/department"
+          element={
+            <ProtectedAdminRoutes>
+              <Department />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/associated-sites"
+          element={
+            <ProtectedAdminRoutes>
+              <AssociatedSites />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/company-holidays"
+          element={
+            <ProtectedAdminRoutes>
+              <Holiday />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/bank-accounts"
+          element={
+            <ProtectedAdminRoutes>
+              <BankAccount />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/calendar-milestones-events"
+          element={
+            <ProtectedAdminRoutes>
+              <CalendarEvent />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/employee-fields/personal-details"
+          element={
+            <ProtectedAdminRoutes>
+              <PersonalInformation />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/employee-fields/employment-details"
+          element={
+            <ProtectedAdminRoutes>
+              <EmployeeAddress />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/employee-fields/documents"
+          element={
+            <ProtectedAdminRoutes>
+              <Document />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/user-setting"
+          element={
+            <ProtectedAdminRoutes>
+              <ManageAdmin />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/manage-admin"
+          element={
+            <ProtectedAdminRoutes>
+              <ManageAdmin />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/third-party"
+          element={
+            <ProtectedAdminRoutes>
+              <ThirdParty />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/employee-fields/permission"
+          element={
+            <ProtectedAdminRoutes>
+              <PermissionsField />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/employee-fields/news-feed-permission"
+          element={
+            <ProtectedAdminRoutes>
+              <NewsFeedPermission />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/document-letter"
+          element={
+            <ProtectedAdminRoutes>
+              <CompanyDocuments />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/company-documents"
+          element={
+            <ProtectedAdminRoutes>
+              <CompanyDocuments />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/document/letter-template"
+          element={
+            <ProtectedAdminRoutes>
+              <LetterTemplate />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-letter-template"
+          element={
+            <ProtectedAdminRoutes>
+              <AddLetterTemplate />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/document/old-letter-template"
+          element={
+            <ProtectedAdminRoutes>
+              <OldLetterTemplate />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/workflow-setting"
+          element={
+            <ProtectedAdminRoutes>
+              <AddOnboardingSetting />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/onboarding-setting"
+          element={
+            <ProtectedAdminRoutes>
+              <AddOnboardingSetting />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/workflow-trigger"
+          element={
+            <ProtectedAdminRoutes>
+              <WorkflowTrigger />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/emailid-mapping"
+          element={
+            <ProtectedAdminRoutes>
+              <EmailIdMapping />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/communication-template"
+          element={
+            <ProtectedAdminRoutes>
+              <CommunicationTemplate />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/hrms/investment-setting"
+          element={
+            <ProtectedAdminRoutes>
+              <InvestmentSetting />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/reports"
+          element={
+            <ProtectedAdminRoutes>
+              <ImportExport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/report-generation"
+          element={
+            <ProtectedAdminRoutes>
+              <ReportGeneration />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/audit-reports"
+          element={
+            <ProtectedAdminRoutes>
+              <AuditReports />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/Payroll-Reports"
+          element={
+            <ProtectedAdminRoutes>
+              <PayrollReports />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/Compliance-reports"
+          element={
+            <ProtectedAdminRoutes>
+              <ComplianceReports />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/income-tax-report"
+          element={
+            <ProtectedAdminRoutes>
+              <IncomeTaxReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/bank-report"
+          element={
+            <ProtectedAdminRoutes>
+              <BankReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/leave-report"
+          element={
+            <ProtectedAdminRoutes>
+              <LeaveReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/attendance-report"
+          element={
+            <ProtectedAdminRoutes>
+              <AttendanceReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/expense-report"
+          element={
+            <ProtectedAdminRoutes>
+              <ExpenseReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/form16"
+          element={
+            <ProtectedAdminRoutes>
+              <Form16 />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/custom-report"
+          element={
+            <ProtectedAdminRoutes>
+              <CustomReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hr-report"
+          element={
+            <ProtectedAdminRoutes>
+              <HRReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/investment-report"
+          element={
+            <ProtectedAdminRoutes>
+              <InvestmentReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/OnBoarding"
+          element={
+            <ProtectedAdminRoutes>
+              <OnBoarding />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/OffBoarding"
+          element={
+            <ProtectedAdminRoutes>
+              <OffBoarding />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/add-challan"
+          element={
+            <ProtectedAdminRoutes>
+              <AddChallan />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/view/form16/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <ViewForm16 />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/hrms/roaster"
+          element={
+            <ProtectedAdminRoutes>
+              <Roster />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/roaster-shift"
+          element={
+            <ProtectedAdminRoutes>
+              <RosterShift />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/*  */}
+        <Route
+          path="/admin/hrms/run-payroll"
+          element={
+            <ProtectedAdminRoutes>
+              <RunPayroll />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/pay-slip"
+          element={
+            <ProtectedAdminRoutes>
+              <Payslip />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/payroll/form-16"
+          element={
+            <ProtectedAdminRoutes>
+              <PayrollForm16 />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/loan-app"
+          element={
+            <ProtectedAdminRoutes>
+              <LoanApplication />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/payroll-setting"
+          element={
+            <ProtectedAdminRoutes>
+              <PayrollSettings />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/location-master"
+          element={
+            <ProtectedAdminRoutes>
+              <LocationMaster />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/fixed-allowance"
+          element={
+            <ProtectedAdminRoutes>
+              <FixedAllowance />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/fixed-deduction"
+          element={
+            <ProtectedAdminRoutes>
+              <FixedDeduction />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/variable-allowance"
+          element={
+            <ProtectedAdminRoutes>
+              <VariableAllowance />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/variable-deduction"
+          element={
+            <ProtectedAdminRoutes>
+              <VariableDeduction />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/other-benefit"
+          element={
+            <ProtectedAdminRoutes>
+              <OtherBenefit />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/loans"
+          element={
+            <ProtectedAdminRoutes>
+              <Loans />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-loan"
+          element={
+            <ProtectedAdminRoutes>
+              <AddLoan />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/tax-setting"
+          element={
+            <ProtectedAdminRoutes>
+              <TaxSettings />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/payslip-setting"
+          element={
+            <ProtectedAdminRoutes>
+              <PayslipSetting />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/CTC-Template"
+          element={
+            <ProtectedAdminRoutes>
+              <CTCTemplate />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/NPS"
+          element={
+            <ProtectedAdminRoutes>
+              <NPS />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/Gratuity"
+          element={
+            <ProtectedAdminRoutes>
+              <Gratuity />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/Leave-Recovery"
+          element={
+            <ProtectedAdminRoutes>
+              <LeaveRecovery />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="admin/Notice-Recovery"
+          element={
+            <ProtectedAdminRoutes>
+              <NoticeRecovery />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="admin/Minimum-Wage"
+          element={
+            <ProtectedAdminRoutes>
+              <MinimumWage />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="admin/PF"
+          element={
+            <ProtectedAdminRoutes>
+              <PF />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="admin/daily-wage"
+          element={
+            <ProtectedAdminRoutes>
+              <DailyWage />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        {/*  */}
+        <Route
+          path="/admin/hrms/attendance-records"
+          element={
+            <ProtectedAdminRoutes>
+              {/* <AttendanceRecords /> */}
+              <AttendanceRec />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/Attendance-Process"
+          element={
+            <ProtectedAdminRoutes>
+              <AttendanceProcess />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/Regularization-Requests"
+          element={
+            <ProtectedAdminRoutes>
+              <RegularizationRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/Attendance-Audit"
+          element={
+            <ProtectedAdminRoutes>
+              <AttendanceAudit />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/Device-Request"
+          element={
+            <ProtectedAdminRoutes>
+              <DeviceRegistration />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/Attendance-Validation"
+          element={
+            <ProtectedAdminRoutes>
+              <AttendanceValidation />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/Attendance-Log"
+          element={
+            <ProtectedAdminRoutes>
+              <AttendanceLogs />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/setting"
+          element={
+            <ProtectedAdminRoutes>
+              <AttendanceGeneralSetting />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/attendance/Regularization-Reason"
+          element={
+            <ProtectedAdminRoutes>
+              <RegularizationReason />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/att/template"
+          element={
+            <ProtectedAdminRoutes>
+              <AttendanceTemplate />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/att/template-assign"
+          element={
+            <ProtectedAdminRoutes>
+              <AttendanceTemplateAssign />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/att/template/add"
+          element={
+            <ProtectedAdminRoutes>
+              <AttAddTemplate />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/hrms/employee-directory"
+          element={
+            <ProtectedAdminRoutes>
+              <EmployeeDirectory />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-employee"
+          element={
+            <ProtectedAdminRoutes>
+              <AddEmployee />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/hrms/investment"
+          element={
+            <ProtectedAdminRoutes>
+              <InvestmentApproval />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/fitout/request/details/:id"
+          element={<FitOutRequestDetails />}
+        />
+        <Route
+          path="/hrms/calendar"
+          element={
+            <ProtectedAdminRoutes>
+              <Calender />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/hrms/generated-letter"
+          element={
+            <ProtectedAdminRoutes>
+              <GenerationLetter />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/hrms/organization-tree-setting"
+          element={
+            <ProtectedAdminRoutes>
+              {/* <OrganizationTree /> */}
+              <OrganizationChart />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/hrms/employee-transaction"
+          element={
+            <ProtectedAdminRoutes>
+              <DataChangeRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/ctc-basket"
+          element={
+            <ProtectedAdminRoutes>
+              <CTCBasket />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/hrms/onboarding"
+          element={
+            <ProtectedAdminRoutes>
+              <EmpOnboarding />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/hrms/separation-request"
+          element={
+            <ProtectedAdminRoutes>
+              <SeparationApplication />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        {/* paused */}
+        {/* admin HRMS */}
+        <Route
+          path="admin/hrms/employee-onboarding"
+          element={
+            <ProtectedAdminRoutes>
+              <EmployeeOnboarding />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-employee-onboarding"
+          element={
+            <ProtectedAdminRoutes>
+              <AddEmployeeOnBoarding />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/employee-onboarding-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EmployeeOnboardingDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/employee-onboarding-edit/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditEmployeeOnBoarding />
+            </ProtectedAdminRoutes>
+          }
+        />
+
+        <Route
+          path="/employee/hrms-leaves-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeLeavesDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/leaves"
+          element={
+            <ProtectedRoute>
+              <EmployeeHRMSLeaves />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* <Route
             path="/admin/hrms"
             element={
               <ProtectedAdminRoutes>
@@ -5618,1750 +5619,1750 @@ function App() {
             }
           /> */}
 
-          <Route
-            path="/admin/hrms-attendance-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <HRMSAttendanceDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms-salary-slip-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <HRMSSalarySlipDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms-salary-auto-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <HRMSSalaryAutoDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/admin/hrms-attendance-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <HRMSAttendanceDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms-salary-slip-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <HRMSSalarySlipDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms-salary-auto-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <HRMSSalaryAutoDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/admin/hrms-attendance"
-            element={
-              <ProtectedAdminRoutes>
-                <HRMSAttendance />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms-salary-slip"
-            element={
-              <ProtectedAdminRoutes>
-                <HRMSSalarySlip />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/auto-salary-breakup"
-            element={
-              <ProtectedAdminRoutes>
-                <HRMSAutoSalaryBreakupCreation />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/admin/hrms-attendance"
+          element={
+            <ProtectedAdminRoutes>
+              <HRMSAttendance />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms-salary-slip"
+          element={
+            <ProtectedAdminRoutes>
+              <HRMSSalarySlip />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/auto-salary-breakup"
+          element={
+            <ProtectedAdminRoutes>
+              <HRMSAutoSalaryBreakupCreation />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="admin/leaves"
-            element={
-              <ProtectedAdminRoutes>
-                <HRMSLeaves />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms-leaves-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <HRMSLeavesDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/hrms/pending-contract-renewal"
-            element={
-              <ProtectedAdminRoutes>
-                <PendingContract />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="admin/leaves"
+          element={
+            <ProtectedAdminRoutes>
+              <HRMSLeaves />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms-leaves-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <HRMSLeavesDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/hrms/pending-contract-renewal"
+          element={
+            <ProtectedAdminRoutes>
+              <PendingContract />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          {/*field sense */}
-          <Route
-            path="/admin/field-sense-meeting"
-            element={
-              <ProtectedAdminRoutes>
-                <FieldSenseMeeting />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/create-field-sense"
-            element={
-              <ProtectedAdminRoutes>
-                <CreateFieldSenseMeeting />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/field-sense-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <FieldSenseMeetingDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/field-sense-lead-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <FieldSenseLeadManagementDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/create-field-sence-leads"
-            element={
-              <ProtectedRoute>
-                <CreateFieldSenseLeads />
-              </ProtectedRoute>
-            }
-          />
+        {/*field sense */}
+        <Route
+          path="/admin/field-sense-meeting"
+          element={
+            <ProtectedAdminRoutes>
+              <FieldSenseMeeting />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/create-field-sense"
+          element={
+            <ProtectedAdminRoutes>
+              <CreateFieldSenseMeeting />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/field-sense-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <FieldSenseMeetingDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/field-sense-lead-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <FieldSenseLeadManagementDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/create-field-sence-leads"
+          element={
+            <ProtectedRoute>
+              <CreateFieldSenseLeads />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/admin/field-sense-leads"
-            element={
-              <ProtectedAdminRoutes>
-                <FieldSenseLeads />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* employee field sense */}
-          <Route
-            path="/employee/field-sense-meeting"
-            element={
-              <ProtectedRoute>
-                <EmployeeFieldSenseMeeting />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/field-sense-create-meeting"
-            element={
-              <ProtectedRoute>
-                <CreateEmployeeFieldSenseMeeting />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/field-sense-leads"
-            element={
-              <ProtectedRoute>
-                <EmployeeFieldSenseLead />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/admin/field-sense-leads"
+          element={
+            <ProtectedAdminRoutes>
+              <FieldSenseLeads />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* employee field sense */}
+        <Route
+          path="/employee/field-sense-meeting"
+          element={
+            <ProtectedRoute>
+              <EmployeeFieldSenseMeeting />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/field-sense-create-meeting"
+          element={
+            <ProtectedRoute>
+              <CreateEmployeeFieldSenseMeeting />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/field-sense-leads"
+          element={
+            <ProtectedRoute>
+              <EmployeeFieldSenseLead />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/employee/field-sence-meeting-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeFieldSenseMeetingDetails />
-              </ProtectedRoute>
-            }
-          />
-          {/*Bill Pay */}
-          <Route
-            path="/admin/bill-pay"
-            element={
-              <ProtectedAdminRoutes>
-                <BillPay />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/bill-pay-details"
-            element={
-              <ProtectedAdminRoutes>
-                <BillPayDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* Employee Bill Pay */}
-          <Route
-            path="/employee/bill-pay"
-            element={
-              <ProtectedRoute>
-                <EmployeeBillPay />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/employee/field-sence-meeting-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeFieldSenseMeetingDetails />
+            </ProtectedRoute>
+          }
+        />
+        {/*Bill Pay */}
+        <Route
+          path="/admin/bill-pay"
+          element={
+            <ProtectedAdminRoutes>
+              <BillPay />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/bill-pay-details"
+          element={
+            <ProtectedAdminRoutes>
+              <BillPayDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* Employee Bill Pay */}
+        <Route
+          path="/employee/bill-pay"
+          element={
+            <ProtectedRoute>
+              <EmployeeBillPay />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/employee/bill-pay-detail"
-            element={
-              <ProtectedRoute>
-                <EmployeeBillPayDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/communication-access-control"
-            element={
-              <ProtectedAdminRoutes>
-                <CommunicationAccessControl />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/employee/bill-pay-detail"
+          element={
+            <ProtectedRoute>
+              <EmployeeBillPayDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/communication-access-control"
+          element={
+            <ProtectedAdminRoutes>
+              <CommunicationAccessControl />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          {/* hrms expenses */}
-          <Route
-            path="/expenses"
-            element={<Navigate to="/expenses/expense-report" />}
-            replace
-          />
-          <Route
-            path="/expenses/expense-report"
-            element={
-              <ProtectedAdminRoutes>
-                <ExpensesReports />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/expenses/advance-report"
-            element={
-              <ProtectedAdminRoutes>
-                <AdvanceReports />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/process-history"
-            element={<Navigate to="/process-history/expense-process-history" />}
-            replace
-          />
-          <Route
-            path="/process-history/expense-process-history"
-            element={
-              <ProtectedAdminRoutes>
-                <ProcessHistory />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/process-history/advance-expense-process-history"
-            element={
-              <ProtectedAdminRoutes>
-                <AdvanceHistory />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/expense-setting"
-            element={<Navigate to="/expense-setting/expense-category" />}
-            replace
-          />
-          <Route
-            path="/expense-setting/expense-category"
-            element={
-              <ProtectedAdminRoutes>
-                <ExpenseSetting />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/expense-setting/expense-templates"
-            element={
-              <ProtectedAdminRoutes>
-                <ExpenseTemplates />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/expense-setting/expense-template-assignment"
-            element={
-              <ProtectedAdminRoutes>
-                <ExpenseTemplateAssignment />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/expense-setting/general"
-            element={
-              <ProtectedAdminRoutes>
-                <ExpenseGeneralSetting />
-              </ProtectedAdminRoutes>
-            }
-          />
+        {/* hrms expenses */}
+        <Route
+          path="/expenses"
+          element={<Navigate to="/expenses/expense-report" />}
+          replace
+        />
+        <Route
+          path="/expenses/expense-report"
+          element={
+            <ProtectedAdminRoutes>
+              <ExpensesReports />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/expenses/advance-report"
+          element={
+            <ProtectedAdminRoutes>
+              <AdvanceReports />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/process-history"
+          element={<Navigate to="/process-history/expense-process-history" />}
+          replace
+        />
+        <Route
+          path="/process-history/expense-process-history"
+          element={
+            <ProtectedAdminRoutes>
+              <ProcessHistory />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/process-history/advance-expense-process-history"
+          element={
+            <ProtectedAdminRoutes>
+              <AdvanceHistory />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/expense-setting"
+          element={<Navigate to="/expense-setting/expense-category" />}
+          replace
+        />
+        <Route
+          path="/expense-setting/expense-category"
+          element={
+            <ProtectedAdminRoutes>
+              <ExpenseSetting />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/expense-setting/expense-templates"
+          element={
+            <ProtectedAdminRoutes>
+              <ExpenseTemplates />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/expense-setting/expense-template-assignment"
+          element={
+            <ProtectedAdminRoutes>
+              <ExpenseTemplateAssignment />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/expense-setting/general"
+          element={
+            <ProtectedAdminRoutes>
+              <ExpenseGeneralSetting />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          {/*personal financial */}
-          <Route
-            path="/personal-finance"
-            element={
-              <ProtectedRoute>
-                <PersonalFinancialLogin />
-              </ProtectedRoute>
-            }
-          />
+        {/*personal financial */}
+        <Route
+          path="/personal-finance"
+          element={
+            <ProtectedRoute>
+              <PersonalFinancialLogin />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/personal-financial-setup"
-            element={
-              <ProtectedRoute>
-                <PersonalFinancialSetup />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/personal-financial-edit/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <PersonalFinancialEdit />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/emergency-fund"
-            element={
-              <ProtectedRoute>
-                <EmergencyFund />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/add-emergency-fund"
-            element={
-              <ProtectedRoute>
-                <AddEmergencyFund />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/personal-investment"
-            element={
-              <ProtectedRoute>
-                <Investment />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/add-investment"
-            element={
-              <ProtectedRoute>
-                <AddInvestment />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/goal-plan"
-            element={
-              <ProtectedRoute>
-                <GoalPlanning />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/add-goal-plan"
-            element={
-              <ProtectedRoute>
-                <AddGoalPlanning />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/personal-insurance"
-            element={
-              <ProtectedRoute>
-                <PersonalInsurance />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/add-insurance"
-            element={
-              <ProtectedRoute>
-                <AddPersonalInsurance />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/personal-insurance-details/:id"
-            element={
-              <ProtectedRoute>
-                <InsuranceDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/personal-financial-details/:id"
-            element={
-              <ProtectedRoute>
-                <IndividualDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/emergency-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmergencyFundDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/investment-details/:id"
-            element={
-              <ProtectedRoute>
-                <InvestmentDetails />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/personal-financial-setup"
+          element={
+            <ProtectedRoute>
+              <PersonalFinancialSetup />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/personal-financial-edit/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <PersonalFinancialEdit />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/emergency-fund"
+          element={
+            <ProtectedRoute>
+              <EmergencyFund />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-emergency-fund"
+          element={
+            <ProtectedRoute>
+              <AddEmergencyFund />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/personal-investment"
+          element={
+            <ProtectedRoute>
+              <Investment />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-investment"
+          element={
+            <ProtectedRoute>
+              <AddInvestment />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/goal-plan"
+          element={
+            <ProtectedRoute>
+              <GoalPlanning />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-goal-plan"
+          element={
+            <ProtectedRoute>
+              <AddGoalPlanning />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/personal-insurance"
+          element={
+            <ProtectedRoute>
+              <PersonalInsurance />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-insurance"
+          element={
+            <ProtectedRoute>
+              <AddPersonalInsurance />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/personal-insurance-details/:id"
+          element={
+            <ProtectedRoute>
+              <InsuranceDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/personal-financial-details/:id"
+          element={
+            <ProtectedRoute>
+              <IndividualDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/emergency-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmergencyFundDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/investment-details/:id"
+          element={
+            <ProtectedRoute>
+              <InvestmentDetails />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/goal-details/:id"
-            element={
-              <ProtectedRoute>
-                <GoalDetails />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/goal-details/:id"
+          element={
+            <ProtectedRoute>
+              <GoalDetails />
+            </ProtectedRoute>
+          }
+        />
 
-          {/*Advance Salary Module */}
-          <Route
-            path="/admin/advance-salary-request"
-            element={
-              <ProtectedAdminRoutes>
-                <AdvanceSalaryRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/bank-account-creation"
-            element={
-              <ProtectedAdminRoutes>
-                <BankAccountCreation />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/create-bank-account"
-            element={
-              <ProtectedAdminRoutes>
-                <CreateBankAccount />
-              </ProtectedAdminRoutes>
-            }
-          />
+        {/*Advance Salary Module */}
+        <Route
+          path="/admin/advance-salary-request"
+          element={
+            <ProtectedAdminRoutes>
+              <AdvanceSalaryRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/bank-account-creation"
+          element={
+            <ProtectedAdminRoutes>
+              <BankAccountCreation />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/create-bank-account"
+          element={
+            <ProtectedAdminRoutes>
+              <CreateBankAccount />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/admin/bank-account-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <BankAccountDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/*Employee Advance Salary Module */}
-          <Route
-            path="/employee/advance-salary"
-            element={
-              <ProtectedRoute>
-                <EmployeeAdvanceSalaryRequest />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/bank-account-creation"
-            element={
-              <ProtectedRoute>
-                <EmployeeBankAccountCreation />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/create-bank-account"
-            element={
-              <ProtectedRoute>
-                <EmployeeCreateBankAccount />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/admin/bank-account-details/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <BankAccountDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/*Employee Advance Salary Module */}
+        <Route
+          path="/employee/advance-salary"
+          element={
+            <ProtectedRoute>
+              <EmployeeAdvanceSalaryRequest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/bank-account-creation"
+          element={
+            <ProtectedRoute>
+              <EmployeeBankAccountCreation />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/create-bank-account"
+          element={
+            <ProtectedRoute>
+              <EmployeeCreateBankAccount />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/employee/bank-account-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeBankAccountDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/integration"
-            element={
-              <ProtectedRoute>
-                <Integration />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/gmail"
-            element={
-              <ProtectedRoute>
-                <Gmail />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/reports"
-            element={
-              <ProtectedRoute>
-                <DashboardBeta />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/employee/bank-account-details/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeBankAccountDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/integration"
+          element={
+            <ProtectedRoute>
+              <Integration />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/gmail"
+          element={
+            <ProtectedRoute>
+              <Gmail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute>
+              <DashboardBeta />
+            </ProtectedRoute>
+          }
+        />
 
-          {/* newest admin hrms */}
-          <Route
-            path="/admin/reports/"
-            element={<Navigate to="/admin/reports/import-export" />}
-            replace
-          />
+        {/* newest admin hrms */}
+        <Route
+          path="/admin/reports/"
+          element={<Navigate to="/admin/reports/import-export" />}
+          replace
+        />
 
-          <Route
-            path="/admin/reports/import-export"
-            element={
-              <ProtectedAdminRoutes>
-                <ImportExport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/reports/report-generation"
-            element={
-              <ProtectedAdminRoutes>
-                <ReportGeneration />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/reports/audit-reports"
-            element={
-              <ProtectedAdminRoutes>
-                <AuditReports />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/reports/Payroll-Reports"
-            element={
-              <ProtectedAdminRoutes>
-                <PayrollReports />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/reports/Compliance-reports"
-            element={
-              <ProtectedAdminRoutes>
-                <ComplianceReports />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/reports/income-tax-report"
-            element={
-              <ProtectedAdminRoutes>
-                <IncomeTaxReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/reports/bank-report"
-            element={
-              <ProtectedAdminRoutes>
-                <BankReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/reports/leave-report"
-            element={
-              <ProtectedAdminRoutes>
-                <LeaveReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/reports/attendance-report"
-            element={
-              <ProtectedAdminRoutes>
-                <AttendanceReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/reports/expense-report"
-            element={
-              <ProtectedAdminRoutes>
-                <ExpenseReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/reports/form16"
-            element={
-              <ProtectedAdminRoutes>
-                <Form16 />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/reports/custom-report"
-            element={
-              <ProtectedAdminRoutes>
-                <CustomReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/reports/hr-report"
-            element={
-              <ProtectedAdminRoutes>
-                <HRReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/reports/investment-report"
-            element={
-              <ProtectedAdminRoutes>
-                <InvestmentReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/reports/OnBoarding"
-            element={
-              <ProtectedAdminRoutes>
-                <OnBoarding />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/reports/OffBoarding"
-            element={
-              <ProtectedAdminRoutes>
-                <OffBoarding />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/ctc/"
-            element={<Navigate to="/admin/hrms/ctc/CTC-Template" />}
-            replace
-          />
+        <Route
+          path="/admin/reports/import-export"
+          element={
+            <ProtectedAdminRoutes>
+              <ImportExport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/reports/report-generation"
+          element={
+            <ProtectedAdminRoutes>
+              <ReportGeneration />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/reports/audit-reports"
+          element={
+            <ProtectedAdminRoutes>
+              <AuditReports />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/reports/Payroll-Reports"
+          element={
+            <ProtectedAdminRoutes>
+              <PayrollReports />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/reports/Compliance-reports"
+          element={
+            <ProtectedAdminRoutes>
+              <ComplianceReports />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/reports/income-tax-report"
+          element={
+            <ProtectedAdminRoutes>
+              <IncomeTaxReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/reports/bank-report"
+          element={
+            <ProtectedAdminRoutes>
+              <BankReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/reports/leave-report"
+          element={
+            <ProtectedAdminRoutes>
+              <LeaveReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/reports/attendance-report"
+          element={
+            <ProtectedAdminRoutes>
+              <AttendanceReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/reports/expense-report"
+          element={
+            <ProtectedAdminRoutes>
+              <ExpenseReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/reports/form16"
+          element={
+            <ProtectedAdminRoutes>
+              <Form16 />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/reports/custom-report"
+          element={
+            <ProtectedAdminRoutes>
+              <CustomReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/reports/hr-report"
+          element={
+            <ProtectedAdminRoutes>
+              <HRReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/reports/investment-report"
+          element={
+            <ProtectedAdminRoutes>
+              <InvestmentReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/reports/OnBoarding"
+          element={
+            <ProtectedAdminRoutes>
+              <OnBoarding />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/reports/OffBoarding"
+          element={
+            <ProtectedAdminRoutes>
+              <OffBoarding />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/ctc/"
+          element={<Navigate to="/admin/hrms/ctc/CTC-Template" />}
+          replace
+        />
 
-          <Route
-            path="/admin/hrms/ctc/CTC-Template"
-            element={
-              <ProtectedAdminRoutes>
-                <CTCTemplate />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-employee/basics"
-            element={
-              <ProtectedAdminRoutes>
-                <AddEmployee />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-employee/basics"
-            element={
-              <ProtectedAdminRoutes>
-                <EditEmployee />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/hrms/organization-tree-setting"
-            element={
-              <ProtectedAdminRoutes>
-                <OrganisationView1 />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-employee/"
-            element={<Navigate to="/admin/add-employee/onboarding" />}
-            replace
-          />
+        <Route
+          path="/admin/hrms/ctc/CTC-Template"
+          element={
+            <ProtectedAdminRoutes>
+              <CTCTemplate />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-employee/basics"
+          element={
+            <ProtectedAdminRoutes>
+              <AddEmployee />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-employee/basics"
+          element={
+            <ProtectedAdminRoutes>
+              <EditEmployee />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/hrms/organization-tree-setting"
+          element={
+            <ProtectedAdminRoutes>
+              <OrganisationView1 />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-employee/"
+          element={<Navigate to="/admin/add-employee/onboarding" />}
+          replace
+        />
 
-          <Route
-            path="/admin/add-employee/onboarding"
-            element={
-              <ProtectedAdminRoutes>
-                <EmpOnboarding />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* flexi settings */}
-          <Route
-            path="/flexi-benefit/settings"
-            element={<Navigate to="/flexi-benefit/settings/general-settings" />}
-            replace
-          />
-          <Route
-            path="/flexi-benefit/settings/general-settings"
-            element={
-              <ProtectedAdminRoutes>
-                <FlexiGeneralSettings />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/flexi-benefit/settings/benefit-categories"
-            element={
-              <ProtectedAdminRoutes>
-                <FlexiCategory />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/performance-setting"
-            element={
-              <ProtectedAdminRoutes>
-                <PerformanceSettings />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* New HRMS changes */}
-          <Route
-            path="/admin/employee-fields/other-details"
-            element={
-              <ProtectedAdminRoutes>
-                <OtherDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/generation-letter"
-            element={
-              <ProtectedAdminRoutes>
-                <AddGenerationLetter />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/hrms/separation/"
-            element={<Navigate to="/hrms/separation/separation-request" />}
-            replace
-          />
+        <Route
+          path="/admin/add-employee/onboarding"
+          element={
+            <ProtectedAdminRoutes>
+              <EmpOnboarding />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* flexi settings */}
+        <Route
+          path="/flexi-benefit/settings"
+          element={<Navigate to="/flexi-benefit/settings/general-settings" />}
+          replace
+        />
+        <Route
+          path="/flexi-benefit/settings/general-settings"
+          element={
+            <ProtectedAdminRoutes>
+              <FlexiGeneralSettings />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/flexi-benefit/settings/benefit-categories"
+          element={
+            <ProtectedAdminRoutes>
+              <FlexiCategory />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/performance-setting"
+          element={
+            <ProtectedAdminRoutes>
+              <PerformanceSettings />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* New HRMS changes */}
+        <Route
+          path="/admin/employee-fields/other-details"
+          element={
+            <ProtectedAdminRoutes>
+              <OtherDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/generation-letter"
+          element={
+            <ProtectedAdminRoutes>
+              <AddGenerationLetter />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/hrms/separation/"
+          element={<Navigate to="/hrms/separation/separation-request" />}
+          replace
+        />
 
-          <Route
-            path="/hrms/separation/separation-request"
-            element={
-              <ProtectedAdminRoutes>
-                <SeparationApplication />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/organisation-view2"
-            element={
-              <ProtectedAdminRoutes>
-                <OrganisationView2 />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/organisation-view3"
-            element={
-              <ProtectedAdminRoutes>
-                <OrganisationView3 />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/organisation-view1"
-            element={
-              <ProtectedAdminRoutes>
-                <OrganisationView1 />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/company-profile/basic-link"
-            element={
-              <ProtectedAdminRoutes>
-                <BasicLink />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-bank-account"
-            element={
-              <ProtectedAdminRoutes>
-                <AddBankAccount />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-employee-directory"
-            element={
-              <ProtectedAdminRoutes>
-                <AddEmployeeDirectory />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/leave-link"
-            element={
-              <ProtectedAdminRoutes>
-                <LeaveLink />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-communication-templates/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditCommunicationTemplate />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-employee-directory"
-            element={
-              <ProtectedAdminRoutes>
-                <SectionsPersonal />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/hrms/employee-directory-Personal/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <SectionsPersonal />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-directory-Employment/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <SectionsEmployment />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-directory-Statutory/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <SectionStatutory />
-              </ProtectedAdminRoutes>
-            }
-          />
-          {/* <Route
+        <Route
+          path="/hrms/separation/separation-request"
+          element={
+            <ProtectedAdminRoutes>
+              <SeparationApplication />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/organisation-view2"
+          element={
+            <ProtectedAdminRoutes>
+              <OrganisationView2 />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/organisation-view3"
+          element={
+            <ProtectedAdminRoutes>
+              <OrganisationView3 />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/organisation-view1"
+          element={
+            <ProtectedAdminRoutes>
+              <OrganisationView1 />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/company-profile/basic-link"
+          element={
+            <ProtectedAdminRoutes>
+              <BasicLink />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-bank-account"
+          element={
+            <ProtectedAdminRoutes>
+              <AddBankAccount />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-employee-directory"
+          element={
+            <ProtectedAdminRoutes>
+              <AddEmployeeDirectory />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/leave-link"
+          element={
+            <ProtectedAdminRoutes>
+              <LeaveLink />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-communication-templates/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditCommunicationTemplate />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-employee-directory"
+          element={
+            <ProtectedAdminRoutes>
+              <SectionsPersonal />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/hrms/employee-directory-Personal/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <SectionsPersonal />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/employee-directory-Employment/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <SectionsEmployment />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/employee-directory-Statutory/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <SectionStatutory />
+            </ProtectedAdminRoutes>
+          }
+        />
+        {/* <Route
             path="/admin/employee-directory/:id"
             element={<Navigate to="/admin/employee-directory/Salary/:id" />}
             replace
           /> */}
 
-          <Route
-            path="/admin/employee-directory/Salary/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <SectionSalary />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-directory/add-new-ctc"
-            element={
-              <ProtectedAdminRoutes>
-                <AddNewCTC />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-directory-Tax/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <SectionTax />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-directory-Documents/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <SectionDoc />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-directory-LoansAdvances/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <SectionLoans />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-directory-Transaction/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <SectionTransaction />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-directory-Change-logs/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <SectionLog />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/admin/employee-directory/Salary/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <SectionSalary />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/employee-directory/add-new-ctc"
+          element={
+            <ProtectedAdminRoutes>
+              <AddNewCTC />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/employee-directory-Tax/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <SectionTax />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/employee-directory-Documents/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <SectionDoc />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/employee-directory-LoansAdvances/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <SectionLoans />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/employee-directory-Transaction/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <SectionTransaction />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/employee-directory-Change-logs/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <SectionLog />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/admin/hrms/alerts/"
-            element={<Navigate to="/admin/hrms/alerts/pending-request" />}
-            replace
-          />
-          <Route
-            path="/admin/hrms/alerts/pending-request"
-            element={
-              <ProtectedAdminRoutes>
-                <PendingRequest />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/alerts/Setup-Issues"
-            element={
-              <ProtectedAdminRoutes>
-                <SetupIssues />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/alerts/Process-Alerts"
-            element={
-              <ProtectedAdminRoutes>
-                <ProcessAlert />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/alerts/tasks"
-            element={
-              <ProtectedAdminRoutes>
-                <AlertTasks />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/flexi-benefits"
-            element={
-              <ProtectedAdminRoutes>
-                <Flexibenefits />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-flexi-benefit-balance"
-            element={
-              <ProtectedAdminRoutes>
-                <EmployeeBalance />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/admin/hrms/alerts/"
+          element={<Navigate to="/admin/hrms/alerts/pending-request" />}
+          replace
+        />
+        <Route
+          path="/admin/hrms/alerts/pending-request"
+          element={
+            <ProtectedAdminRoutes>
+              <PendingRequest />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/alerts/Setup-Issues"
+          element={
+            <ProtectedAdminRoutes>
+              <SetupIssues />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/alerts/Process-Alerts"
+          element={
+            <ProtectedAdminRoutes>
+              <ProcessAlert />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/alerts/tasks"
+          element={
+            <ProtectedAdminRoutes>
+              <AlertTasks />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/flexi-benefits"
+          element={
+            <ProtectedAdminRoutes>
+              <Flexibenefits />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/employee-flexi-benefit-balance"
+          element={
+            <ProtectedAdminRoutes>
+              <EmployeeBalance />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/admin/tax-edit"
-            element={
-              <ProtectedAdminRoutes>
-                <Deductions80C />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/Other-Exemptions"
-            element={
-              <ProtectedAdminRoutes>
-                <OtherExemptions />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/Rent-Information"
-            element={
-              <ProtectedAdminRoutes>
-                <RentInformation />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/Prequisites Information"
-            element={
-              <ProtectedAdminRoutes>
-                <PrerequisiteInformation />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/Other-Income-Info"
-            element={
-              <ProtectedAdminRoutes>
-                <OtherIncomeInfo />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/Housing-Loan-Info"
-            element={
-              <ProtectedAdminRoutes>
-                <HousingLoanInfo />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/view-records"
-            element={
-              <ProtectedAdminRoutes>
-                <ViewRecords />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-employee/Employment"
-            element={
-              <ProtectedAdminRoutes>
-                <Employment />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-employee/Statutory"
-            element={
-              <ProtectedAdminRoutes>
-                <Statutory />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-employee/Salary"
-            element={
-              <ProtectedAdminRoutes>
-                <OnboardingSalary />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-employee/Policies"
-            element={
-              <ProtectedAdminRoutes>
-                <Policies />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-employee/Invite"
-            element={
-              <ProtectedAdminRoutes>
-                <Invite />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/hrms/separation/separate-application/resignation"
-            element={
-              <ProtectedAdminRoutes>
-                <Resignation />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/hrms/separation/separate-application/resignation/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <Resignation />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-attendance-process/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditAttendanceProcess />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/loan-app/add-loan"
-            element={
-              <ProtectedAdminRoutes>
-                <LoanAppAdd />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/ctc/ctc-template/General-Settings"
-            element={
-              <ProtectedAdminRoutes>
-                <CTCGeneralSetting />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/hrms/ctc/ctc-template/edit/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <CTCGeneralSettingEdit />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/admin/tax-edit"
+          element={
+            <ProtectedAdminRoutes>
+              <Deductions80C />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/Other-Exemptions"
+          element={
+            <ProtectedAdminRoutes>
+              <OtherExemptions />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/Rent-Information"
+          element={
+            <ProtectedAdminRoutes>
+              <RentInformation />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/Prequisites Information"
+          element={
+            <ProtectedAdminRoutes>
+              <PrerequisiteInformation />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/Other-Income-Info"
+          element={
+            <ProtectedAdminRoutes>
+              <OtherIncomeInfo />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/Housing-Loan-Info"
+          element={
+            <ProtectedAdminRoutes>
+              <HousingLoanInfo />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/view-records"
+          element={
+            <ProtectedAdminRoutes>
+              <ViewRecords />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-employee/Employment"
+          element={
+            <ProtectedAdminRoutes>
+              <Employment />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-employee/Statutory"
+          element={
+            <ProtectedAdminRoutes>
+              <Statutory />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-employee/Salary"
+          element={
+            <ProtectedAdminRoutes>
+              <OnboardingSalary />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-employee/Policies"
+          element={
+            <ProtectedAdminRoutes>
+              <Policies />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-employee/Invite"
+          element={
+            <ProtectedAdminRoutes>
+              <Invite />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/hrms/separation/separate-application/resignation"
+          element={
+            <ProtectedAdminRoutes>
+              <Resignation />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/hrms/separation/separate-application/resignation/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <Resignation />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-attendance-process/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <EditAttendanceProcess />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/loan-app/add-loan"
+          element={
+            <ProtectedAdminRoutes>
+              <LoanAppAdd />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/ctc/ctc-template/General-Settings"
+          element={
+            <ProtectedAdminRoutes>
+              <CTCGeneralSetting />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/hrms/ctc/ctc-template/edit/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <CTCGeneralSettingEdit />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/admin/details-payslip/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <PayslipDetailsPage />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/details1-payslip"
-            element={
-              <ProtectedAdminRoutes>
-                <PayslipDetails1 />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/details2-payslip"
-            element={
-              <ProtectedAdminRoutes>
-                <PayslipDetails2 />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/details3-payslip"
-            element={
-              <ProtectedAdminRoutes>
-                <PayslipDetails3 />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/details4-payslip"
-            element={
-              <ProtectedAdminRoutes>
-                <PayslipDetails4 />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/reports/add-custom-report"
-            element={
-              <ProtectedAdminRoutes>
-                <AddCustomReport />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/add-communication-templates"
-            element={
-              <ProtectedAdminRoutes>
-                <AddCommunicationTemplate />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-letter-templates"
-            element={
-              <ProtectedAdminRoutes>
-                <EditLetterTemplate />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/milestone-type-setting"
-            element={
-              <ProtectedAdminRoutes>
-                <MilestoneTypeSettings />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/user-roles"
-            element={
-              <ProtectedAdminRoutes>
-                <UserRoles />
-              </ProtectedAdminRoutes>
-            }
-          />
+        <Route
+          path="/admin/details-payslip/:id"
+          element={
+            <ProtectedAdminRoutes>
+              <PayslipDetailsPage />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/details1-payslip"
+          element={
+            <ProtectedAdminRoutes>
+              <PayslipDetails1 />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/details2-payslip"
+          element={
+            <ProtectedAdminRoutes>
+              <PayslipDetails2 />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/details3-payslip"
+          element={
+            <ProtectedAdminRoutes>
+              <PayslipDetails3 />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/details4-payslip"
+          element={
+            <ProtectedAdminRoutes>
+              <PayslipDetails4 />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/reports/add-custom-report"
+          element={
+            <ProtectedAdminRoutes>
+              <AddCustomReport />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/add-communication-templates"
+          element={
+            <ProtectedAdminRoutes>
+              <AddCommunicationTemplate />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/edit-letter-templates"
+          element={
+            <ProtectedAdminRoutes>
+              <EditLetterTemplate />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/milestone-type-setting"
+          element={
+            <ProtectedAdminRoutes>
+              <MilestoneTypeSettings />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/user-roles"
+          element={
+            <ProtectedAdminRoutes>
+              <UserRoles />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          {/* New HRMS changes */}
+        {/* New HRMS changes */}
 
-          {/* newest admin hrms */}
+        {/* newest admin hrms */}
 
-          {/* skill grow employee*/}
-          <Route
-            path="/employee/certificate"
-            element={<Navigate to="/employee/certificate/course" replace />}
-          />
-          <Route
-            path="/employee/certificate/course"
-            element={
-              <ProtectedRoute>
-                <EmployeeCourseCertificate />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/coursedetails"
-            element={
-              <ProtectedRoute>
-                <EmployeeCourseCertificateDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/project"
-            element={
-              <ProtectedRoute>
-                <EmployeeProjectCertificate />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/rr-certificate"
-            element={
-              <ProtectedRoute>
-                <EmployeeRRCertificate />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/course-request-approval"
-            element={
-              <ProtectedRoute>
-                <EmployeeCourseRequestApproval />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/course-details"
-            element={
-              <ProtectedRoute>
-                <EmployeeCourseDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/project-request-approval"
-            element={
-              <ProtectedRoute>
-                <EmployeeProjectRequestApproval />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/project-request-approval"
-            element={
-              <Navigate
-                to="/employee/certificate/project-request-approval/request"
-                replace
-              />
-            }
-          />
-          <Route
-            path="/employee/certificate/project-request-approval/request"
-            element={
-              <ProtectedRoute>
-                <EmployeeRequested />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/project-request-approval/create-request"
-            element={
-              <ProtectedRoute>
-                <CreateEmployeeRequest />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/project-request-approval/edit-request/:id"
-            element={
-              <ProtectedRoute>
-                <EditEmployeeRequest />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/project-request-approval/view-request/:id"
-            element={
-              <ProtectedRoute>
-                <ViewEmployeeRequest />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/project-request-approval/approved"
-            element={
-              <ProtectedRoute>
-                <EmployeeApproved />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/project-view"
-            element={
-              <ProtectedRoute>
-                <EmployeeProjectView />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/project-request-approval/rejected"
-            element={
-              <ProtectedRoute>
-                <EmployeeRejected />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/project-tracking"
-            element={
-              <ProtectedRoute>
-                <EmployeeProjectTracking />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/project-repository"
-            element={
-              <ProtectedRoute>
-                <EmployeeProjectRepository />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/project-repository-details"
-            element={
-              <ProtectedRoute>
-                <EmployeeProjectRepositoryDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/knowledge-base"
-            element={
-              <ProtectedRoute>
-                <EmployeeKnowledgeBase />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/project-task-view"
-            element={
-              <ProtectedRoute>
-                <EmployeeProjectTaskView />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/project-task-completed"
-            element={
-              <ProtectedRoute>
-                <EmployeeProjectTaskCompleted />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/project-reject-details"
-            element={
-              <ProtectedRoute>
-                <EmployeeProjectRejectDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/certificate/course-details-free"
-            element={
-              <ProtectedRoute>
-                <FreeCoursesDetails />
-              </ProtectedRoute>
-            }
-          />
-          {/* skill grow employee*/}
-          <Route
-            path="/employee/dashboard"
-            element={
-              <ProtectedRoute>
-                <EmployeeDashboard />
-              </ProtectedRoute>
-            }
-          />
-          {/* Admin Skill Grow */}
-          <Route
-            path="/admin/skill-grow"
-            element={<Navigate to="/admin/skill-grow/course" replace />}
-          />
-          <Route
-            path="/admin/skill-grow/header"
-            element={
-              <ProtectedAdminRoutes>
-                <SkillGrowHeaderComponent />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/course"
-            element={
-              <ProtectedAdminRoutes>
-                <Course />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/projects"
-            element={
-              <ProtectedAdminRoutes>
-                <SkillGrowProjects />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/employee-profile"
-            element={
-              <ProtectedAdminRoutes>
-                <SkillGrowEmployeeProfile />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/instructor"
-            element={
-              <ProtectedAdminRoutes>
-                <Instructor />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/dashboard"
-            element={
-              <ProtectedAdminRoutes>
-                <SkillGrowDashboard />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/create-course"
-            element={
-              <ProtectedAdminRoutes>
-                <CreateCourse />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/edit-course"
-            element={
-              <ProtectedAdminRoutes>
-                <EditCourse />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/employee-profile-details"
-            element={
-              <ProtectedAdminRoutes>
-                <SkillGrowEmployeeProfileDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/project-details"
-            element={
-              <ProtectedAdminRoutes>
-                <SkillGrowProjectDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/course-details"
-            element={
-              <ProtectedAdminRoutes>
-                <CourseDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/instructor-details"
-            element={
-              <ProtectedAdminRoutes>
-                <InstructorDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/create-course-details"
-            element={
-              <ProtectedAdminRoutes>
-                <CreateCourseDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
+        {/* skill grow employee*/}
+        <Route
+          path="/employee/certificate"
+          element={<Navigate to="/employee/certificate/course" replace />}
+        />
+        <Route
+          path="/employee/certificate/course"
+          element={
+            <ProtectedRoute>
+              <EmployeeCourseCertificate />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/coursedetails"
+          element={
+            <ProtectedRoute>
+              <EmployeeCourseCertificateDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/project"
+          element={
+            <ProtectedRoute>
+              <EmployeeProjectCertificate />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/rr-certificate"
+          element={
+            <ProtectedRoute>
+              <EmployeeRRCertificate />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/course-request-approval"
+          element={
+            <ProtectedRoute>
+              <EmployeeCourseRequestApproval />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/course-details"
+          element={
+            <ProtectedRoute>
+              <EmployeeCourseDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/project-request-approval"
+          element={
+            <ProtectedRoute>
+              <EmployeeProjectRequestApproval />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/project-request-approval"
+          element={
+            <Navigate
+              to="/employee/certificate/project-request-approval/request"
+              replace
+            />
+          }
+        />
+        <Route
+          path="/employee/certificate/project-request-approval/request"
+          element={
+            <ProtectedRoute>
+              <EmployeeRequested />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/project-request-approval/create-request"
+          element={
+            <ProtectedRoute>
+              <CreateEmployeeRequest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/project-request-approval/edit-request/:id"
+          element={
+            <ProtectedRoute>
+              <EditEmployeeRequest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/project-request-approval/view-request/:id"
+          element={
+            <ProtectedRoute>
+              <ViewEmployeeRequest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/project-request-approval/approved"
+          element={
+            <ProtectedRoute>
+              <EmployeeApproved />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/project-view"
+          element={
+            <ProtectedRoute>
+              <EmployeeProjectView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/project-request-approval/rejected"
+          element={
+            <ProtectedRoute>
+              <EmployeeRejected />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/project-tracking"
+          element={
+            <ProtectedRoute>
+              <EmployeeProjectTracking />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/project-repository"
+          element={
+            <ProtectedRoute>
+              <EmployeeProjectRepository />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/project-repository-details"
+          element={
+            <ProtectedRoute>
+              <EmployeeProjectRepositoryDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/knowledge-base"
+          element={
+            <ProtectedRoute>
+              <EmployeeKnowledgeBase />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/project-task-view"
+          element={
+            <ProtectedRoute>
+              <EmployeeProjectTaskView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/project-task-completed"
+          element={
+            <ProtectedRoute>
+              <EmployeeProjectTaskCompleted />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/project-reject-details"
+          element={
+            <ProtectedRoute>
+              <EmployeeProjectRejectDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/certificate/course-details-free"
+          element={
+            <ProtectedRoute>
+              <FreeCoursesDetails />
+            </ProtectedRoute>
+          }
+        />
+        {/* skill grow employee*/}
+        <Route
+          path="/employee/dashboard"
+          element={
+            <ProtectedRoute>
+              <EmployeeDashboard />
+            </ProtectedRoute>
+          }
+        />
+        {/* Admin Skill Grow */}
+        <Route
+          path="/admin/skill-grow"
+          element={<Navigate to="/admin/skill-grow/course" replace />}
+        />
+        <Route
+          path="/admin/skill-grow/header"
+          element={
+            <ProtectedAdminRoutes>
+              <SkillGrowHeaderComponent />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/course"
+          element={
+            <ProtectedAdminRoutes>
+              <Course />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/projects"
+          element={
+            <ProtectedAdminRoutes>
+              <SkillGrowProjects />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/employee-profile"
+          element={
+            <ProtectedAdminRoutes>
+              <SkillGrowEmployeeProfile />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/instructor"
+          element={
+            <ProtectedAdminRoutes>
+              <Instructor />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/dashboard"
+          element={
+            <ProtectedAdminRoutes>
+              <SkillGrowDashboard />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/create-course"
+          element={
+            <ProtectedAdminRoutes>
+              <CreateCourse />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/edit-course"
+          element={
+            <ProtectedAdminRoutes>
+              <EditCourse />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/employee-profile-details"
+          element={
+            <ProtectedAdminRoutes>
+              <SkillGrowEmployeeProfileDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/project-details"
+          element={
+            <ProtectedAdminRoutes>
+              <SkillGrowProjectDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/course-details"
+          element={
+            <ProtectedAdminRoutes>
+              <CourseDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/instructor-details"
+          element={
+            <ProtectedAdminRoutes>
+              <InstructorDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/create-course-details"
+          element={
+            <ProtectedAdminRoutes>
+              <CreateCourseDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
 
-          <Route
-            path="/admin/skill-grow/course-description"
-            element={
-              <ProtectedAdminRoutes>
-                <CourseDescription />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/course-curriculum"
-            element={
-              <ProtectedAdminRoutes>
-                <CourseCurriculum />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/create-faqs"
-            element={
-              <ProtectedAdminRoutes>
-                <CreateFAQs />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/edit-course-details"
-            element={
-              <ProtectedAdminRoutes>
-                <EditCourseDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/edit-course-description"
-            element={
-              <ProtectedAdminRoutes>
-                <EditCourseDescription />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/edit-curriculum"
-            element={
-              <ProtectedAdminRoutes>
-                <EditCurriculum />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/skill-grow/edit-faqs"
-            element={
-              <ProtectedAdminRoutes>
-                <EditFAQs />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/passes/add-goods-in-out"
-            element={
-              <ProtectedAdminRoutes>
-                <AddGoods />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/setup/visitor-setup"
-            element={
-              <ProtectedAdminRoutes>
-                <VisitorSetup />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/employee-portal"
-            element={<Navigate to="/employee-portal/attendance" replace />}
-          />
+        <Route
+          path="/admin/skill-grow/course-description"
+          element={
+            <ProtectedAdminRoutes>
+              <CourseDescription />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/course-curriculum"
+          element={
+            <ProtectedAdminRoutes>
+              <CourseCurriculum />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/create-faqs"
+          element={
+            <ProtectedAdminRoutes>
+              <CreateFAQs />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/edit-course-details"
+          element={
+            <ProtectedAdminRoutes>
+              <EditCourseDetails />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/edit-course-description"
+          element={
+            <ProtectedAdminRoutes>
+              <EditCourseDescription />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/edit-curriculum"
+          element={
+            <ProtectedAdminRoutes>
+              <EditCurriculum />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/skill-grow/edit-faqs"
+          element={
+            <ProtectedAdminRoutes>
+              <EditFAQs />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/passes/add-goods-in-out"
+          element={
+            <ProtectedAdminRoutes>
+              <AddGoods />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/setup/visitor-setup"
+          element={
+            <ProtectedAdminRoutes>
+              <VisitorSetup />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/employee-portal"
+          element={<Navigate to="/employee-portal/attendance" replace />}
+        />
 
-          <Route
-            path="/employee-portal/employee-feeds"
-            element={
-              <ProtectedRoute>
-                <WorkspaceFeeds />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee-portal/attendance"
-            element={
-              <ProtectedRoute>
-                <MyWorkSpace />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee-portal/survey"
-            element={
-              <ProtectedRoute>
-                <WorkplaceSurvey />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee-portal/docs"
-            element={
-              <ProtectedRoute>
-                <WorkSpaceDocs />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee-portal/leave"
-            element={
-              <ProtectedRoute>
-                <WorkplaceLeave />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee-portal/roster"
-            element={
-              <ProtectedRoute>
-                <WorkspaceRoaster />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee-portal/payslip"
-            element={
-              <ProtectedRoute>
-                <WorkSpacepaySlip />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee-portal/timesheet"
-            element={
-              <ProtectedRoute>
-                <WorkspaceTimesheet />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee-portal/payslip-details"
-            element={
-              <ProtectedRoute>
-                <PayslipData />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee-portal/esic"
-            element={
-              <ProtectedRoute>
-                <WorkspaceESIC />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee-portal/add-family-esic"
-            element={
-              <ProtectedRoute>
-                <AddEsic />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/employee-portal/employee-feeds"
+          element={
+            <ProtectedRoute>
+              <WorkspaceFeeds />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee-portal/attendance"
+          element={
+            <ProtectedRoute>
+              <MyWorkSpace />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee-portal/survey"
+          element={
+            <ProtectedRoute>
+              <WorkplaceSurvey />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee-portal/docs"
+          element={
+            <ProtectedRoute>
+              <WorkSpaceDocs />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee-portal/leave"
+          element={
+            <ProtectedRoute>
+              <WorkplaceLeave />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee-portal/roster"
+          element={
+            <ProtectedRoute>
+              <WorkspaceRoaster />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee-portal/payslip"
+          element={
+            <ProtectedRoute>
+              <WorkSpacepaySlip />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee-portal/timesheet"
+          element={
+            <ProtectedRoute>
+              <WorkspaceTimesheet />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee-portal/payslip-details"
+          element={
+            <ProtectedRoute>
+              <PayslipData />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee-portal/esic"
+          element={
+            <ProtectedRoute>
+              <WorkspaceESIC />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee-portal/add-family-esic"
+          element={
+            <ProtectedRoute>
+              <AddEsic />
+            </ProtectedRoute>
+          }
+        />
 
-          {/* Accounting Module Routes */}
-          <Route
-            path="/accounting"
-            element={
-              <ProtectedAdminRoutes>
-                <AccountingDashboard />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/accounting/account-groups"
-            element={
-              <ProtectedAdminRoutes>
-                <AccountGroups />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/accounting/ledgers"
-            element={
-              <ProtectedAdminRoutes>
-                <Ledgers />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/accounting/tax-rates"
-            element={
-              <ProtectedAdminRoutes>
-                <TaxRates />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/accounting/journal-entries"
-            element={
-              <ProtectedAdminRoutes>
-                <JournalEntries />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/accounting/invoices"
-            element={
-              <ProtectedAdminRoutes>
-                <AccountingInvoices />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/accounting/payments"
-            element={
-              <ProtectedAdminRoutes>
-                <AccountingPayments />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/accounting/reports"
-            element={
-              <ProtectedAdminRoutes>
-                <AccountingReports />
-              </ProtectedAdminRoutes>
-            }
-          />
+        {/* Accounting Module Routes */}
+        <Route
+          path="/accounting"
+          element={
+            <ProtectedAdminRoutes>
+              <AccountingDashboard />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/accounting/account-groups"
+          element={
+            <ProtectedAdminRoutes>
+              <AccountGroups />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/accounting/ledgers"
+          element={
+            <ProtectedAdminRoutes>
+              <Ledgers />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/accounting/tax-rates"
+          element={
+            <ProtectedAdminRoutes>
+              <TaxRates />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/accounting/journal-entries"
+          element={
+            <ProtectedAdminRoutes>
+              <JournalEntries />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/accounting/invoices"
+          element={
+            <ProtectedAdminRoutes>
+              <AccountingInvoices />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/accounting/payments"
+          element={
+            <ProtectedAdminRoutes>
+              <AccountingPayments />
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+          path="/accounting/reports"
+          element={
+            <ProtectedAdminRoutes>
+              <AccountingReports />
+            </ProtectedAdminRoutes>
+          }
+        />
 
 
-        </Routes>
-        <Footer />
+      </Routes>
+      <Footer />
       {/* </Router> */}
       <ToastContainer
         position="top-right"

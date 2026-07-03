@@ -33,13 +33,19 @@ const InwardsTable = () => {
     
     // Use current search state for pagination
     let dataToUse = searchText.trim() === "" ? goodsIn : 
-      goodsIn.filter((item) =>
-        (item.person_name && 
-         item.person_name.name &&
-         item.person_name.name.toLowerCase().includes(searchText.toLowerCase())) ||
-        (item.vehicle_no &&
-         item.vehicle_no.toLowerCase().includes(searchText.toLowerCase()))
-      );
+     goodsIn.filter((item) => {
+  const personName =
+    typeof item.person_name === "string"
+      ? item.person_name.toLowerCase()
+      : item.person_name?.name?.toLowerCase() || "";
+
+  const vehicleNo = item.vehicle_no?.toLowerCase() || "";
+
+  return (
+    personName.includes(searchText.toLowerCase()) ||
+    vehicleNo.includes(searchText.toLowerCase())
+  );
+})
     
     setFullFilteredData(dataToUse);
     const pageData = getPaginatedData(dataToUse, 1, newPerPage);
@@ -136,14 +142,19 @@ const InwardsTable = () => {
     if (searchValue.trim() === "") {
       filteredResults = goodsIn;
     } else {
-      filteredResults = goodsIn.filter(
-        (item) =>
-          (item.person_name && 
-           item.person_name.name &&
-           item.person_name.name.toLowerCase().includes(searchValue.toLowerCase())) ||
-          (item.vehicle_no &&
-           item.vehicle_no.toLowerCase().includes(searchValue.toLowerCase()))
-      );
+      filteredResults = goodsIn.filter((item) => {
+  const personName =
+    typeof item.person_name === "string"
+      ? item.person_name.toLowerCase()
+      : item.person_name?.name?.toLowerCase() || "";
+
+  const vehicleNo = item.vehicle_no?.toLowerCase() || "";
+
+  return (
+    personName.includes(searchValue.toLowerCase()) ||
+    vehicleNo.includes(searchValue.toLowerCase())
+  );
+});
     }
     
     // Update full filtered data and pagination

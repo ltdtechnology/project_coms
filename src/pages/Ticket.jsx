@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 
-import DataTable from "react-data-table-component";
 import Navbar from "../components/Navbar";
+import Table from "../components/table/Table";
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import {
@@ -13,15 +13,12 @@ import {
 import { BsEye } from "react-icons/bs";
 import { BiEdit, BiFilterAlt } from "react-icons/bi";
 import moment from "moment";
-// import { getItemInLocalStorage } from "../utils/localStorage";
-// import { useSelector } from "react-redux";
-// import Table from "../components/table/Table";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { DNA } from "react-loader-spinner";
 import TicketFilterModal from "../containers/modals/TicketFilterModal";
 import { IoIosArrowDown } from "react-icons/io";
 import { FaDownload, FaCalendarAlt } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { MdKeyboardArrowRight } from "react-icons/md";
 const Ticket = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -153,18 +150,6 @@ const Ticket = () => {
   // =============================
   // PAGINATION
   // =============================
-  const handleNext = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-    }
-  };
-
   const columns = [
     {
       name: "Action",
@@ -799,7 +784,7 @@ const Ticket = () => {
         </div>
 
         <div className="flex sm:flex-row flex-col w-full  gap-2 my-5">
-          <div className="md:flex justify-between grid grid-cols-2 items-center  gap-2 border border-gray-300 rounded-md px-3 p-2 w-auto">
+          {/* <div className="md:flex justify-between grid grid-cols-2 items-center  gap-2 border border-gray-300 rounded-md px-3 p-2 w-auto">
             <div className="flex items-center gap-2">
               <input
                 type="radio"
@@ -872,7 +857,7 @@ const Ticket = () => {
                 Completed
               </label>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex lg:flex-row flex-col w-full gap-2">
             <input
@@ -939,7 +924,7 @@ const Ticket = () => {
           </div>
         </div>
 
-        {loading || complaints.length === 0 ? (
+        {loading ? (
           <div className="flex justify-center items-center h-full">
             <DNA
               visible={true}
@@ -951,50 +936,22 @@ const Ticket = () => {
             />
           </div>
         ) : (
-          <>
-            <DataTable
-              responsive
-              // selectableRows
-              columns={columns.filter(
-                (column) => columnVisibility[column.name]
-              )}
-              data={filteredData}
-              customStyles={customStyle}
-              fixedHeader
-              fixedHeaderScrollHeight="500px"
-              selectableRowsHighlight
-              highlightOnHover
-            />
-          </>
+          <Table
+            columns={columns.filter((column) => columnVisibility[column.name])}
+            data={filteredData}
+            customStyles={customStyle}
+            pagination
+            paginationServer
+            paginationTotalRows={totalRows}
+            paginationPerPage={perPage}
+            paginationRowsPerPageOptions={[10, 20, 30, 50]}
+            currentPage={currentPage}
+            onChangePage={(page) => setCurrentPage(page)}
+            onChangeRowsPerPage={(newPerPage) => handlePerPageChange(newPerPage)}
+            height="500px"
+          />
         )}
         {/* </div> */}
-
-        <div className="flex justify-between items-center m-2">
-          <div className="text-sm text-gray-600">
-            Page {currentPage} of {totalPages} | Showing{" "}
-            {filteredData.length} of {totalRows} records
-          </div>
-
-          <div className="flex gap-2 items-center">
-            <button
-              onClick={handlePrevious}
-              disabled={currentPage <= 1}
-            >
-              <MdKeyboardArrowLeft size={25} />
-            </button>
-
-            <span>
-              {currentPage} / {totalPages}
-            </span>
-
-            <button
-              onClick={handleNext}
-              disabled={currentPage >= totalPages}
-            >
-              <MdKeyboardArrowRight size={25} />
-            </button>
-          </div>
-        </div>
       </div>
       {filterModal && (
         <TicketFilterModal

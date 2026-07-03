@@ -4,6 +4,7 @@ import Navbar from "../../../components/Navbar";
 import { domainPrefix, getStaffDetails } from "../../../api";
 import { useParams } from "react-router-dom";
 import image from "/profile.png";
+import * as XLSX from "xlsx";
 import {
   dateFormat,
   dateTimeFormat,
@@ -31,12 +32,43 @@ const StaffDetails = () => {
     fetchDetails();
   }, []);
 
+  const exportStaffLogs = () => {
+    if (!staffLogs || staffLogs.length === 0) {
+      alert("No data to export");
+      return;
+    }
+
+    const formattedData = staffLogs.map((item, index) => ({
+      "Sr No": index + 1,
+      "Staff Name": item.staff_name || "--",
+      "Mobile": item.staff_number || "--",
+      "Work Type": item.staff_work_type || "--",
+      "Check In": item.punched_in_at
+        ? FormattedDateToShowProperly(item.punched_in_at)
+        : "--",
+      "Check Out": item.punched_out_at
+        ? FormattedDateToShowProperly(item.punched_out_at)
+        : "Still Working",
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Staff Logs");
+
+    XLSX.writeFile(
+      workbook,
+      `staff_logs_${new Date().toISOString().split("T")[0]}.xlsx`
+    );
+  };
+
+
   const scheduleArray = details.working_schedule
     ? Object.keys(details.working_schedule).map((day) => ({
-        day: day,
-        start_time: details.working_schedule[day].start_time,
-        end_time: details.working_schedule[day].end_time,
-      }))
+      day: day,
+      start_time: details.working_schedule[day].start_time,
+      end_time: details.working_schedule[day].end_time,
+    }))
     : [];
   const columns = [
     {
@@ -61,69 +93,69 @@ const StaffDetails = () => {
     },
   ];
 
-const staffLogs = useMemo(() => {
-  if (!details.attendances || details.attendances.length === 0) return [];
+  const staffLogs = useMemo(() => {
+    if (!details.attendances || details.attendances.length === 0) return [];
 
-  return details.attendances.map((attendance) => ({
-    id: attendance.id,
-    attendance_of_id: attendance.attendance_of_id,
-    attendance_of_type: attendance.attendance_of_type,
-    attendance_of_name: attendance.attendance_of_name,
-    staff_name: attendance.staff_name,
-    staff_number: attendance.staff_number,
-    staff_work_type: attendance.staff_work_type,
-    punched_in_at: attendance.punched_in_at,
-    punched_out_at: attendance.punched_out_at,
-  }));
-}, [details]);
+    return details.attendances.map((attendance) => ({
+      id: attendance.id,
+      attendance_of_id: attendance.attendance_of_id,
+      attendance_of_type: attendance.attendance_of_type,
+      attendance_of_name: attendance.attendance_of_name,
+      staff_name: attendance.staff_name,
+      staff_number: attendance.staff_number,
+      staff_work_type: attendance.staff_work_type,
+      punched_in_at: attendance.punched_in_at,
+      punched_out_at: attendance.punched_out_at,
+    }));
+  }, [details]);
 
 
-const visitorLogColumn = [
-  {
-    name: "Attendance ID",
-    selector: (row) => row.id,
-    sortable: true,
-  },
-  {
-    name: "Staff ID",
-    selector: (row) => row.attendance_of_id,
-    sortable: true,
-  },
-  {
-    name: "Staff Name",
-    selector: (row) => row.staff_name,
-    sortable: true,
-  },
-  {
-    name: "Mobile No",
-    selector: (row) => row.staff_number,
-    sortable: true,
-  },
-  {
-    name: "Work Type",
-    selector: (row) => row.staff_work_type,
-    sortable: true,
-  },
-  // {
-  //   name: "Staff Type",
-  //   selector: (row) => row.attendance_of_type,
-  //   sortable: true,
-  // },
-  {
-    name: "Check In",
-    selector: (row) =>
-      row.punched_in_at ? dateTimeFormat(row.punched_in_at) : "-",
-    sortable: true,
-  },
-  {
-    name: "Check Out",
-    selector: (row) =>
-      row.punched_out_at
-        ? dateTimeFormat(row.punched_out_at)
-        : "Not Checked Out Yet",
-    sortable: true,
-  },
-];
+  const visitorLogColumn = [
+    {
+      name: "Attendance ID",
+      selector: (row) => row.id,
+      sortable: true,
+    },
+    {
+      name: "Staff ID",
+      selector: (row) => row.attendance_of_id,
+      sortable: true,
+    },
+    {
+      name: "Staff Name",
+      selector: (row) => row.staff_name,
+      sortable: true,
+    },
+    {
+      name: "Mobile No",
+      selector: (row) => row.staff_number,
+      sortable: true,
+    },
+    {
+      name: "Work Type",
+      selector: (row) => row.staff_work_type,
+      sortable: true,
+    },
+    // {
+    //   name: "Staff Type",
+    //   selector: (row) => row.attendance_of_type,
+    //   sortable: true,
+    // },
+    {
+      name: "Check In",
+      selector: (row) =>
+        row.punched_in_at ? dateTimeFormat(row.punched_in_at) : "-",
+      sortable: true,
+    },
+    {
+      name: "Check Out",
+      selector: (row) =>
+        row.punched_out_at
+          ? dateTimeFormat(row.punched_out_at)
+          : "Not Checked Out Yet",
+      sortable: true,
+    },
+  ];
 
 
   const isImage = (filePath) => {
@@ -259,17 +291,28 @@ const visitorLogColumn = [
             <Table columns={columns} data={scheduleArray} />
           </div>
           <div className="my-4">
-                      <h2 className="font-medium  text-lg border-gray-400 px-2 border-b-2 mb-2">
-                        Staff Attendence
-                      </h2>
-                      <div className="m-2">
-                        {staffLogs.length > 0 ? (
-                          <Table columns={visitorLogColumn} data={staffLogs} />
-                        ) : (
-                          <p className="text-center">No Log Yet</p>
-                        )}
-                      </div>
-                    </div>
+            <div className="flex justify-between items-center border-b-2 border-gray-400 pb-2 mb-2">
+              <h2 className="font-medium text-lg">
+                Staff Attendance
+              </h2>
+
+              <button
+                onClick={exportStaffLogs}
+                style={{ background: themeColor }}
+                className="text-white px-4 py-2 rounded-md text-sm"
+              >
+                Export
+              </button>
+            </div>
+
+            <div className="m-2">
+              {staffLogs.length > 0 ? (
+                <Table columns={visitorLogColumn} data={staffLogs} />
+              ) : (
+                <p className="text-center">No Log Yet</p>
+              )}
+            </div>
+          </div>
           <div>
             <h2 className="font-medium border-b border-gray-300">
               Attachments

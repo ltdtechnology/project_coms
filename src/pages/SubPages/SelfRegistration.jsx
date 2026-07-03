@@ -1,35 +1,26 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Table from "../../components/table/Table";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 import { PiPlusCircle } from "react-icons/pi";
-import { useSelector } from "react-redux";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import { getSelfRegistration } from "../../api";
 
 function SelfRegistration() {
   const siteId = getItemInLocalStorage("SITEID");
-  const { id } = useParams();
-  const [records, setRecords] = useState([])
-   const [search, setSearch] = useState("");
-  // const [debouncedSearch, setDebouncedSearch] = useState("");
-   const token = getItemInLocalStorage("TOKEN");
+  const token = getItemInLocalStorage("TOKEN");
 
-  const useQuery = () => {
-    return new URLSearchParams(window.location.search);
-  };
+  const [records, setRecords] = useState([]);
+  const [search, setSearch] = useState("");
 
-  console.log("records", records);
-
- const fetchSelfRegistrations = async (searchValue = "") => {
+  const fetchSelfRegistrations = async () => {
     try {
-      const response = await getSelfRegistration(token, searchValue);
+      const response = await getSelfRegistration(token);
 
       const selfRegistration = response?.data?.data || [];
       const visitors = response?.data?.visitors || [];
 
-      // Merge both safely
       const mergedData = [...selfRegistration, ...visitors];
 
       setRecords(mergedData);
@@ -38,21 +29,32 @@ function SelfRegistration() {
     }
   };
 
-
-  // ✅ Initial Load
   useEffect(() => {
-    fetchSelfRegistrations("");
+    fetchSelfRegistrations();
   }, []);
 
-  // ✅ Debounce Search (Works for 1 alphabet also)
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      fetchSelfRegistrations(search.trim());
-    }, 400);
+  // Frontend Search Filter
+  const filteredRecords = useMemo(() => {
+    const searchText = search.toLowerCase().trim();
 
-    return () => clearTimeout(delay);
-  }, [search]);
+    if (!searchText) return records;
 
+    return records.filter((row) => {
+      const visitorName = row.visitor_name?.toLowerCase() || "";
+      const hostName = row.hosts?.[0]?.hosts_name?.toLowerCase() || "";
+      const contactNo = row.contact_no?.toString().toLowerCase() || "";
+      const purpose = row.purpose?.toLowerCase() || "";
+      const comingFrom = row.coming_from?.toLowerCase() || "";
+
+      return (
+        visitorName.includes(searchText) ||
+        hostName.includes(searchText) ||
+        contactNo.includes(searchText) ||
+        purpose.includes(searchText) ||
+        comingFrom.includes(searchText)
+      );
+    });
+  }, [records, search]);
 
   const columns = [
     {
@@ -68,23 +70,21 @@ function SelfRegistration() {
         </div>
       ),
     },
-
     {
       name: "Visitor Type",
-      selector: (row) => row.visit_type === "Guest-SelfRegistration" ? "Guest" : "",
+      selector: (row) =>
+        row.visit_type === "Guest-SelfRegistration" ? "Guest" : "-",
       sortable: true,
     },
     {
-      name: " Name",
+      name: "Name",
       selector: (row) => row.visitor_name || "-",
       sortable: true,
     },
-   {
+    {
       name: "Host",
       selector: (row) =>
-        row.hosts?.length > 0
-          ? row.hosts[0]?.hosts_name || "-"
-          : "-",
+        row.hosts?.length > 0 ? row.hosts[0]?.hosts_name || "-" : "-",
       sortable: true,
     },
     {
@@ -92,36 +92,31 @@ function SelfRegistration() {
       selector: (row) => row.contact_no || "-",
       sortable: true,
     },
-
     {
       name: "Purpose",
       selector: (row) => row.purpose || "-",
       sortable: true,
     },
     {
-      name: "Coming from",
+      name: "Coming From",
       selector: (row) => row.coming_from || "-",
       sortable: true,
     },
-   {
-      name: "Expected Date",
-      selector: (row) =>
-        row.expected_date
-          ? new Date(row.expected_date).toLocaleDateString()
-          : "-",  
-      sortable: true,
-    },
-    {
-      name: "Expected Time",
-      selector: (row) =>
-        row.expected_time
-          ? row.expected_time.slice(0, 5)  
-          : "-", 
-      sortable: true,
-    },
-
+    // {
+    //   name: "Expected Date",
+    //   selector: (row) =>
+    //     row.expected_date
+    //       ? new Date(row.expected_date).toLocaleDateString()
+    //       : "-",
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Expected Time",
+    //   selector: (row) =>
+    //     row.expected_time ? row.expected_time.slice(0, 5) : "-",
+    //   sortable: true,
+    // },
   ];
-
 
   return (
     <div className="flex flex-col w-full overflow-hidden">
@@ -130,21 +125,23 @@ function SelfRegistration() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="border border-gray-300 p-2 rounded-md placeholder:text-sm w-[1250px]"
+          className="border border-gray-300 p-2 rounded-md placeholder:text-sm w-full"
           placeholder="Search using Visitor name, Host name, Contact number, Purpose or Coming from"
         />
+
         <div className="flex justify-end">
           <Link
-            to={`/admin/passes/add-self-registration?site_id=${siteId}&token=${token}`}
-            className=" font-semibold bg-black hover:text-white duration-150 transition-all p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+            to={`/add-self-registration/${siteId}?token=${token}`}
+            className="font-semibold bg-black hover:text-white p-2 rounded-md text-white flex items-center gap-2"
           >
             <PiPlusCircle size={20} />
             Add Self-Registration
           </Link>
         </div>
       </div>
+
       <div className="my-3">
-        <Table columns={columns} data={records} />
+        <Table columns={columns} data={filteredRecords} />
       </div>
     </div>
   );

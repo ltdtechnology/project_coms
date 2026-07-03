@@ -25,6 +25,7 @@ const localizer = dateFnsLocalizer({
 const AmenitiesCalendar = () => {
   const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bookingType, setBookingType] = useState("");
@@ -82,22 +83,19 @@ const AmenitiesCalendar = () => {
     navigate(`/bookings/hotelbooking-details/${bookingId}`);
   };
   const handleRangeChange = (range, view) => {
-    let start;
-    let end;
+  let start;
+  let end;
 
-    if (view === "month") {
-      start = startOfMonth(range.start || range);
-      end = endOfMonth(range.start || range);
-    } else if (view === "week") {
-      start = startOfWeek(range.start, { locale: enIN });
-      end = endOfWeek(range.start, { locale: enIN });
-    } else {
-      start = range.start;
-      end = range.end;
-    }
+  if (Array.isArray(range)) {
+    start = range[0];
+    end = range[range.length - 1];
+  } else {
+    start = range.start;
+    end = range.end;
+  }
 
-    setDateRange({ start, end });
-  };
+  setDateRange({ start, end });
+};
 
   const eventStyleGetter = (event) => {
     const baseStyle = {
@@ -172,18 +170,22 @@ const AmenitiesCalendar = () => {
             boxShadow: "0 10px 25px rgba(0,0,0,0.08)",
           }}
         >
-          <Calendar
-            localizer={localizer}
-            events={bookings}
-            startAccessor="start"
-            endAccessor="end"
-            style={{ height: "70vh" }}
-            eventPropGetter={eventStyleGetter}
-            onSelectEvent={handleEventClick}
-            view={currentView}
-            onView={(view) => setCurrentView(view)}
-            onRangeChange={handleRangeChange}
-          />
+      <Calendar
+  localizer={localizer}
+  events={bookings}
+  startAccessor="start"
+  endAccessor="end"
+  style={{ height: "70vh" }}
+  eventPropGetter={eventStyleGetter}
+  onSelectEvent={handleEventClick}
+  view={currentView}
+  date={currentDate}
+  onNavigate={(date) => {
+    setCurrentDate(date);
+  }}
+  onView={(view) => setCurrentView(view)}
+  onRangeChange={handleRangeChange}
+/>
         </div>
       )}
 

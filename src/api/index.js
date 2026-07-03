@@ -446,6 +446,13 @@ export const getFitoutChecklist = async () =>
     },
   });
 
+  export const getFitoutChecklistById = async (id) =>
+  axiosInstance.get(`/snag_checklists/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+
 //FitOut Request
 export const postFitoutRequest = async (data) =>
   axiosInstance.post(`/fitout_request.json`, data, {
@@ -592,7 +599,12 @@ export const destroyFitoutCategory = async (catId) =>
       token: token,
     },
   });
-
+export const destroyFitoutSubcategory = async (id) =>
+  axiosInstance.delete(`/fitout_subcategories/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
 export const postHelpDeskSubCategoriesSetup = async (data) =>
   axiosInstance.post(`/pms/admin/create_helpdesk_sub_category.json`, data, {
     params: {
@@ -644,7 +656,14 @@ export const getGRNDetails = async (id) =>
       token: token,
     },
   });
-
+export const getSetupAmenityExport = async (siteId) =>
+  axiosInstance.get("amenities/export.xlsx", {
+    params: {
+      "q[site_id_eq]": siteId,
+      token: token,
+    },
+    responseType: "blob",
+  });
 export const postHelpDeskResolutionEscalationSetup = async (data) =>
   axiosInstance.post(`/pms/admin/create_escalation.json`, data, {
     params: {
@@ -696,7 +715,17 @@ export const getHelpDeskStatusDetailsSetup = async (id) =>
       },
     }
   );
-
+export const updateHelpDeskStatus = async (id, formData) => {
+  return axiosInstance.patch(
+    `pms/admin/helpdesk_categories/update_complaint_statuses/${id}.json?token=${token}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+};
 export const getFitOutStatus = async (id) =>
   axiosInstance.get(`/fitout_statuses/${id}.json`, {
     params: {
@@ -1598,20 +1627,24 @@ export const postParkingConfiguration = async (data) =>
 //     },
 //   });
 
-export const getFacitilitySetup = async (page, per_page) => {
+export const getFacitilitySetup = async (page = 1, per_page = 10) => {
   try {
-    const response = await axiosInstance.get(`/amenities.json?q[amenity_is_hotel_not_null]=true`, {
-      params: {
-        token: token,
-        Page: page,
-        Per_Page: per_page,
-      },
-      headers: {
-        "Cache-Control": "no-cache",
-        Pragma: "no-cache",
-        Expires: "0",
-      },
-    });
+    const response = await axiosInstance.get(
+      "/amenities.json?q[amenity_is_hotel_not_null]=true",
+      {
+        params: {
+          token,
+          page,
+          per_page,
+        },
+        headers: {
+          "Cache-Control": "no-cache",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      }
+    );
+
     return response;
   } catch (error) {
     console.error("Error fetching facility setup:", error);
@@ -2925,6 +2958,42 @@ export const getSoftServices = async () =>
       token: token,
     },
   });
+
+
+export const exportSoftServices = (startDate, endDate) => {
+  return axiosInstance.get(
+    `/soft_services/export_soft_service.xlsx`,
+    {
+      params: {
+        token: token,
+        start_date: startDate,
+        end_date: endDate,
+      },
+      responseType: "blob",
+    }
+  );
+};
+export const importSoftServices = (file) => {
+  const formData = new FormData();
+  formData.append("file", file); 
+
+  return axiosInstance.post("/soft_services/import.json", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+export const downloadSoftServiceSample = async () => {
+  return axiosInstance.get(
+    `/soft_services/sample_file.xlsx`,
+    {
+      params: {
+        token: token, 
+      },
+      responseType: "blob", 
+    }
+  );
+};
 export const getServicesChecklist = async () =>
   axiosInstance.get("/checklists.json?q[ctype_eq]=soft_service", {
     params: {
@@ -7712,11 +7781,9 @@ export const editIncidentCatDetails = async (id, data) =>
     },
   });
 
-export const getIncidentTags = async (tagType, companyId) =>
-  axiosInstance.get("/incidence_tags.json", {
+export const getIncidentTags = async (tagType) =>
+  axiosInstance.get(`/incidence_tags.json?q[tag_type_cont]=${tagType}`, {
     params: {
-      "q[tag_type_eq]": tagType,
-      "q[resource_id_eq]": companyId,
       token: token,
     },
   });

@@ -341,15 +341,41 @@ const BookingDetails = () => {
   );
   const slotTime = selectedSlot
     ? `${String(selectedSlot.start_hr || 0).padStart(2, "0")}:${String(
-        selectedSlot.start_min || 0
-      ).padStart(2, "0")} - ${String(selectedSlot.end_hr || 0).padStart(
-        2,
-        "0"
-      )}:${String(selectedSlot.end_min || 0).padStart(2, "0")}`
+      selectedSlot.start_min || 0
+    ).padStart(2, "0")} - ${String(selectedSlot.end_hr || 0).padStart(
+      2,
+      "0"
+    )}:${String(selectedSlot.end_min || 0).padStart(2, "0")}`
     : "N/A";
   // console.log("slot time", slotTime);
 
   // console.log("fac anem", bookingDetails.amount);
+  const handleRefund = async () => {
+    try {
+      const updatedBookingData = {
+        status: "refunded",
+      };
+
+      const response = await updateAmenityBook(
+        id,
+        updatedBookingData
+      );
+
+      if (response?.status === 200) {
+        toast.success("Refund processed successfully!");
+
+        setBookingDetails((prev) => ({
+          ...prev,
+          status: "refunded",
+        }));
+      } else {
+        toast.error("Refund failed!");
+      }
+    } catch (error) {
+      console.error("Refund Error:", error);
+      toast.error("Error processing refund!");
+    }
+  };
 
   return (
     <section className="flex ">
@@ -368,7 +394,8 @@ const BookingDetails = () => {
           <div>
             <div className="flex justify-end gap-2 w-full">
               {bookingDetails.status !== "cancelled" &&
-                bookingDetails.status !== "paid" && (
+                bookingDetails.status !== "paid" &&
+                bookingDetails.status !== "refunded" && (
                   <button
                     className="bg-yellow-500 rounded-md text-white p-2 w-[150px] cursor-pointer"
                     onClick={() => setShowModal(true)}
@@ -376,6 +403,15 @@ const BookingDetails = () => {
                     Capture Payment
                   </button>
                 )}
+
+              {bookingDetails.status === "paid" && (
+                <button
+                  className="bg-orange-500 rounded-md text-white p-2 w-[150px] cursor-pointer"
+                  onClick={handleRefund}
+                >
+                  Refund
+                </button>
+              )}
               {/* <button
                 className="bg-red-500 rounded-md text-white p-2 w-[100px] cursor-pointer"
                 onClick={() => navigate("/bookings")}
@@ -383,14 +419,15 @@ const BookingDetails = () => {
                 Cancel
               </button> */}
               <div>
-                {bookingDetails.status !== "paid" && (
-                  <button
-                    className="bg-red-500 rounded-md text-white p-2 w-[100px] cursor-pointer"
-                    onClick={handleCancelClick}
-                  >
-                    Cancel
-                  </button>
-                )}
+                {bookingDetails.status !== "paid" &&
+                  bookingDetails.status !== "refunded" && (
+                    <button
+                      className="bg-red-500 rounded-md text-white p-2 w-[100px] cursor-pointer"
+                      onClick={handleCancelClick}
+                    >
+                      Cancel
+                    </button>
+                  )}
 
                 {/* Confirmation Popup */}
                 {showConfirmPopup && (
@@ -564,13 +601,16 @@ const BookingDetails = () => {
           <div className="grid grid-cols-2 gap-2 items-center">
             <p className="font-medium">Status:</p>
             <p
-              className={`${
-                bookingDetails.status === "booked"
-                  ? "bg-yellow-500" // yellow for booked
-                  : bookingDetails.status === "cancelled"
-                  ? "bg-red-500" // red for cancelled
-                  : "bg-green-500" // default color for other statuses
-              } text-white p-1 rounded-md text-center`}
+              className={`${bookingDetails.status === "booked"
+                ? "bg-yellow-500"
+                : bookingDetails.status === "cancelled"
+                  ? "bg-red-500"
+                  : bookingDetails.status === "paid"
+                    ? "bg-green-500"
+                    : bookingDetails.status === "refunded"
+                      ? "bg-orange-500"
+                      : "bg-gray-500"
+                } text-white p-1 rounded-md text-center`}
             >
               {bookingDetails.status.charAt(0).toUpperCase() +
                 bookingDetails.status.slice(1)}{" "}
@@ -629,8 +669,8 @@ const BookingDetails = () => {
               {bookingDetails.payment_mode === "post"
                 ? "Postpaid"
                 : bookingDetails.payment_mode === "pre"
-                ? "Prepaid"
-                : "Unknown Payment Mode"}
+                  ? "Prepaid"
+                  : "Unknown Payment Mode"}
             </p>
           </div>
 
@@ -782,9 +822,8 @@ const BookingDetails = () => {
               Description:
             </h3>
             <p
-              className={`text-gray-600 ${
-                facilityDetails.description ? "" : "italic text-gray-400"
-              }`}
+              className={`text-gray-600 ${facilityDetails.description ? "" : "italic text-gray-400"
+                }`}
             >
               {facilityDetails.description || "NA"}
             </p>
@@ -792,9 +831,8 @@ const BookingDetails = () => {
           <div>
             <h3 className="text-lg font-semibold text-gray-700 mb-2">Terms:</h3>
             <p
-              className={`text-gray-600 ${
-                facilityDetails.terms ? "" : "italic text-gray-400"
-              }`}
+              className={`text-gray-600 ${facilityDetails.terms ? "" : "italic text-gray-400"
+                }`}
             >
               {facilityDetails.terms || "NA"}
             </p>

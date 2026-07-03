@@ -276,8 +276,14 @@ import JournalEntryModal from "./JournalEntryModal";
 import Navbar from "../../components/Navbar";
 import { FaEdit, FaEye, FaFirstdraft, FaTrash } from "react-icons/fa";
 import { TbFlagCancel } from "react-icons/tb";
+import { getItemInLocalStorage } from "../../utils/localStorage";
 
 const JournalEntries = () => {
+  const userType = getItemInLocalStorage("USERTYPE");
+  const isAdmin = userType === "pms_admin";
+  const isAccountingUser = userType === "accounting_emp";
+  const canCreate = isAdmin || isAccountingUser;
+  const canEditDelete = isAdmin;
   const [journalEntries, setJournalEntries] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -464,13 +470,27 @@ const JournalEntries = () => {
       <Navbar />
       <div className="w-full flex mx-3 mb-10 flex-col overflow-hidden p-6 bg-white/80 mt-2">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Journal Entries</h1>
-          <button
-            onClick={handleCreate}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            + Add Journal Entry
-          </button>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold">Journal Entries</h1>
+            {isAdmin && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
+                Full Access
+              </span>
+            )}
+            {isAccountingUser && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-200">
+                Create Only
+              </span>
+            )}
+          </div>
+          {canCreate && (
+            <button
+              onClick={handleCreate}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              + Add Journal Entry
+            </button>
+          )}
         </div>
 
         <div className="mb-4 flex flex-wrap gap-4 items-center">
@@ -558,22 +578,21 @@ const JournalEntries = () => {
                         {(
                           parseFloat(
                             entry.total_amount ??
-                              entry.total_debit ??
-                              entry.total_credit ??
-                              0,
+                            entry.total_debit ??
+                            entry.total_credit ??
+                            0,
                           ) || 0
                         ).toFixed(2)}
                       </td>
 
                       <td className="px-6 py-4">
                         <span
-                          className={`px-2 py-1 rounded text-xs ${
-                            entry.status === "posted"
+                          className={`px-2 py-1 rounded text-xs ${entry.status === "posted"
                               ? "bg-green-100 text-green-800"
                               : entry.status === "cancelled"
                                 ? "bg-red-100 text-red-800"
                                 : "bg-yellow-100 text-yellow-800"
-                          }`}
+                            }`}
                         >
                           {entry.status}
                         </span>
@@ -583,15 +602,25 @@ const JournalEntries = () => {
                         {entry.status === "draft" && (
                           <>
                             <button
-                              onClick={() => handlePost(entry.id)}
-                              className="text-gray-600 hover:text-green-900 mr-3"
+                              onClick={() => canEditDelete ? handlePost(entry.id) : undefined}
+                              disabled={!canEditDelete}
+                              title={!canEditDelete ? "Only Admin can post" : "Post"}
+                              className={canEditDelete
+                                ? "text-gray-600 hover:text-green-900 mr-3"
+                                : "text-gray-300 cursor-not-allowed mr-3"
+                              }
                             >
                               <FaFirstdraft className="inline mr-1" />
                             </button>
 
                             <button
-                              onClick={() => handleEdit(entry)}
-                              className="text-blue-600 hover:text-blue-900 mr-3"
+                              onClick={() => canEditDelete ? handleEdit(entry) : undefined}
+                              disabled={!canEditDelete}
+                              title={!canEditDelete ? "Only Admin can edit" : "Edit"}
+                              className={canEditDelete
+                                ? "text-blue-600 hover:text-blue-900 mr-3"
+                                : "text-gray-300 cursor-not-allowed mr-3"
+                              }
                             >
                               <FaEdit className="inline mr-1" />
                             </button>
@@ -608,8 +637,13 @@ const JournalEntries = () => {
                               <FaEye className="inline mr-1" />
                             </button>
                             <button
-                              onClick={() => handleCancel(entry.id)}
-                              className="text-red-600 hover:text-orange-900 mr-3"
+                              onClick={() => canEditDelete ? handleCancel(entry.id) : undefined}
+                              disabled={!canEditDelete}
+                              title={!canEditDelete ? "Only Admin can cancel" : "Cancel"}
+                              className={canEditDelete
+                                ? "text-red-600 hover:text-orange-900 mr-3"
+                                : "text-gray-300 cursor-not-allowed mr-3"
+                              }
                             >
                               <TbFlagCancel className="inline mr-1" />
                             </button>
@@ -617,8 +651,13 @@ const JournalEntries = () => {
                         )}
 
                         <button
-                          onClick={() => handleDelete(entry.id)}
-                          className="text-red-600 hover:text-red-900"
+                          onClick={() => canEditDelete ? handleDelete(entry.id) : undefined}
+                          disabled={!canEditDelete}
+                          title={!canEditDelete ? "Only Admin can delete" : "Delete"}
+                          className={canEditDelete
+                            ? "text-red-600 hover:text-red-900"
+                            : "text-gray-300 cursor-not-allowed"
+                          }
                         >
                           <FaTrash className="inline mr-1" />
                         </button>
@@ -675,13 +714,12 @@ const JournalEntries = () => {
                 <div className="bg-gray-50 p-3 rounded">
                   <p className="text-xs text-gray-500 mb-1">Status</p>
                   <span
-                    className={`px-2 py-1 rounded text-xs ${
-                      viewEntry.status === "posted"
+                    className={`px-2 py-1 rounded text-xs ${viewEntry.status === "posted"
                         ? "bg-green-100 text-green-800"
                         : viewEntry.status === "cancelled"
                           ? "bg-red-100 text-red-800"
                           : "bg-yellow-100 text-yellow-800"
-                    }`}
+                      }`}
                   >
                     {viewEntry.status}
                   </span>
@@ -693,9 +731,9 @@ const JournalEntries = () => {
                     {(
                       parseFloat(
                         viewEntry.total_amount ??
-                          viewEntry.total_debit ??
-                          viewEntry.total_credit ??
-                          0,
+                        viewEntry.total_debit ??
+                        viewEntry.total_credit ??
+                        0,
                       ) || 0
                     ).toFixed(2)}
                   </p>
@@ -826,8 +864,8 @@ const JournalEntries = () => {
                                 sum +
                                 (parseFloat(
                                   line.debit ??
-                                    line.amount_debit ??
-                                    line.debit_amount,
+                                  line.amount_debit ??
+                                  line.debit_amount,
                                 ) || 0)
                               );
                             }, 0)
@@ -848,8 +886,8 @@ const JournalEntries = () => {
                                 sum +
                                 (parseFloat(
                                   line.credit ??
-                                    line.amount_credit ??
-                                    line.credit_amount,
+                                  line.amount_credit ??
+                                  line.credit_amount,
                                 ) || 0)
                               );
                             }, 0)

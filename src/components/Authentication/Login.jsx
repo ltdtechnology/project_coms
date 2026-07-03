@@ -140,6 +140,7 @@ const Login = () => {
       setItemInLocalStorage("LASTNAME", lastName);
 
       const userType = response.data.user.user_type;
+      const normalizedUserType = String(userType || "").toLowerCase();
       setItemInLocalStorage("USERTYPE", userType);
       const CompanyId = response.data.user.company_id;
       setItemInLocalStorage("COMPANYID", CompanyId);
@@ -157,13 +158,8 @@ const Login = () => {
       // console.log(userName)
       // console.log("Sit",selectedSiteId)
       toast.loading("Processing your data please wait...");
-      // if (userType === "pms_admin") {
-      //   navigate("/dashboard");
-      // } else {
-      //   navigate(selectedSiteId === 10 ? "/employee/dashboard" : "/mytickets");
-      // }
       const route =
-        userType === "pms_admin" || userType === "project_head"
+        ["pms_admin", "project_head", "accounting_emp"].includes(normalizedUserType)
           ? "/dashboard"
           : selectedSiteId === 10
           ? "/employee/dashboard"

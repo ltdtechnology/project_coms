@@ -3,11 +3,12 @@ import Navbar from "../../../components/Navbar";
 import { useSelector } from "react-redux";
 import { editAddress, getAddressDetails, postAddress } from "../../../api";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function EditAddressesSetup() {
-  const themeColor = useSelector((state) => state.theme.color);
+  const themeColor = "rgb(3,19,37)";
   const { id } = useParams();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",
     buildingName: "",
@@ -58,7 +59,8 @@ function EditAddressesSetup() {
     try {
       const addresResp = await editAddress(id, sendData);
       toast.success("Address Edited Successfully");
-      console.log(addresResp);
+      navigate("/admin/addresses-setup");
+      // console.log(addresResp);
     } catch (error) {
       console.log(error);
     }
@@ -246,12 +248,18 @@ function EditAddressesSetup() {
                 />
               </div> */}
             </div>
-            <div className="flex justify-center my-8 gap-2 ">
+            <div className="flex justify-center my-8 gap-4 ">
               <button
                 onClick={handleAddressSubmit}
                 className="bg-black text-white p-2 px-4 rounded-md font-medium"
               >
                 Submit
+              </button>
+              <button
+                onClick={()=>navigate("/admin/addresses-setup")}
+                className="bg-gray-400 text-white p-2 px-4 rounded-md font-medium"
+              >
+                Cancel
               </button>
             </div>
           </div>

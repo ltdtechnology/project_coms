@@ -1,172 +1,34 @@
 import React, { useEffect, useState } from "react";
-import TicketCategorySetup from "./TicketCategorySetup";
 import { useSelector } from "react-redux";
-import Table from "../../../components/table/Table";
 import { BiEdit } from "react-icons/bi";
-import { Link } from "react-router-dom";
-import { ColorPicker, Space } from "antd";
-import FileInputBox from "../../../containers/Inputs/FileInputBox";
-import { FaTrash } from "react-icons/fa";
-import { getHelpDeskStatusSetup, postHelpDeskStatusSetup } from "../../../api";
-import { statusColors } from "../../../utils/colors";
 import toast from "react-hot-toast";
-import { getItemInLocalStorage } from "../../../utils/localStorage";
+
+import TicketCategorySetup from "./TicketCategorySetup";
+import Table from "../../../components/table/Table";
 import EditStatusModal from "./EditStatusModal";
 
-const TicketSetupPage = () => {
-  const [selectedRule, setSelectedRule] = useState("");
-  const [statusAdded, setStatusAdded] = useState(false);
+import {
+  getHelpDeskStatusSetup,
+  postHelpDeskStatusSetup,
+} from "../../../api";
+import { getItemInLocalStorage } from "../../../utils/localStorage";
+
+const TicketSetupPage = ({ activeSiteId }) => {
+  const themeColor = useSelector((state) => state.theme.color);
+
+  const [page, setPage] = useState("Category Type");
+  const [statuses, setStatuses] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [editId, setEditId] = useState("");
+
   const [formData, setFormData] = useState({
     status: "",
     fixedState: "",
-    color: "",
+    color: "#1677ff",
     order: "",
   });
 
-  const handleSelectChange = (event) => {
-    setSelectedRule(event.target.value);
-  };
-  const [showModal, setShowModal] = useState(false);
-  const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
-  const [page, setPage] = useState("Category Type");
-  const themeColor = "rgb(3,19,37)";
-  const [color, setColor] = useState("#ffffff");
-  const [showPicker, setShowPicker] = useState(false);
-  const [statuses, setStatuses] = useState([]);
-  const [id, setId] = useState("");
-  useEffect(() => {
-    const fetchTicketStatus = async () => {
-      try {
-        const statusResp = await getHelpDeskStatusSetup();
-        const statusArray = Object.values(statusResp.data);
-        setStatuses(statusArray);
-        console.log(statusArray);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchTicketStatus();
-  }, [statusAdded]);
-
-  const handleColorChange = (newColor) => {
-    setColor(newColor.hex);
-  };
-
-  const togglePicker = () => {
-    setShowPicker(!showPicker);
-  };
-  const columns1 = [
-    {
-      name: "Sr.No",
-      selector: (row) => row.No,
-      sortable: true,
-    },
-    {
-      name: "Complaint Mode",
-      selector: (row) => row.Complaint_Mode,
-      sortable: true,
-    },
-    {
-      name: "Action",
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <Link>
-            <BiEdit size={15} />
-          </Link>
-          <Link>
-            <FaTrash size={15} />
-          </Link>
-        </div>
-      ),
-    },
-  ];
-  const columns2 = [
-    {
-      name: "Sr.No",
-      selector: (row) => row.No,
-      sortable: true,
-    },
-    {
-      name: "Rule",
-      selector: (row) => row.Complaint_Mode,
-      sortable: true,
-    },
-    {
-      name: "Action",
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <Link>
-            <FaTrash size={15} />
-          </Link>
-        </div>
-      ),
-    },
-  ];
-
-  const handleEditStatusModal = (id) => {
-    setId(id);
-    setShowEditModal(true);
-  };
-  const statusColumns = [
-    {
-      name: "Order",
-      selector: (row) => row.position,
-      sortable: true,
-    },
-    {
-      name: "Status",
-      selector: (row) => row.name,
-      sortable: true,
-    },
-    {
-      name: "Fixed State",
-      selector: (row) => row.fixed_state,
-      sortable: true,
-    },
-    {
-      name: "Color",
-      selector: (row) => (
-        <div
-          style={{ background: row.color_code }}
-          className={`rounded-md w-4 h-4 text-center`}
-        ></div>
-      ),
-      sortable: true,
-    },
-    // {
-    //   name: "Email",
-    //   selector: (row) => row.Email,
-    //   sortable: true,
-    // },
-    {
-      name: "Action",
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => {
-              handleEditStatusModal(row.id);
-            }}
-          >
-            <BiEdit size={15} />
-          </button>
-          {/* <Link>
-            <FaTrash size={15} />
-          </Link> */}
-        </div>
-      ),
-    },
-  ];
-
-  const data1 = [
-    {
-      id: 1,
-      No: "1",
-      Complaint_Mode: "Phone",
-    },
-  ];
-    const [operationalDays, setOperationalDays] = useState({
+  const [operationalDays, setOperationalDays] = useState({
     Monday: { enabled: false, start: "", end: "" },
     Tuesday: { enabled: false, start: "", end: "" },
     Wednesday: { enabled: false, start: "", end: "" },
@@ -175,55 +37,70 @@ const TicketSetupPage = () => {
     Saturday: { enabled: false, start: "", end: "" },
     Sunday: { enabled: false, start: "", end: "" },
   });
-  // const data2 = [
-  //   {
-  //     id: 1,
-  //     No: "1",
-  //     Complaint_Mode: "1 - 25 Days",
-  //   },
-  // ];
-  console.log(statusAdded);
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-  console.log(formData);
-  const handleColorClick = (color) => {
-    setFormData({ ...formData, color });
-  };
-  const siteID = getItemInLocalStorage("SITEID");
-  const handleAddStatus = async () => {
-    if (formData.status === "" || formData.order === "") {
-      return toast.error("Please Add Status Name & Order");
-    }
-    const postStatus = new FormData();
-    postStatus.append("complaint_status[of_phase]", "pms");
-    postStatus.append("complaint_status[society_id]", siteID);
-    postStatus.append("complaint_status[name]", formData.status);
-    postStatus.append("complaint_status[fixed_state]", formData.fixedState);
-    postStatus.append("complaint_status[color_code]", formData.color);
-    postStatus.append("complaint_status[position]", formData.order);
+
+  /* ---------------- FETCH STATUS ---------------- */
+  const fetchStatuses = async () => {
     try {
-      const resp = await postHelpDeskStatusSetup(postStatus);
-      console.log(resp);
-      setStatusAdded(true);
-      toast.success("Status Added Successfully");
-      setFormData({
-        ...formData,
-        color: "",
-        status: "",
-        fixedState: "",
-        order: "",
-      });
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.error);
-    } finally {
-      setTimeout(() => {
-        setStatusAdded(false);
-      }, 500);
+      const res = await getHelpDeskStatusSetup();
+      setStatuses(Object.values(res.data));
+    } catch (err) {
+      console.error(err);
     }
   };
 
+  useEffect(() => {
+    fetchStatuses();
+  }, [activeSiteId]); // ✅ re-fetch when site changes
+
+  const handleReset = () => {
+    setFormData({
+      status: "",
+      fixedState: "",
+      color: "#1677ff",
+      order: "",
+    });
+  };
+
+  /* ---------------- HANDLERS ---------------- */
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleAddStatus = async () => {
+    if (!formData.status || !formData.fixedState || !formData.order) {
+      return toast.error("Please fill all fields");
+    }
+
+    const siteID = activeSiteId; // ✅ use reactive prop from parent
+
+    const payload = new FormData();
+    payload.append("complaint_status[of_phase]", "pms");
+    payload.append("complaint_status[society_id]", siteID);
+    payload.append("complaint_status[name]", formData.status);
+    payload.append("complaint_status[fixed_state]", formData.fixedState);
+    payload.append("complaint_status[color_code]", formData.color);
+    payload.append("complaint_status[position]", formData.order);
+
+    try {
+      await postHelpDeskStatusSetup(payload);
+
+      toast.success("Status added successfully");
+
+      setFormData({
+        status: "",
+        fixedState: "",
+        color: "#1677ff",
+        order: "",
+      });
+
+      fetchStatuses(); // refresh table
+    } catch (err) {
+  const message =
+    err?.response?.data?.error || "Failed to add status";
+
+  toast.error(message);
+}
+  };
 
   const updateDay = (day, field, value) => {
     setOperationalDays((prev) => ({
@@ -245,370 +122,179 @@ const TicketSetupPage = () => {
     toast.success("Operational days saved");
   };
 
+  /* ---------------- TABLE ---------------- */
+  const statusColumns = [
+    { name: "Order", selector: (row) => row.position },
+    { name: "Status", selector: (row) => row.name },
+    { name: "Fixed State", selector: (row) => row.fixed_state },
+    {
+      name: "Color",
+      cell: (row) => (
+        <div
+          className="w-4 h-4 rounded"
+          style={{ background: row.color_code }}
+        />
+      ),
+    },
+    {
+      name: "Action",
+      cell: (row) => (
+        <button
+          onClick={() => {
+            setEditId(row.id);
+            setShowEditModal(true);
+          }}
+        >
+          <BiEdit />
+        </button>
+      ),
+    },
+  ];
+
   return (
-    <div className=" w-full my-2 flex  overflow-hidden flex-col">
-      <div className="flex w-full">
-        <div className=" flex gap-2 p-2 pb-0 border-b-2 border-gray-200 w-full">
-          <h2
-            className={`p-1 ${
-              page === "Category Type" &&
-              `bg-white font-medium text-blue-500 shadow-custom-all-sides`
-            } rounded-t-md px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
-            onClick={() => setPage("Category Type")}
+    <div className="w-full my-2">
+      {/* Tabs */}
+      <div className="flex border-b">
+        {["Category Type", "Status", "Operational Days"].map((tab) => (
+          <button
+            key={tab}
+            className={`px-4 py-2 ${page === tab ? "border-b-2 text-blue-500" : ""
+              }`}
+            onClick={() => setPage(tab)}
           >
-            Category Type
-          </h2>
-          <h2
-            className={`p-1 ${
-              page === "Status" &&
-              "bg-white font-medium text-blue-500 shadow-custom-all-sides"
-            } rounded-t-md px-4 cursor-pointer transition-all duration-300 ease-linear`}
-            onClick={() => setPage("Status")}
-          >
-            Status
-          </h2>
-          <h2
-            className={`p-1 ${
-              page === "Operational Days" &&
-              "bg-white font-medium text-blue-500 shadow-custom-all-sides"
-            } rounded-t-md px-4 cursor-pointer transition-all duration-300 ease-linear`}
-            onClick={() => setPage("Operational Days")}
-          >
-            Operational Days
-          </h2>
-          {/* <h2
-            className={`p-1 ${
-              page === "Complaint Mode" &&
-              "bg-white font-medium text-blue-500 shadow-custom-all-sides"
-            } rounded-t-md px-4 cursor-pointer transition-all duration-300 ease-linear`}
-            onClick={() => setPage("Complaint Mode")}
-          >
-            Complaint Mode
-          </h2>
-          <h2
-            className={`p-1 ${
-              page === "Aging Rule" &&
-              "bg-white font-medium text-blue-500 shadow-custom-all-sides"
-            } rounded-t-md px-4 cursor-pointer transition-all duration-300 ease-linear`}
-            onClick={() => setPage("Aging Rule")}
-          >
-            Aging Rule
-          </h2> */}
-        </div>
+            {tab}
+          </button>
+        ))}
       </div>
-      <div>
-        {page === "Category Type" && (
-          <div className="mr-4">
-            <TicketCategorySetup />
+
+      {/* Category */}
+      {page === "Category Type" && <TicketCategorySetup />}
+
+      {/* Status */}
+      {page === "Status" && (
+        <div className="p-4">
+          <div className="grid md:grid-cols-5 gap-2 mb-4">
+            <input
+              name="status"
+              placeholder="Status"
+              value={formData.status}
+              onChange={handleChange}
+              className="border p-2 rounded"
+            />
+
+            <input
+              name="fixedState"
+              placeholder="Fixed State"
+              value={formData.fixedState}
+              onChange={handleChange}
+              className="border p-2 rounded"
+            />
+
+            <input
+              name="order"
+              type="number"
+              placeholder="Order"
+              value={formData.order}
+              onChange={handleChange}
+              className="border p-2 rounded"
+            />
+
+            <button
+              onClick={handleAddStatus}
+              className="text-white rounded"
+              style={{ background: themeColor }}
+            >
+              Add
+            </button>
+            <button
+              onClick={handleReset}
+              className="text-white rounded bg-black"
+            >
+              Reset
+            </button>
           </div>
-        )}
-        {page === "Status" && (
-          <div className="m-2">
-            <div className="grid md:grid-cols-5 gap-2 my-2">
-              <input
-                type="text"
-                placeholder="Enter status"
-                className="border p-2 rounded-md border-gray-300"
-                value={formData.status}
-                onChange={handleChange}
-                name="status"
-              />
-              <select
-                name="fixedState"
-                onChange={handleChange}
-                value={formData.fixedState}
-                id=""
-                className="border p-2 rounded-md border-gray-300"
-              >
-                <option value="">Select Fixed State</option>
-                <option value="closed">Closed</option>
-                <option value="open">Open</option>
-                <option value="complete">Complete</option>
-                <option value="pending">Pending</option>
-                
-              </select>
 
-              <ColorPicker
-                value={formData.color}
-                onChange={(color) =>
-                  setFormData({ ...formData, color: color.toHexString() })
-                }
-                size="large"
-              />
+          <Table columns={statusColumns} data={statuses} isPagination />
+        </div>
+      )}
 
-              <input
-                type="number"
-                placeholder="Enter order"
-                className="border p-2 rounded-md border-gray-300"
-                value={formData.order}
-                onChange={handleChange}
-                name="order"
-              />
-              <button
-                className=" font-medium hover:text-white transition-all w-full p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
-                style={{ background: themeColor }}
-                onClick={handleAddStatus}
-              >
-                Add
-              </button>
-            </div>
-            <Table
-              responsive
-              //   selectableRows
-              columns={statusColumns}
-              data={statuses}
-              isPagination={true}
-            />{" "}
-            {/* <div className="flex gap-10">
-              <label className="font-semibold mt-2" htmlFor="">
-                Allow User to reopen ticket after closure
-              </label>
-              <select
-                className="border p-2 rounded-md w-64 border-black"
-                name=""
-                id=""
-              >
-                <option value="">Select time period</option>
-                <option value="">Days</option>
-                <option value="">Hrs</option>
-                <option value="">Months</option>
-              </select>
-              <input
-                type="text"
-                className="border p-2 rounded-md border-black"
-                placeholder="2"
-              />
-              <button
-                className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
-                style={{ background: themeColor }}
-              >
-                Update
-              </button>
-            </div> */}
-          </div>
-        )}
-        {page === "Operational Days" && (
-          <div className=" w-full my-2 px-10">
-       <table className="w-full border-collapse rounded-xl overflow-hidden">
-          <thead
-            style={{ background: themeColor }}
-            className="text-white"
-          >
-            <tr>
-              <th className="py-2 px-4"></th>
-              <th className="py-2 px-4 text-center">Day</th>
-              <th className="py-2 px-4 text-center">Start Time</th>
-              <th className="py-2 px-4 text-center">End Time</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {Object.entries(operationalDays).map(([day, data], index) => (
-              <tr
-                key={day}
-                className={`transition duration-200 ${
-                  index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                } hover:bg-blue-50`}
-              >
-                <td className="py-2 px-4 text-center border">
-                  <input
-                    type="checkbox"
-                    checked={data.enabled}
-                    onChange={(e) =>
-                      updateDay(day, "enabled", e.target.checked)
-                    }
-                    className="w-5 h-5 accent-blue-600 cursor-pointer"
-                  />
-                </td>
-
-                <td className="py-2 px-4 border text-center font-medium text-gray-700">
-                  {day}
-                </td>
-
-                <td className="py-2 px-4 text-center border">
-                  <input
-                    type="time"
-                    disabled={!data.enabled}
-                    value={data.start}
-                    onChange={(e) =>
-                      updateDay(day, "start", e.target.value)
-                    }
-                    className={`px-3 py-2 rounded-lg border transition duration-200 
-                    ${
-                      data.enabled
-                        ? "border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                        : "bg-gray-100 cursor-not-allowed"
-                    }`}
-                  />
-                </td>
-
-                <td className="py-2 px-4 text-center border">
-                  <input
-                    type="time"
-                    disabled={!data.enabled}
-                    value={data.end}
-                    onChange={(e) =>
-                      updateDay(day, "end", e.target.value)
-                    }
-                    className={`px-3 py-2 rounded-lg border transition duration-200 
-                    ${
-                      data.enabled
-                        ? "border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                        : "bg-gray-100 cursor-not-allowed"
-                    }`}
-                  />
-                </td>
+      {/* Operational Days */}
+      {page === "Operational Days" && (
+        <div className="p-4">
+          <table className="w-full border">
+            <thead style={{ background: themeColor }} className="text-white">
+              <tr>
+                <th />
+                <th>Day</th>
+                <th>Start</th>
+                <th>End</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-            <div className="flex justify-center my-2 mb-5">
-              <button
+            </thead>
+
+            <tbody>
+              {Object.entries(operationalDays).map(([day, data]) => (
+                <tr key={day}>
+                  <td className="border text-center">
+                    <input
+                      type="checkbox"
+                      checked={data.enabled}
+                      onChange={(e) =>
+                        updateDay(day, "enabled", e.target.checked)
+                      }
+                    />
+                  </td>
+
+                  <td className="border text-center">{day}</td>
+
+                  <td className="border">
+                    <input
+                      type="time"
+                      disabled={!data.enabled}
+                      value={data.start}
+                      onChange={(e) =>
+                        updateDay(day, "start", e.target.value)
+                      }
+                    />
+                  </td>
+
+                  <td className="border">
+                    <input
+                      type="time"
+                      disabled={!data.enabled}
+                      value={data.end}
+                      onChange={(e) =>
+                        updateDay(day, "end", e.target.value)
+                      }
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <div className="text-center mt-6">
+            <button
               onClick={handleOperationalSubmit}
               className="px-8 py-2 text-white rounded"
               style={{ background: themeColor }}
             >
               Save Operational Days
             </button>
-            </div>
-            {showModal && (
-              <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-                <div className="bg-white p-5 rounded-lg w-2/3">
-                  {/* <h1>Clone Data</h1> */}
-                  <h2 className="text-xl text-center font-semibold mb-4">
-                    Bulk Upload
-                  </h2>
-                  <FileInputBox />
-                  <div className="flex justify-center gap-2 mt-2">
-                    <button
-                      className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
-                      style={{ background: themeColor }}
-                    >
-                      Download Sample format
-                    </button>
+          </div>
+        </div>
+      )}
 
-                    <button
-                      className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
-                      style={{ background: themeColor }}
-                    >
-                      Import
-                    </button>
-                    <button
-                      onClick={closeModal}
-                      className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
-                      style={{ background: themeColor }}
-                    >
-                      Close
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-        {page === "Complaint Mode" && (
-          <div className="mt-5">
-            <div className="flex gap-5 mb-5">
-              <input
-                type="text"
-                placeholder="Enter complaint mode"
-                className="border p-2 rounded-md border-black"
-              />
-              <button
-                className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
-                style={{ background: themeColor }}
-              >
-                Add
-              </button>
-            </div>
-            <div className="mr-4">
-              <Table
-                responsive
-                //   selectableRows
-                columns={columns1}
-                data={data1}
-                isPagination={true}
-              />
-            </div>
-          </div>
-        )}
-        {page === "Aging Rule" && (
-          <div className="mt-7">
-            <div className="flex gap-6 mb-5">
-              <select
-                name=""
-                id=""
-                className="border p-2 rounded-md border-black w-48"
-              >
-                <option value="">Select Rule Type</option>
-                <option value="">Months</option>
-                <option value="">Days</option>
-                <option value="">Hours</option>
-              </select>
-              <select
-                name="rule"
-                id="rule"
-                className="border p-2 rounded-md border-black w-48"
-                onChange={handleSelectChange}
-                value={selectedRule}
-              >
-                <option value="">Select Rule Unit</option>
-                <option value="between">Between</option>
-                <option value="equal">Equal</option>
-                <option value="lessThan">Less than</option>
-                <option value="greaterThan">Greater than</option>
-                <option value="lessThanEqual">Less than Equal</option>
-                <option value="greaterThanEqual">Greater than Equal</option>
-              </select>
-
-              <div className="">
-                {selectedRule === "between" ? (
-                  <>
-                    <input
-                      type="text"
-                      className="border p-2 rounded-md border-black mr-2"
-                      placeholder="From"
-                    />
-                    <input
-                      type="text"
-                      className="border p-2 rounded-md border-black"
-                      placeholder="To"
-                    />
-                  </>
-                ) : selectedRule ? (
-                  <input
-                    type="text"
-                    className="border p-2 rounded-md border-black"
-                    placeholder="Value"
-                  />
-                ) : null}
-              </div>
-              <button
-                className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
-                style={{ background: themeColor }}
-              >
-                Add
-              </button>
-            </div>
-            <div className="mr-4">
-              <Table
-                responsive
-                //   selectableRows
-                columns={columns2}
-                data={data2}
-                isPagination={true}
-              />
-            </div>
-          </div>
-        )}
-        {showEditModal && (
-          <EditStatusModal
-            onClose={() => setShowEditModal(false)}
-            id={id}
-            setStatusAdded={setStatusAdded}
-          />
-        )}
-      </div>
+      {/* Edit Modal */}
+      {showEditModal && (
+        <EditStatusModal
+          id={editId}
+          onClose={() => setShowEditModal(false)}
+          onUpdated={() => {
+            setShowEditModal(false);
+            fetchStatuses(); // refresh after edit
+          }}
+        />
+      )}
     </div>
   );
 };
