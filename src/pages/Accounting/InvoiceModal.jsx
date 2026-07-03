@@ -474,7 +474,7 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
     terms_conditions: "",
     gst_reverse_charge: "0",
     gst_input_value: "0.00",
-    place_of_supply: "Club House",
+    place_of_supply: "",
     state: "Maharashtra",
     state_code: "27",
   });
@@ -681,7 +681,7 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
         gst_reverse_charge: invoice.gst_reverse_charge || "0",
         gst_input_value: invoice.gst_input_value?.toString?.() || invoice.gst_input_value || "0.00",
         amount: "0.00",
-        place_of_supply: invoice.place_of_supply || "Club House",
+        place_of_supply: invoice.place_of_supply || "",
         state: invoice.state || "Maharashtra",
         state_code: invoice.state_code || "27",
       });
@@ -715,7 +715,7 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
         terms_conditions: prev.terms_conditions || billingConfig.terms_and_conditions || "",
         state: prev.state || billingConfig.state || "Maharashtra",
         state_code: prev.state_code || billingConfig.state_code || "27",
-        place_of_supply: prev.place_of_supply || billingConfig.place_of_supply || "Club House",
+        place_of_supply: prev.place_of_supply || billingConfig.place_of_supply || "",
         items: prev.items.length === 1 && !prev.items[0].service_description ? [defaultItem] : prev.items,
       }));
     }
@@ -1053,6 +1053,7 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
       if (unit) {
         setUnitDetails(unit);
         setShowDetails(true);
+        const placeOfSupply = unit.site_name || unit.site?.name || "";
         setFormData(prev => ({
           ...prev,
           unit_no: unit.name || unitId,
@@ -1062,6 +1063,7 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
           customer_email: "",
           gst_no: "",
           customer_address: "",
+          place_of_supply: placeOfSupply,
         }));
         await fetchUsersByUnit(unitId);
       }
@@ -1078,6 +1080,7 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
         customer_email: "",
         gst_no: "",
         customer_address: "",
+        place_of_supply: "",
       }));
     }
   };
@@ -2141,6 +2144,7 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
                   >
                     <option value="">Select Payment Mode</option>
                     <option value="cash">Cash</option>
+                    <option value="upi">UPI</option>
                     <option value="cheque">Cheque</option>
                     <option value="online">Online Transfer</option>
                     <option value="card">Card</option>
@@ -2317,7 +2321,11 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
                       <td className="p-2"></td>
                     </tr>
                     <tr>
-                      <td className="border-r border-t border-gray-800 p-2"><strong>Invoice date:</strong> {formData.invoice_date || ""}</td>
+                      <td className="border-r border-t border-gray-800 p-2"><strong>Invoice date:</strong> {formData.invoice_date ? new Date(formData.invoice_date).toLocaleDateString("en-US", {
+                        month: "2-digit",
+                        day: "2-digit",
+                        year: "numeric"
+                      }) : ""}</td>
                       <td className="border-t border-gray-800 p-2"></td>
                     </tr>
                     <tr>
@@ -2333,7 +2341,7 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
                       <td className="border-t border-gray-800 p-2" style={{display: 'flex', justifyContent: 'space-between'}}>
                         <span><strong>Code</strong></span>
                         <span>{formData.state_code || "27"}</span>
-                        <span><strong>Place of Supply:</strong> {formData.place_of_supply || "Club House"}</span>
+                        <span><strong>Place of Supply:</strong> {formData.place_of_supply || ""}</span>
                       </td>
                     </tr>
                   </tbody>
@@ -2404,7 +2412,7 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
                     <th className="border border-gray-800 p-1 font-bold text-xs">Rate %</th>
                     <th className="border border-gray-800 p-1 font-bold text-xs">Amount</th>
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <td className="border border-gray-800 p-1"></td>
                     <td className="border border-gray-800 p-1"></td>
                     <td className="border border-gray-800 p-1"></td>
@@ -2415,7 +2423,7 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
                     <td className="border border-gray-800 p-1 text-center">9%</td>
                     <td className="border border-gray-800 p-1 text-center">-</td>
                     <td className="border border-gray-800 p-1 text-center">-</td>
-                  </tr>
+                  </tr> */}
                 </thead>
                 <tbody>
                   {formData.items.map((item, index) => (

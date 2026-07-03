@@ -198,7 +198,7 @@ const TaxRates = () => {
                             : "bg-gray-100 text-gray-800"
                         }`}
                       >
-                        {rate.is_active ? "Active" : "Inactive"}
+                        {rate.active ? "Active" : "Inactive"}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">

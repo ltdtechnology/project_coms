@@ -868,6 +868,12 @@ const JournalEntries = () => {
                   {viewEntry.created_at
                     ? new Date(viewEntry.created_at).toLocaleString()
                     : "-"}
+                  <div>
+                    <span className="font-medium"> Created By: </span>
+                    {
+                      viewEntry?.created_by?.firstname + " " + viewEntry?.created_by?.lastname
+                    }
+                  </div>
                 </div>
                 <div>
                   <span className="font-medium">Updated:</span>{" "}
