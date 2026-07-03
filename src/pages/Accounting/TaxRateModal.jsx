@@ -96,7 +96,7 @@ const TaxRateModal = ({ taxRate, onClose, onSave }) => {
                 {/* <option value="sales">Sales Tax</option> */}
                 {/* <option value="purchase">Purchase Tax</option> */}
                 {/* <option value="vat">VAT</option> */}
-                <option value="sgst">SGST</option>
+                {/* <option value="sgst">SGST</option> */}
                 <option value="igst">IGST</option>
                 <option value="gst">GST</option>
                 <option value="other">Other</option>
