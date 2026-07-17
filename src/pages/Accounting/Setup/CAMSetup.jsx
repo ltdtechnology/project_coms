@@ -179,7 +179,7 @@ const CAMSetup = () => {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-2">Accounting Unit Config</h1>
-      {/* <div className="mb-6 border border-amber-300 bg-amber-50 text-amber-900 rounded p-3 text-sm">
+      <div className="mb-6 border border-amber-300 bg-amber-50 text-amber-900 rounded p-3 text-sm">
         <div className="font-semibold">Possession Guard</div>
         <div>
           Possession cannot be issued until the resident pays advance maintenance of {settings.advance_months_required || 24} months from possession date.
@@ -187,9 +187,9 @@ const CAMSetup = () => {
         <div className="mt-1">
           Tenant move-in/out fees apply: set amounts and GST in Global Settings; invoices will use these values.
         </div>
-      </div> */}
+      </div>
 
-      {/* <div className="bg-white rounded-lg shadow p-5 mb-6">
+      <div className="bg-white rounded-lg shadow p-5 mb-6">
         <h2 className="text-lg font-semibold mb-4">Global Settings</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
@@ -252,7 +252,7 @@ const CAMSetup = () => {
             Save Settings
           </button>
         </div>
-      </div> */}
+      </div>
 
       <div className="bg-white rounded-lg shadow p-5">
         <div className="flex items-center justify-between mb-4">

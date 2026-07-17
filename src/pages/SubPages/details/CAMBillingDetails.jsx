@@ -465,7 +465,7 @@ function CAMBillingDetails() {
               </div>
               <div className="grid grid-cols-2">
                 <p>Place of Supply/Delivery : </p>
-                <p className="text-sm font-normal">{addressInvoice.state}</p>
+                <p className="text-sm font-normal">{camBillingAllData.place_of_supply || addressInvoice.state}</p>
               </div>
             </div>
           </div>

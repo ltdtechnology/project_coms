@@ -715,7 +715,7 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
         terms_conditions: prev.terms_conditions || billingConfig.terms_and_conditions || "",
         state: prev.state || billingConfig.state || "Maharashtra",
         state_code: prev.state_code || billingConfig.state_code || "27",
-        place_of_supply: prev.place_of_supply || billingConfig.place_of_supply || "",
+        place_of_supply: prev.place_of_supply || billingConfig.supply_site_name || "",
         items: prev.items.length === 1 && !prev.items[0].service_description ? [defaultItem] : prev.items,
       }));
     }

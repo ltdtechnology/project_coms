@@ -26,6 +26,8 @@ import {
   calculateMonthlyExpenseTotal,
   getMonthlyIncomeTotal,
   getBillingConfigurations,
+  downloadCamBillPdf,
+  sendCamBillEmail,
 } from "../../../api/accountingApi";
 import { makePeriod } from "../utils/cam";
 import { getSites } from "../../../api";
@@ -67,6 +69,11 @@ const CAMBills = () => {
   );
   const [showExpenseDropdown, setShowExpenseDropdown] = useState(false);
   const [billsViewMode, setBillsViewMode] = useState("preview"); // preview | persisted
+  const [selectedBill, setSelectedBill] = useState(null);
+  const [showBillDetailsModal, setShowBillDetailsModal] = useState(false);
+  const [sendingEmail, setSendingEmail] = useState(false);
+  const [emailRecipient, setEmailRecipient] = useState("");
+  const [showEmailModal, setShowEmailModal] = useState(false);
 
   // Income categories and detailed tracking
   const [incomeCategories, setIncomeCategories] = useState([]);
@@ -109,7 +116,7 @@ const CAMBills = () => {
   // Billing configuration (society maintenance charges %)
   const [billingConfig, setBillingConfig] = useState(null);
   const societyMaintenancePercent = useMemo(() => {
-    return Number(billingConfig?.society_maintenance_percent || 0);
+    return billingConfig?.management_fees_enabled ? Number(billingConfig?.society_maintenance_percent || 0) : 0;
   }, [billingConfig]);
 
   const totalPreview = useMemo(
@@ -1053,7 +1060,7 @@ const CAMBills = () => {
     });
     return total;
   }, [
-  selectedIncomeCategories,
+    selectedIncomeCategories,
     incomeCategories,
     incomeTotal,
     incomeBreakdown,
@@ -1184,6 +1191,84 @@ const CAMBills = () => {
       toast.error("Generate failed");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleViewBillDetails = (row) => {
+    setSelectedBill(row);
+    setShowBillDetailsModal(true);
+  };
+
+  const handleDownloadCamBillPdf = async (bill) => {
+    try {
+      setLoading(true);
+      const billYear = bill.year || year;
+      const startMonth = bill.month || month;
+      const endMonth = bill.end_month || startMonth;
+      const startDate = `${billYear}-${String(startMonth).padStart(2, "0")}-01`;
+      const lastDay = new Date(billYear, endMonth, 0).getDate();
+      const endDate = `${billYear}-${String(endMonth).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+      const response = await downloadCamBillPdf({
+        unit_id: bill.unit_id,
+        start_date: startDate,
+        end_date: endDate,
+        template: "invoice",
+        remark_1: "Any Debit / Credit of expenses will be adjusted in next statement of expenses.",
+        remark_2: "This is a computer generated statement, signature is not required.",
+        remark_3: "For queries write to the management office.",
+        remark_4: "These are consolidated expenses for the selected period.",
+      });
+      if (response.data?.type === "application/json") {
+        const text = await response.data.text();
+        const errorData = JSON.parse(text);
+        throw new Error(errorData.error || "PDF generation failed");
+      }
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `cam_bill_${bill.unit_id}_${billYear}_${startMonth}.pdf`,
+      );
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      toast.success("CAM bill PDF downloaded successfully");
+    } catch (err) {
+      console.error("Failed to download CAM bill PDF", err);
+      toast.error("PDF download failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSendBillEmail = async () => {
+    if (!selectedBill) {
+      toast.error("No bill selected");
+      return;
+    }
+    if (!emailRecipient || !emailRecipient.includes("@")) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    try {
+      setSendingEmail(true);
+      await sendCamBillEmail({
+        unit_id: selectedBill.unit_id,
+        year: selectedBill.year || year,
+        month: selectedBill.month || month,
+        recipient_email: emailRecipient,
+      });
+      toast.success(`CAM bill email sent to ${emailRecipient}`);
+      setShowEmailModal(false);
+      setEmailRecipient("");
+    } catch (err) {
+      console.error("Failed to send CAM bill email", err);
+      toast.error("Email sending failed");
+    } finally {
+      setSendingEmail(false);
     }
   };
 
@@ -1442,19 +1527,19 @@ const CAMBills = () => {
           </div>
 
           <div className="flex items-end gap-3">
-            {/* <button 
-              onClick={doPreview} 
+            <button
+              onClick={doPreview}
               className="px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-50 font-medium text-gray-700 transition-colors"
             >
               Preview
-            </button> */}
-            {/* <button 
-              onClick={doGenerate} 
-              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
+            </button>
+            <button
+              onClick={doGenerate}
+              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={loading}
             >
               {loading ? "Generating..." : "Generate"}
-            </button> */}
+            </button>
           </div>
         </div>
 
@@ -1470,12 +1555,17 @@ const CAMBills = () => {
             <div className="flex items-center justify-between">
               <div>
                 {/* <p className="text-sm text-gray-600">Total Expenses {backendExpenseTotal > 0 && <span className="text-xs text-blue-500">(Backend)</span>}</p> */}
-                <p className="text-sm text-gray-600">Total Expenses {societyMaintenancePercent > 0 && <span className="text-xs text-gray-400">(incl. {societyMaintenancePercent}% Mgmt Fees)</span>}</p>
+                <p className="text-sm text-gray-600">
+                  Total Expenses{" "}
+                  {societyMaintenancePercent > 0 && (
+                    <span className="text-xs text-gray-400">
+                      (incl. {societyMaintenancePercent}% Mgmt Fees)
+                    </span>
+                  )}
+                </p>
                 <p className="text-2xl font-bold text-red-600">
                   ₹
-                  {Number(
-                    selectedExpenseTotal || 0,
-                  ).toLocaleString("en-IN", {
+                  {Number(selectedExpenseTotal || 0).toLocaleString("en-IN", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
@@ -1596,9 +1686,7 @@ const CAMBills = () => {
                   :{" "}
                   <span className="font-bold">
                     ₹
-                    {Number(
-                      selectedExpenseTotal || 0,
-                    ).toLocaleString("en-IN", {
+                    {Number(selectedExpenseTotal || 0).toLocaleString("en-IN", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}
@@ -1687,7 +1775,12 @@ const CAMBills = () => {
                     {overviewMode === "expense" && (
                       <>
                         <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                          Expense {societyMaintenancePercent > 0 && <span className="text-xs text-gray-500">(+{societyMaintenancePercent}% Mgmt)</span>}
+                          Expense{" "}
+                          {societyMaintenancePercent > 0 && (
+                            <span className="text-xs text-gray-500">
+                              (+{societyMaintenancePercent}% Mgmt)
+                            </span>
+                          )}
                         </th>
                       </>
                     )}
@@ -1704,7 +1797,12 @@ const CAMBills = () => {
                     {overviewMode === "income_vs_expense" && (
                       <>
                         <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                          Expense {societyMaintenancePercent > 0 && <span className="text-xs text-gray-500">(+{societyMaintenancePercent}% Mgmt)</span>}
+                          Expense{" "}
+                          {societyMaintenancePercent > 0 && (
+                            <span className="text-xs text-gray-500">
+                              (+{societyMaintenancePercent}% Mgmt)
+                            </span>
+                          )}
                         </th>
                         <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                           Income (Allocated)
@@ -1745,7 +1843,10 @@ const CAMBills = () => {
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                           ₹
-                          {Number((r.daysShare || 0) * (1 + societyMaintenancePercent / 100)).toLocaleString("en-IN", {
+                          {Number(
+                            (r.daysShare || 0) *
+                              (1 + societyMaintenancePercent / 100),
+                          ).toLocaleString("en-IN", {
                             maximumFractionDigits: 0,
                           })}
                         </td>
@@ -1815,7 +1916,10 @@ const CAMBills = () => {
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                           ₹
-                          {Number((r.daysShare || 0) * (1 + societyMaintenancePercent / 100)).toLocaleString("en-IN", {
+                          {Number(
+                            (r.daysShare || 0) *
+                              (1 + societyMaintenancePercent / 100),
+                          ).toLocaleString("en-IN", {
                             maximumFractionDigits: 0,
                           })}
                         </td>
@@ -1836,7 +1940,8 @@ const CAMBills = () => {
                         <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-red-700 bg-red-50">
                           ₹
                           {Number(
-                            (r.daysShare || 0) * (1 + societyMaintenancePercent / 100) -
+                            (r.daysShare || 0) *
+                              (1 + societyMaintenancePercent / 100) -
                               (unitWiseIncome[r.unit_id] || 0),
                           ).toLocaleString("en-IN", {
                             minimumFractionDigits: 2,
@@ -1873,12 +1978,13 @@ const CAMBills = () => {
                       <>
                         <td className="px-4 py-3 text-sm font-bold text-gray-900">
                           ₹
-                          {Number(
-                            selectedExpenseTotal || 0,
-                          ).toLocaleString("en-IN", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
+                          {Number(selectedExpenseTotal || 0).toLocaleString(
+                            "en-IN",
+                            {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            },
+                          )}
                         </td>
                       </>
                     )}
@@ -1908,12 +2014,13 @@ const CAMBills = () => {
                       <>
                         <td className="px-4 py-3 text-sm font-bold text-gray-900">
                           ₹
-                          {Number(
-                            selectedExpenseTotal || 0,
-                          ).toLocaleString("en-IN", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
+                          {Number(selectedExpenseTotal || 0).toLocaleString(
+                            "en-IN",
+                            {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            },
+                          )}
                         </td>
                         <td className="px-4 py-3 text-sm font-bold text-gray-900">
                           ₹
@@ -1959,13 +2066,13 @@ const CAMBills = () => {
         </div>
 
         {/* Preview and Persisted - Toggle View */}
-        {/* <div className="bg-white rounded-lg shadow-md border border-gray-200">
-           Toggle Header  
+        <div className="bg-white rounded-lg shadow-md border border-gray-200">
+          {/*Toggle Header  */}
           <div className="bg-gradient-to-r from-gray-700 to-gray-800 px-6 py-4 rounded-t-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <h2 className="text-lg font-semibold text-white">CAM Bills</h2>
-                 Toggle Slider 
+                {/*Toggle Slider */}
                 <div className="flex items-center bg-gray-600 rounded-full p-1">
                   <button
                     onClick={() => setBillsViewMode("preview")}
@@ -1989,23 +2096,34 @@ const CAMBills = () => {
                   </button>
                 </div>
               </div>
-              <div className={`text-sm text-white px-4 py-1 rounded-full ${billsViewMode === "preview" ? "bg-green-600" : "bg-purple-600"}`}>
-                Total: <span className="font-bold">
-                  ₹{(billsViewMode === "preview" ? totalPreview : totalPersisted).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              <div
+                className={`text-sm text-white px-4 py-1 rounded-full ${billsViewMode === "preview" ? "bg-green-600" : "bg-purple-600"}`}
+              >
+                Total:{" "}
+                <span className="font-bold">
+                  ₹
+                  {(billsViewMode === "preview"
+                    ? totalPreview
+                    : totalPersisted
+                  ).toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </span>
               </div>
             </div>
-             Society Maintenance Rate Display
+            {/*Society Maintenance Rate Display*/}
             {societyMaintenancePercent > 0 && (
               <div className="mt-2 text-xs text-gray-300">
-                Society Maintenance: {societyMaintenancePercent}% | Rate per sqft: ₹{settings?.rate_per_sqft || 0}
+                Society Maintenance: {societyMaintenancePercent}% | Rate per
+                sqft: ₹{settings?.rate_per_sqft || 0}
               </div>
             )}
           </div>
-          
+
           <div className="p-6">
-            Info Banner 
-            <div className={`mb-4 p-3 rounded-lg text-sm ${billsViewMode === "preview" ? "bg-green-50 border border-green-200" : "bg-purple-50 border border-purple-200"}`}>
+            {/*Info Banner */}
+            {/* <div className={`mb-4 p-3 rounded-lg text-sm ${billsViewMode === "preview" ? "bg-green-50 border border-green-200" : "bg-purple-50 border border-purple-200"}`}>
               <div className="flex items-center gap-2">
                 <span className={billsViewMode === "preview" ? "text-green-600" : "text-purple-600"}>ℹ️</span>
                 <span className={billsViewMode === "preview" ? "text-green-700" : "text-purple-700"}>
@@ -2014,71 +2132,391 @@ const CAMBills = () => {
                     : "Generated shows saved bills from database."}
                 </span>
               </div>
-            </div>
-            
+            </div>*/}
+
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-100">
                   <tr>
-                    <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase">Unit</th>
-                    <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase">Area (sqft)</th>
-                    <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase">Days</th>
-                    <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase">Base Amount</th>
-                    <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase">Society Charges ({societyMaintenancePercent || 0}%)</th>
-                    <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase">Total</th>
+                    <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase">
+                      Unit
+                    </th>
+                    <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase">
+                      Area (sqft)
+                    </th>
+                    <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase">
+                      Days
+                    </th>
+                    <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase">
+                      Base Amount
+                    </th>
+                    {/* <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase">Society Charges ({societyMaintenancePercent || 0}%)</th> */}
+                    <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase">
+                      Total
+                    </th>
+                    <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 uppercase">
+                      View/Download
+                    </th>
+                    {/* <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 uppercase"></th> */}
+                    {/* <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 uppercase">Send Mail</th> */}
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {(billsViewMode === "preview" ? previewRows : persistedRows).length === 0 ? (
+                  {(billsViewMode === "preview" ? previewRows : persistedRows)
+                    .length === 0 ? (
                     <tr>
-                      <td colSpan="6" className="px-3 py-8 text-center text-gray-500">
-                        {billsViewMode === "preview" 
-                          ? "Click 'Preview' to calculate bills for this period" 
+                      <td
+                        colSpan="9"
+                        className="px-3 py-8 text-center text-gray-500"
+                      >
+                        {billsViewMode === "preview"
+                          ? "Click 'Preview' to calculate bills for this period"
                           : "No generated bills for this period"}
                       </td>
                     </tr>
                   ) : (
-                    (billsViewMode === "preview" ? previewRows : persistedRows).map((r, idx) => (
-                      <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                    (billsViewMode === "preview"
+                      ? previewRows
+                      : persistedRows
+                    ).map((r, idx) => (
+                      <tr
+                        key={idx}
+                        className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                      >
                         <td className="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {r.flat_no || r.unit_name || r.flat || `Unit ${r.unit_id}`}
-                          <span className="ml-2 text-xs text-gray-500">#{r.unit_id}</span>
+                          {r.flat_no ||
+                            r.unit_name ||
+                            r.flat ||
+                            `Unit ${r.unit_id}`}
+                          <span className="ml-2 text-xs text-gray-500">
+                            #{r.unit_id}
+                          </span>
                         </td>
-                        <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-600">{Number(r.carpet_area_sqft || 0).toFixed(2)}</td>
-                        <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-600">{Number(r.active_days || 0)}</td>
-                        <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-600">₹{Number(r.base_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                        <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-600">₹{Number(r.gst_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                        <td className={`px-3 py-2 whitespace-nowrap text-sm font-medium ${billsViewMode === "preview" ? "text-green-700" : "text-purple-700"}`}>
-                          ₹{Number(r.total_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                        <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-600">
+                          {Number(r.carpet_area_sqft || 0).toFixed(2)}
                         </td>
+                        <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-600">
+                          {Number(r.active_days || 0)}
+                        </td>
+                        <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-600">
+                          ₹
+                          {Number(r.base_amount || 0).toLocaleString("en-IN", {
+                            minimumFractionDigits: 2,
+                          })}
+                        </td>
+                        {/* <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-600">₹{Number(r.gst_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td> */}
+                        <td
+                          className={`px-3 py-2 whitespace-nowrap text-sm font-medium ${billsViewMode === "preview" ? "text-green-700" : "text-purple-700"}`}
+                        >
+                          ₹
+                          {Number(r.total_amount || 0).toLocaleString("en-IN", {
+                            minimumFractionDigits: 2,
+                          })}
+                        </td>
+                        <td className="px-3 py-2 gap-2 whitespace-nowrap text-center">
+                          <button
+                            onClick={() => handleViewBillDetails(r)}
+                            className="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
+                            title="View detailed breakdown"
+                          >
+                            👁️ View
+                          </button>
+                          <button
+                            onClick={() => handleDownloadCamBillPdf(r)}
+                            className="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors"
+                            title="Download PDF"
+                          >
+                            ⬇️ PDF
+                          </button>
+                        </td>
+                        {/* <td className="px-3 py-2 whitespace-nowrap text-center"></td> */}
+                        {/* <td className="px-3 py-2 whitespace-nowrap text-center">
+                          <button
+                            onClick={() => {
+                              setSelectedBill(r);
+                              setShowEmailModal(true);
+                            }}
+                            className="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors"
+                            title="Send via email"
+                          >
+                            ✉️ Mail
+                          </button>
+                        </td> */}
                       </tr>
                     ))
                   )}
                 </tbody>
-                {(billsViewMode === "preview" ? previewRows : persistedRows).length > 0 && (
-                  <tfoot className={billsViewMode === "preview" ? "bg-green-50 border-t-2 border-green-200" : "bg-purple-50 border-t-2 border-purple-200"}>
+                {(billsViewMode === "preview" ? previewRows : persistedRows)
+                  .length > 0 && (
+                  <tfoot
+                    className={
+                      billsViewMode === "preview"
+                        ? "bg-green-50 border-t-2 border-green-200"
+                        : "bg-purple-50 border-t-2 border-purple-200"
+                    }
+                  >
                     <tr>
-                      <td className="px-3 py-2 text-sm font-bold text-gray-900">Total</td>
                       <td className="px-3 py-2 text-sm font-bold text-gray-900">
-                        {(billsViewMode === "preview" ? previewRows : persistedRows).reduce((s, r) => s + Number(r.carpet_area_sqft || 0), 0).toFixed(2)}
-                      </td>
-                      <td className="px-3 py-2 text-sm font-bold text-gray-900">-</td>
-                      <td className="px-3 py-2 text-sm font-bold text-gray-900">
-                        ₹{(billsViewMode === "preview" ? previewRows : persistedRows).reduce((s, r) => s + Number(r.base_amount || 0), 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                        Total
                       </td>
                       <td className="px-3 py-2 text-sm font-bold text-gray-900">
-                        ₹{(billsViewMode === "preview" ? previewRows : persistedRows).reduce((s, r) => s + Number(r.gst_amount || 0), 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                        {(billsViewMode === "preview"
+                          ? previewRows
+                          : persistedRows
+                        )
+                          .reduce(
+                            (s, r) => s + Number(r.carpet_area_sqft || 0),
+                            0,
+                          )
+                          .toFixed(2)}
                       </td>
-                      <td className={`px-3 py-2 text-sm font-bold ${billsViewMode === "preview" ? "text-green-700" : "text-purple-700"}`}>
-                        ₹{(billsViewMode === "preview" ? totalPreview : totalPersisted).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                      <td className="px-3 py-2 text-sm font-bold text-gray-900">
+                        -
                       </td>
+                      <td className="px-3 py-2 text-sm font-bold text-gray-900">
+                        ₹
+                        {(billsViewMode === "preview"
+                          ? previewRows
+                          : persistedRows
+                        )
+                          .reduce((s, r) => s + Number(r.base_amount || 0), 0)
+                          .toLocaleString("en-IN", {
+                            minimumFractionDigits: 2,
+                          })}
+                      </td>
+                      <td className="px-3 py-2 text-sm font-bold text-gray-900">
+                        ₹
+                        {(billsViewMode === "preview"
+                          ? previewRows
+                          : persistedRows
+                        )
+                          .reduce((s, r) => s + Number(r.gst_amount || 0), 0)
+                          .toLocaleString("en-IN", {
+                            minimumFractionDigits: 2,
+                          })}
+                      </td>
+                      <td
+                        className={`px-3 py-2 text-sm font-bold ${billsViewMode === "preview" ? "text-green-700" : "text-purple-700"}`}
+                      >
+                        ₹
+                        {(billsViewMode === "preview"
+                          ? totalPreview
+                          : totalPersisted
+                        ).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                      </td>
+                      <td colSpan="3" className="px-3 py-2"></td>
                     </tr>
                   </tfoot>
                 )}
               </table>
             </div>
           </div>
-        </div> */}
+        </div>
+
+        {/* CAM Bill Details Modal */}
+        {showBillDetailsModal && selectedBill && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-lg max-w-xl w-full mx-4 max-h-[30rem] overflow-y-auto">
+              <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-4 flex justify-between items-center">
+                <h3 className="text-lg font-bold">CAM Bill Details</h3>
+                <button
+                  onClick={() => setShowBillDetailsModal(false)}
+                  className="text-white hover:bg-blue-800 p-1 rounded"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="p-6 space-y-4">
+                {/* Unit & Period Info */}
+                <div className="border-b pb-3">
+                  <p className="text-sm text-gray-600">Unit ID</p>
+                  <p className="text-lg font-semibold text-gray-800">
+                    {selectedBill.unit_id}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 border-b pb-3">
+                  <div>
+                    <p className="text-sm text-gray-600">Period</p>
+                    <p className="text-sm font-semibold text-gray-800">
+                      {selectedBill.month}/{selectedBill.year || year}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">Carpet Area</p>
+                    <p className="text-sm font-semibold text-gray-800">
+                      {Number(selectedBill.carpet_area_sqft || 0).toFixed(2)}{" "}
+                      sqft
+                    </p>
+                  </div>
+                </div>
+
+                {/* Days Information */}
+                <div className="bg-gray-50 p-3 rounded border border-gray-200">
+                  <p className="text-sm text-gray-600 mb-2">Active Days</p>
+                  <p className="text-lg font-bold text-gray-800">
+                    {selectedBill.active_days || "-"} days
+                  </p>
+                </div>
+
+                {/* Rate Information */}
+                <div className="bg-blue-50 p-3 rounded border border-blue-200">
+                  <p className="text-sm text-gray-600">Daily Rate</p>
+                  <p className="text-sm font-semibold text-gray-800">
+                    ₹
+                    {Number(
+                      selectedBill.daily_rate_per_sqft || 0,
+                    ).toLocaleString("en-IN", {
+                      minimumFractionDigits: 2,
+                    })}{" "}
+                    per sqft per day
+                  </p>
+                </div>
+
+                {/* Calculation Breakdown */}
+                <div className="space-y-2 border-t pt-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Base Amount:</span>
+                    <span className="font-semibold text-gray-800">
+                      ₹
+                      {Number(selectedBill.base_amount || 0).toLocaleString(
+                        "en-IN",
+                        { minimumFractionDigits: 2 },
+                      )}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">
+                      Society Charges (
+                      {selectedBill.gst_rate_percent ||
+                        societyMaintenancePercent}
+                      %):
+                    </span>
+                    <span className="font-semibold text-gray-800">
+                      ₹
+                      {Number(selectedBill.gst_amount || 0).toLocaleString(
+                        "en-IN",
+                        { minimumFractionDigits: 2 },
+                      )}
+                    </span>
+                  </div>
+                  {Number(selectedBill.advance_deduction || 0) > 0 && (
+                    <div className="flex justify-between items-center text-orange-600">
+                      <span className="text-sm">Advance Deduction:</span>
+                      <span className="font-semibold">
+                        -₹
+                        {Number(
+                          selectedBill.advance_deduction || 0,
+                        ).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Total */}
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-3 rounded border border-green-200 flex justify-between items-center">
+                  <span className="font-bold text-gray-800">Total Due:</span>
+                  <span className="text-xl font-bold text-green-700">
+                    ₹
+                    {Number(selectedBill.total_amount || 0).toLocaleString(
+                      "en-IN",
+                      { minimumFractionDigits: 2 },
+                    )}
+                  </span>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-2 pt-2">
+                  <button
+                    onClick={() => {
+                      handleDownloadCamBillPdf(selectedBill);
+                      setShowBillDetailsModal(false);
+                    }}
+                    className="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"
+                  >
+                    Download PDF
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowBillDetailsModal(false);
+                      setShowEmailModal(true);
+                    }}
+                    className="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"
+                  >
+                    Send Email
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Send Email Modal */}
+        {/* {showEmailModal && selectedBill && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-lg max-w-sm w-full mx-4">
+              <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-4 flex justify-between items-center">
+                <h3 className="text-lg font-bold">Send CAM Bill</h3>
+                <button
+                  onClick={() => {
+                    setShowEmailModal(false);
+                    setEmailRecipient('');
+                  }}
+                  className="text-white hover:bg-purple-800 p-1 rounded"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="p-6 space-y-4">
+                <div>
+                  <p className="text-sm text-gray-600 mb-2">
+                    Sending CAM bill for Unit <span className="font-bold">{selectedBill.unit_id}</span> ({selectedBill.month}/{selectedBill.year || year})
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Recipient Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    value={emailRecipient}
+                    onChange={(e) => setEmailRecipient(e.target.value)}
+                    placeholder="resident@example.com"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  />
+                </div>
+
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+                  <p className="text-xs text-purple-800">
+                    The bill details and PDF attachment will be sent to the email address above.
+                  </p>
+                </div>
+
+                <div className="flex gap-2 pt-2">
+                  <button
+                    onClick={() => {
+                      setShowEmailModal(false);
+                      setEmailRecipient('');
+                    }}
+                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSendBillEmail}
+                    disabled={sendingEmail || !emailRecipient}
+                    className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-gray-400 font-medium"
+                  >
+                    {sendingEmail ? 'Sending...' : 'Send Email'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )} */}
       </div>
     </div>
   );

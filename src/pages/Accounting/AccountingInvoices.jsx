@@ -7,6 +7,7 @@ import {
   updateAccountingInvoice,
   deleteAccountingInvoice,
   sendInvoice,
+  bulkSendInvoices,
   addPaymentToInvoice,
   getOverdueInvoices,
   downloadInvoicePdf,
@@ -31,6 +32,7 @@ const AccountingInvoices = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [showOverdueOnly, setShowOverdueOnly] = useState(false);
+  const [selectedInvoiceIds, setSelectedInvoiceIds] = useState([]);
 
   useEffect(() => {
     fetchInvoices();
@@ -125,6 +127,52 @@ const AccountingInvoices = () => {
       fetchInvoices();
     } catch (error) {
       toast.error("Failed to send invoice");
+      console.error(error);
+    }
+  };
+
+  const toggleInvoiceSelection = (id) => {
+    setSelectedInvoiceIds((prev) =>
+      prev.includes(id) ? prev.filter((iid) => iid !== id) : [...prev, id]
+    );
+  };
+
+  const handleSelectAllDraft = () => {
+    const draftIds = filteredInvoices
+      .filter((inv) => inv.status === "draft")
+      .map((inv) => inv.id);
+    const allSelected = draftIds.every((id) => selectedInvoiceIds.includes(id));
+    if (allSelected) {
+      setSelectedInvoiceIds([]);
+    } else {
+      setSelectedInvoiceIds(draftIds);
+    }
+  };
+
+  const handleBulkSend = async () => {
+    const draftIds = selectedInvoiceIds.filter((id) => {
+      const inv = invoices.find((i) => i.id === id);
+      return inv && inv.status === "draft";
+    });
+    if (draftIds.length === 0) {
+      toast.error("No draft invoices selected");
+      return;
+    }
+    if (!window.confirm(`Are you sure you want to send ${draftIds.length} invoice${draftIds.length === 1 ? '' : 's'}?`))
+      return;
+    try {
+      const res = await bulkSendInvoices(draftIds);
+      const result = res.data;
+      if (result.sent?.length > 0) {
+        toast.success(`${result.sent.length} invoice${result.sent.length === 1 ? '' : 's'} sent successfully`);
+      }
+      if (result.failed?.length > 0) {
+        toast.error(`${result.failed.length} invoice${result.failed.length === 1 ? '' : 's'} failed: ${result.failed.map((f) => f.error).join(', ')}`);
+      }
+      setSelectedInvoiceIds([]);
+      fetchInvoices();
+    } catch (error) {
+      toast.error("Failed to bulk send invoices");
       console.error(error);
     }
   };
@@ -249,6 +297,18 @@ const AccountingInvoices = () => {
             />
             <span>Overdue Only</span>
           </label>
+
+          {selectedInvoiceIds.length > 0 && (
+            <button
+              onClick={handleBulkSend}
+              className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 text-sm"
+            >
+              Bulk Send ({selectedInvoiceIds.filter((id) => {
+                const inv = invoices.find((i) => i.id === id);
+                return inv && inv.status === "draft";
+              }).length})
+            </button>
+          )}
         </div>
 
         {loading ? (
@@ -260,6 +320,14 @@ const AccountingInvoices = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
+                  <th className="px-2 py-3 w-10">
+                    <input
+                      type="checkbox"
+                      checked={filteredInvoices.filter((inv) => inv.status === "draft").length > 0 && filteredInvoices.filter((inv) => inv.status === "draft").every((inv) => selectedInvoiceIds.includes(inv.id))}
+                      onChange={handleSelectAllDraft}
+                      className="h-4 w-4"
+                    />
+                  </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Invoice
                   </th>
@@ -287,7 +355,7 @@ const AccountingInvoices = () => {
                 {filteredInvoices.length === 0 ? (
                   <tr>
                     <td
-                      colSpan="7"
+                      colSpan="8"
                       className="px-6 py-4 text-center text-gray-500"
                     >
                       No invoices found
@@ -303,6 +371,14 @@ const AccountingInvoices = () => {
 
                     return (
                       <tr key={invoice.id} className="hover:bg-gray-50">
+                        <td className="px-2 py-4">
+                          <input
+                            type="checkbox"
+                            checked={selectedInvoiceIds.includes(invoice.id)}
+                            onChange={() => toggleInvoiceSelection(invoice.id)}
+                            className="h-4 w-4"
+                          />
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap font-medium">
                           {invoice.invoice_number}
                         </td>

@@ -43,8 +43,8 @@ const AccountingAnalyticsDashboard = () => {
     try {
       const res = await getBillingConfigurations();
       const config = res?.data?.data || res?.data;
-      const configObj = Array.isArray(config) ? config[0] : config;
-      setSocietyMaintenancePercent(Number(configObj?.society_maintenance_percent || 0));
+        const configObj = Array.isArray(config) ? config[0] : config;
+        setSocietyMaintenancePercent(configObj?.management_fees_enabled ? Number(configObj?.society_maintenance_percent || 0) : 0);
     } catch (e) {
       console.error("Failed to fetch billing config:", e);
     }

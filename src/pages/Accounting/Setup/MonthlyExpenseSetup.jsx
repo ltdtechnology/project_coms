@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import * as XLSX from "xlsx";
-import { createMonthlyExpense, deleteMonthlyExpense, getMonthlyExpenses, updateMonthlyExpense, calculateMonthlyExpenseTotal, getBillingConfigurations } from "../../../api/accountingApi";
+import { createMonthlyExpense, deleteMonthlyExpense, getMonthlyExpenses, updateMonthlyExpense, calculateMonthlyExpenseTotal, getBillingConfigurations, getUnitCamConfigs } from "../../../api/accountingApi";
 import { getSites } from "../../../api";
 
 const defaultRow = () => ({ id: undefined, category: "", amount: 0, isCustom: false });
@@ -46,6 +46,10 @@ const MonthlyExpenseSetup = () => {
 
   // Society maintenance charges
   const [societyMaintenancePercent, setSocietyMaintenancePercent] = useState(0);
+  const [managementFeesEnabled, setManagementFeesEnabled] = useState(false);
+
+  // Total carpet area for Per Square Feet calculation
+  const [totalArea, setTotalArea] = useState(0);
 
   // Custom date range
   const [useCustomDate, setUseCustomDate] = useState(false);
@@ -150,16 +154,36 @@ const MonthlyExpenseSetup = () => {
         // Load society maintenance percent from billing config
         const bcData = bcRes?.data;
         if (Array.isArray(bcData) && bcData.length > 0) {
+          setManagementFeesEnabled(!!bcData[0]?.management_fees_enabled);
           setSocietyMaintenancePercent(Number(bcData[0]?.society_maintenance_percent || 0));
         } else if (bcData && typeof bcData === 'object' && !Array.isArray(bcData)) {
+          setManagementFeesEnabled(!!bcData.management_fees_enabled);
           setSocietyMaintenancePercent(Number(bcData.society_maintenance_percent || 0));
         }
       } catch (e) {
         console.error(e);
       }
     };
+
     loadSites();
   }, []);
+
+  // Fetch total carpet area when site changes
+  useEffect(() => {
+    const fetchTotalArea = async () => {
+      try {
+        if (!siteId) { setTotalArea(0); return; }
+        const res = await getUnitCamConfigs({ site_id: siteId });
+        const configs = res?.data?.data || [];
+        const area = configs.reduce((sum, c) => sum + Number(c.carpet_area_sqft || 0), 0);
+        setTotalArea(area);
+      } catch (e) {
+        console.error('Failed to fetch total area:', e);
+        setTotalArea(0);
+      }
+    };
+    fetchTotalArea();
+  }, [siteId]);
 
   useEffect(() => {
     if (useCustomDate) {
@@ -192,12 +216,17 @@ const MonthlyExpenseSetup = () => {
   const saveAll = async () => {
     try {
       const ops = rows.map((r) => {
+        // For Per Square Feet, auto-calculate amount = rate × total area
+        const isPerSqft = r.category === "Per Square Feet";
+        const calculatedAmount = isPerSqft && totalArea > 0
+          ? Number(r.amount || 0) * totalArea
+          : Number(r.amount || 0);
         const payload = {
           monthly_expense: {
             year,
             month,
             category: r.category,
-            amount: Number(r.amount || 0),
+            amount: calculatedAmount,
             ...(siteId ? { project_id: siteId, site_id: siteId } : {}),
           },
         };
@@ -229,8 +258,12 @@ const MonthlyExpenseSetup = () => {
     setShowJeDetailModal(true);
   };
 
-  // Computed totals
-  const camTotal = rows.reduce((s, r) => s + Number(r.amount || 0), 0);
+  // Computed totals (for Per Square Feet, if new row, calculate rate × total area; if loaded, amount is already total)
+  const camTotal = rows.reduce((s, r) => {
+    const isPerSqft = r.category === "Per Square Feet";
+    const amount = isPerSqft && !r.id && totalArea > 0 ? Number(r.amount || 0) * totalArea : Number(r.amount || 0);
+    return s + amount;
+  }, 0);
   const ledgerTotal = ledgerExpenses.reduce((s, r) => s + Number(r.amount || 0), 0);
   const grandTotal = camTotal + ledgerTotal;
 
@@ -273,7 +306,9 @@ const MonthlyExpenseSetup = () => {
 
     const camRows = rows.filter(row => row.category);
     camRows.forEach((row, idx) => {
-      sheetData.push([idx + 1, row.category, Number(row.amount || 0), "Manual"]);
+      const isPerSqft = row.category === "Per Square Feet";
+      const displayAmount = isPerSqft && !row.id && totalArea > 0 ? Number(row.amount || 0) * totalArea : Number(row.amount || 0);
+      sheetData.push([idx + 1, row.category, displayAmount, "Manual"]);
       r++;
     });
 
@@ -307,7 +342,7 @@ const MonthlyExpenseSetup = () => {
     }
 
     // ─── Section 3: Society Maintenance Charges ───
-    if (societyMaintenancePercent > 0 && grandTotal > 0) {
+    if (managementFeesEnabled && societyMaintenancePercent > 0 && grandTotal > 0) {
       sheetData.push(["Society Maintenance Charges", "", "", ""]);
       merges.push({ s: { r, c: 0 }, e: { r, c: 3 } });
       r++;
@@ -516,13 +551,13 @@ const MonthlyExpenseSetup = () => {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
               Export Excel
             </button>
-            {/* <button onClick={saveAll} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save All</button> */}
+            <button onClick={saveAll} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save All</button>
           </div>
         </div>
       </div>
 
       {/* Summary Cards */}
-      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
         <div className="bg-white rounded-lg shadow p-4">
           <div className="text-sm text-gray-500">CAM Expenses</div>
           <div className="text-xl font-bold text-gray-800">₹{camTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</div>
@@ -538,10 +573,15 @@ const MonthlyExpenseSetup = () => {
           <div className="text-xl font-bold text-green-700">₹{grandTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</div>
           <div className="text-xs text-gray-400 mt-1">{periodLabel}</div>
         </div>
-      </div> */}
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="text-sm text-gray-500">Total Carpet Area</div>
+          <div className="text-xl font-bold text-orange-700">{totalArea > 0 ? `${totalArea.toLocaleString('en-IN')} sq.ft` : 'N/A'}</div>
+          <div className="text-xs text-gray-400 mt-1">from unit configurations</div>
+        </div>
+      </div>
 
       {/* CAM Monthly Expense Rows */}
-      {/* <div className="bg-white rounded-lg shadow p-5 mb-4">
+      <div className="bg-white rounded-lg shadow p-5 mb-4">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold">CAM Expense Rows</h2>
           <div className="text-sm text-gray-600">
@@ -587,6 +627,15 @@ const MonthlyExpenseSetup = () => {
                   </td>
                   <td className="px-4 py-2">
                     <input type="number" value={r.amount} onChange={(e) => handleChange(idx, 'amount', e.target.value)} className="w-40 px-3 py-2 border rounded" />
+                    {r.category === "Per Square Feet" && totalArea > 0 && (
+                      <div className="text-xs text-green-600 mt-1">
+                        {!r.id ? (
+                          <>₹{Number(r.amount || 0).toLocaleString('en-IN')}/sqft × {totalArea.toLocaleString('en-IN')} sqft = ₹{(Number(r.amount || 0) * totalArea).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</>
+                        ) : (
+                          <>₹{Number(r.amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })} total (₹{(Number(r.amount || 0) / totalArea).toFixed(2)}/sqft × {totalArea.toLocaleString('en-IN')} sqft)</>
+                        )}
+                      </div>
+                    )}
                   </td>
                   <td className="px-4 py-2">
                     <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
@@ -604,7 +653,7 @@ const MonthlyExpenseSetup = () => {
         <div className="mt-4">
           <button onClick={addRow} className="px-4 py-2 border rounded hover:bg-gray-50">+ Add Row</button>
         </div>
-      </div> */}
+      </div>
 
       {/* Ledger Expenses from Journal Entries */}
       {ledgerExpenses.length > 0 && (
@@ -615,7 +664,7 @@ const MonthlyExpenseSetup = () => {
               <span className="ml-2 text-sm font-normal text-gray-500">(from Journal Entries)</span>
             </h2>
             <div className="text-sm text-gray-600">
-              Subtotal: <span className="font-semibold text-purple-700">₹{(ledgerTotal + (societyMaintenancePercent > 0 ? ledgerTotal * societyMaintenancePercent / 100 : 0)).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+              Subtotal: <span className="font-semibold text-purple-700">₹{(ledgerTotal + (managementFeesEnabled && societyMaintenancePercent > 0 ? ledgerTotal * societyMaintenancePercent / 100 : 0)).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
             </div>
           </div>
           <div className="overflow-x-auto">
@@ -659,7 +708,7 @@ const MonthlyExpenseSetup = () => {
                     </tr>
                   );
                 })}
-                {societyMaintenancePercent > 0 && (
+                {managementFeesEnabled && societyMaintenancePercent > 0 && (
                   <tr className="bg-blue-50/50 border-t-2 border-blue-200">
                     <td className="px-4 py-2">
                       <span className="font-medium text-blue-800">Management Fees ({societyMaintenancePercent}%)</span>

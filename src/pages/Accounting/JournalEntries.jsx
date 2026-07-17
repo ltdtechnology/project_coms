@@ -271,6 +271,7 @@ import {
   deleteJournalEntry,
   postJournalEntry,
   cancelJournalEntry,
+  bulkPostJournalEntries,
 } from "../../api/accountingApi";
 import JournalEntryModal from "./JournalEntryModal";
 import Navbar from "../../components/Navbar";
@@ -292,6 +293,7 @@ const JournalEntries = () => {
   const [statusFilter, setStatusFilter] = useState("");
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewEntry, setViewEntry] = useState(null);
+  const [selectedEntryIds, setSelectedEntryIds] = useState([]);
 
   // Month mapping
   const getMonthName = (monthValue) => {
@@ -409,6 +411,52 @@ const JournalEntries = () => {
     }
   };
 
+  const toggleEntrySelection = (id) => {
+    setSelectedEntryIds((prev) =>
+      prev.includes(id) ? prev.filter((eid) => eid !== id) : [...prev, id]
+    );
+  };
+
+  const handleSelectAllDraft = () => {
+    const draftIds = filteredEntries
+      .filter((e) => e.status === "draft")
+      .map((e) => e.id);
+    const allSelected = draftIds.every((id) => selectedEntryIds.includes(id));
+    if (allSelected) {
+      setSelectedEntryIds([]);
+    } else {
+      setSelectedEntryIds(draftIds);
+    }
+  };
+
+  const handleBulkPost = async () => {
+    const draftIds = selectedEntryIds.filter((id) => {
+      const entry = journalEntries.find((e) => e.id === id);
+      return entry && entry.status === "draft";
+    });
+    if (draftIds.length === 0) {
+      toast.error("No draft entries selected");
+      return;
+    }
+    if (!window.confirm(`Are you sure you want to post ${draftIds.length} journal entr${draftIds.length === 1 ? 'y' : 'ies'}?`))
+      return;
+    try {
+      const res = await bulkPostJournalEntries(draftIds);
+      const result = res.data;
+      if (result.posted?.length > 0) {
+        toast.success(`${result.posted.length} journal entr${result.posted.length === 1 ? 'y' : 'ies'} posted successfully`);
+      }
+      if (result.failed?.length > 0) {
+        toast.error(`${result.failed.length} entr${result.failed.length === 1 ? 'y' : 'ies'} failed: ${result.failed.map((f) => f.error).join(', ')}`);
+      }
+      setSelectedEntryIds([]);
+      fetchJournalEntries();
+    } catch (error) {
+      toast.error("Failed to bulk post journal entries");
+      console.error(error);
+    }
+  };
+
   const handleSave = async (data) => {
     try {
       if (selectedEntry) {
@@ -512,6 +560,18 @@ const JournalEntries = () => {
             <option value="posted">Posted</option>
             <option value="cancelled">Cancelled</option>
           </select>
+
+          {selectedEntryIds.length > 0 && (
+            <button
+              onClick={handleBulkPost}
+              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
+            >
+              Bulk Post ({selectedEntryIds.filter((id) => {
+                const e = journalEntries.find((je) => je.id === id);
+                return e && e.status === "draft";
+              }).length})
+            </button>
+          )}
         </div>
 
         {loading ? (
@@ -523,7 +583,14 @@ const JournalEntries = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  {/* <th className="px-6 py-3">Reference</th> */}
+                  <th className="px-2 py-3 w-10">
+                    <input
+                      type="checkbox"
+                      checked={filteredEntries.filter((e) => e.status === "draft").length > 0 && filteredEntries.filter((e) => e.status === "draft").every((e) => selectedEntryIds.includes(e.id))}
+                      onChange={handleSelectAllDraft}
+                      className="h-4 w-4"
+                    />
+                  </th>
                   <th className="px-6 py-3">Date</th>
                   <th className="px-6 py-3">Invoice Number</th>
                   <th className="px-6 py-3">Invoice Date</th>
@@ -539,17 +606,21 @@ const JournalEntries = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredEntries.length === 0 ? (
                   <tr>
-                    <td colSpan="10" className="text-center py-4 text-gray-500">
+                    <td colSpan="11" className="text-center py-4 text-gray-500">
                       No journal entries found
                     </td>
                   </tr>
                 ) : (
                   filteredEntries.map((entry) => (
                     <tr key={entry.id} className="hover:bg-gray-50">
-                      {/* <td className="px-6 py-4 whitespace-nowrap font-medium">
-                      {entry.reference || entry.entry_number || "-"}
-                    </td> */}
-
+                      <td className="px-2 py-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedEntryIds.includes(entry.id)}
+                          onChange={() => toggleEntrySelection(entry.id)}
+                          className="h-4 w-4"
+                        />
+                      </td>
                       <td className="px-6 py-4">
                         {new Date(entry.entry_date).toLocaleDateString()}
                       </td>
