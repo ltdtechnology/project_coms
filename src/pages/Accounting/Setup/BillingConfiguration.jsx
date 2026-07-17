@@ -57,7 +57,6 @@ const BillingConfiguration = () => {
     society_maintenance_percent: '',
     management_fees_label: 'Management Fees',
     management_fees_enabled: false,
-    enable_igst: false,
     supply_site_name: ''
   });
 
