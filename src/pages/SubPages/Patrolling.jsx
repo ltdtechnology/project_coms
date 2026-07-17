@@ -59,6 +59,17 @@ const Patrolling = () => {
   });
   const [loading, setLoading] = useState(false);
 
+  const formatPatrollingTime = (time) => {
+    if (!time) return "-";
+
+    return new Date(time).toLocaleTimeString("en-IN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "UTC",
+    });
+  };
+
   // Pagination helper functions
   const handleSchedulePerPageChange = (newPerPage, page) => {
     console.log(`Changing schedule per page to ${newPerPage}, page: ${page}`);
@@ -339,12 +350,12 @@ const Patrolling = () => {
 
     {
       name: "Start Time",
-      selector: (row) => convertToIST(row.start_time),
+      selector: (row) => formatPatrollingTime(row.start_time),
       sortable: true,
     },
     {
       name: "End Time",
-      selector: (row) => convertToIST(row.end_time),
+      selector: (row) => formatPatrollingTime(row.end_time),
       sortable: true,
     },
     {
@@ -560,19 +571,17 @@ const Patrolling = () => {
         <Passes />
         <div className="flex gap-4 border-b border-gray-200 ml-1 items-center">
           <h2
-            className={` cursor-pointer ${
-              page === "schedule" &&
+            className={` cursor-pointer ${page === "schedule" &&
               "shadow-custom-all-sides px-2 p-1 rounded-t-md text-blue-500 font-medium"
-            }`}
+              }`}
             onClick={() => setPage("schedule")}
           >
             Schedule
           </h2>
           <h2
-            className={`cursor-pointer ${
-              page === "logs" &&
+            className={`cursor-pointer ${page === "logs" &&
               "shadow-custom-all-sides px-2 p-1 rounded-t-md text-blue-500 font-medium"
-            }`}
+              }`}
             onClick={() => setPage("logs")}
           >
             Logs
@@ -825,19 +834,17 @@ const Patrolling = () => {
                 <div className="flex items-center gap-2 my-2">
                   <p
                     onClick={() => setInterval("hrs")}
-                    className={`font-medium cursor-pointer transition-all border px-4 rounded-full p-1 border-gray-300 duration-300 ${
-                      interval === "hrs" &&
+                    className={`font-medium cursor-pointer transition-all border px-4 rounded-full p-1 border-gray-300 duration-300 ${interval === "hrs" &&
                       "bg-black text-white  rounded-full p-1 px-2"
-                    }`}
+                      }`}
                   >
                     Time Interval(hrs)
                   </p>
                   <p
                     onClick={() => setInterval("specific")}
-                    className={`font-medium cursor-pointer transition-all duration-300 border px-4 rounded-full p-1 border-gray-300  ${
-                      interval === "specific" &&
+                    className={`font-medium cursor-pointer transition-all duration-300 border px-4 rounded-full p-1 border-gray-300  ${interval === "specific" &&
                       "bg-black text-white  rounded-full p-1 "
-                    }`}
+                      }`}
                   >
                     Specific Time
                   </p>
@@ -859,11 +866,10 @@ const Patrolling = () => {
                     {hours.map((hour) => (
                       <p
                         key={hour}
-                        className={`p-2 rounded cursor-pointer ${
-                          selectedHours.includes(hour)
+                        className={`p-2 rounded cursor-pointer ${selectedHours.includes(hour)
                             ? "bg-gray-500 text-white"
                             : "bg-gray-200 text-black"
-                        }`}
+                          }`}
                         onClick={() => toggleHourSelection(hour)}
                       >
                         {hour}

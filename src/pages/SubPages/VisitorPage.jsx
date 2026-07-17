@@ -7,6 +7,7 @@ import Navbar from "../../components/Navbar";
 import Table from "../../components/table/Table";
 import VisitorFilters from "../../components/VisitorFilters";
 import {
+  domainPrefix,
   getAllVisitorLogs,
   getExpectedVisitor,
   getVisitorApprovals,
@@ -16,7 +17,7 @@ import {
   postVisitorLogToBackend,
   visitorApproval,
 } from "../../api";
-import { BsEye } from "react-icons/bs";
+import { BsEye, BsPerson } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 import { DNA } from "react-loader-spinner";
 
@@ -492,9 +493,9 @@ const VisitorPage = () => {
             hosts_display:
               visitor.hosts && visitor.hosts.length > 0
                 ? visitor.hosts
-                    .map((host) => host.full_name || "Unknown")
-                    .filter(Boolean)
-                    .join(", ")
+                  .map((host) => host.full_name || "Unknown")
+                  .filter(Boolean)
+                  .join(", ")
                 : "No Host",
           }));
 
@@ -535,9 +536,8 @@ const VisitorPage = () => {
       ];
 
       const csvRows = allRows.map((r) => {
-        const createdBy = `${r?.created_by_name?.firstname || ""} ${
-          r?.created_by_name?.lastname || ""
-        }`.trim();
+        const createdBy = `${r?.created_by_name?.firstname || ""} ${r?.created_by_name?.lastname || ""
+          }`.trim();
 
         return [
           csvEscape(r.visit_type || ""),
@@ -882,42 +882,79 @@ const VisitorPage = () => {
           </Link>
         </div>
       ),
+      width: "120px"
     },
+    { name: "ID", selector: (row) => row.id, sortable: true, width: "90px" },
+
+    {
+      name: "Profile",
+      cell: (row) => {
+        // const baseUrl = "https://admin.vibecopilot.ai"; // change if needed
+        const imageUrl = row.profile_picture
+          ? `${domainPrefix}${row.profile_picture}`
+          : null;
+
+        return imageUrl ? (
+          <img
+            src={imageUrl}
+            alt="profile"
+            className="w-9 h-9 rounded-full object-cover"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/default-user.png"; // fallback image (optional)
+            }}
+          />
+        ) : (
+          <div className="w-9 h-9 flex items-center justify-center bg-gray-200 rounded-full">
+            <BsPerson size={16} />
+          </div>
+        );
+      },
+      width: "120px"
+    },
+
     {
       name: "Visitor Type",
       selector: (row) => row.visit_type,
       sortable: true,
+
     },
     {
       name: " Name",
       selector: (row) => row.name,
       sortable: true,
+      width: "120px"
     },
     {
       name: "Contact No.",
       selector: (row) => row.contact_no,
       sortable: true,
+      width: "120px"
     },
 
     {
       name: "Purpose",
       selector: (row) => row.purpose,
       sortable: true,
+      width: "120px"
     },
     {
       name: "Coming from",
       selector: (row) => row.coming_from,
       sortable: true,
+      width: "120px"
     },
     {
       name: "Tower-Floor-Unit",
       selector: (row) => row.hosts[0]?.unit_name,
       sortable: true,
+
     },
     {
       name: "Host",
       selector: (row) => `${row?.hosts[0]?.full_name}`,
       sortable: true,
+      width: "120px"
     },
     // {
     //   name: "Expected Date",
@@ -937,68 +974,80 @@ const VisitorPage = () => {
 
     {
       name: "Host Approval",
-      selector: (row) => (row.skip_host_approval ? "Not Required" : "Required"),
+      cell: (row) => {
+        const hostApproval = row.hosts?.[0]?.is_approved;
+        const skipApproval = row.skip_host_approval;
+
+        let status = "Pending";
+        let colorClass = "text-yellow-600";
+
+        if (skipApproval) {
+          status = "Approved";
+          colorClass = "text-green-600";
+        } else if (hostApproval === true) {
+          status = "Approved";
+          colorClass = "text-green-600";
+        } else if (hostApproval === false) {
+          status = "Rejected";
+          colorClass = "text-red-600";
+        }
+
+        return (
+          <span className={`px-2 py-1 rounded text-sm font-medium ${colorClass}`}>
+            {status}
+          </span>
+        );
+      },
       sortable: true,
+      width: "120px"
     },
 
     {
       name: "Pass Start",
-      selector: (row) => (row.start_pass ? dateFormat(row.start_pass) : ""),
+      selector: (row) => (row.pass_start_date ? dateFormat(row.pass_start_date) : ""),
       sortable: true,
     },
     {
       name: "Pass End",
-      selector: (row) => (row.end_pass ? dateFormat(row.end_pass) : ""),
+      selector: (row) => (row.pass_end_date ? dateFormat(row.pass_end_date) : ""),
       sortable: true,
+      width: "120px"
     },
-    // {
-    //   name: "Check In",
-    //   selector: (row) => (
-    //     <p>
-    //       {row && row.visits_log && row.visits_log.length > 0 ? (
-    //         row.visits_log.map((visit, index) =>
-    //           visit.check_in ? (
-    //             <span key={index}>{dateTimeFormat(visit.check_in)}</span>
-    //           ) : (
-    //             <span key={index}>-</span>
-    //           )
-    //         )
-    //       ) : (
-    //         <span>-</span>
-    //       )}
-    //     </p>
-    //   ),
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Check Out",
-    //   selector: (row) => (row.check_out ? dateTimeFormat(row.check_out) : ""),
-    //   sortable: true,
-    // },
+
     {
       name: "Status",
       selector: (row) => (
         <div
-          className={`${
-            row.visitor_in_out === "IN" ? "text-red-400" : "text-green-400"
-          } `}
+          className={`${row.visitor_in_out === "IN" ? "text-red-400" : "text-green-400"
+            } `}
         >
           {row.visitor_in_out}
         </div>
       ),
       sortable: true,
+      width: "120px"
     },
     {
-      name: "In/OUT",
-      selector: (row) => (
-        <div
-          className={`${
-            row.visitor_in_out === "IN" ? "text-red-400" : "text-green-400"
-          } `}
-        >
-          {row.visitor_in_out}
-        </div>
-      ),
+      name: "Check In",
+      selector: (row) => {
+        const firstLog = row.visits_log?.[0];
+        return firstLog?.check_in ? dateTimeFormat(firstLog.check_in) : "-";
+      },
+    },
+    {
+      name: "Check Out",
+      selector: (row) => {
+        const logs = row.visits_log || [];
+        const checkOutLog = logs.find((log) => log.check_out) || logs[logs.length - 1];
+        return checkOutLog?.check_out
+          ? dateTimeFormat(checkOutLog.check_out)
+          : "-";
+      },
+    },
+    {
+      name: "Created At",
+      selector: (row) =>
+        row.created_at ? dateTimeFormat(row.created_at) : "-",
       sortable: true,
     },
   ];
@@ -1125,6 +1174,22 @@ const VisitorPage = () => {
     {
       name: "Mobile no.",
       selector: (row) => row.contact_no,
+      sortable: true,
+    },
+    {
+      name: "Check In",
+      selector: (row) => {
+        const checkIn = row.visits_log?.[0]?.check_in;
+        return checkIn ? dateTimeFormat(checkIn) : "-";
+      },
+      sortable: true,
+    },
+    {
+      name: "Check Out",
+      selector: (row) => {
+        const checkOut = row.visits_log?.[0]?.check_out;
+        return checkOut ? dateTimeFormat(checkOut) : "-";
+      },
       sortable: true,
     },
     {
@@ -1272,23 +1337,23 @@ const VisitorPage = () => {
       selector: (row) => row.name,
       sortable: true,
     },
-  {
-  name: "Check In",
-  selector: (row) =>
-    row.visits_log?.length > 0 && row.visits_log[0]?.check_in
-      ? dateTimeFormat(row.visits_log[0].check_in)
-      : "-",
-  sortable: true,
-},
+    {
+      name: "Check In",
+      selector: (row) => {
+        const checkIn = row.visits_log?.[0]?.check_in;
+        return checkIn ? dateTimeFormat(checkIn) : "-";
+      },
+      sortable: true,
+    },
 
-{
-  name: "Check Out",
-  selector: (row) =>
-    row.visits_log?.length > 0 && row.visits_log[0]?.check_out
-      ? dateTimeFormat(row.visits_log[0].check_out)
-      : "-",
-  sortable: true,
-},
+    {
+      name: "Check Out",
+      selector: (row) => {
+        const checkOut = row.visits_log?.[0]?.check_out;
+        return checkOut ? dateTimeFormat(checkOut) : "-";
+      },
+      sortable: true,
+    },
   ];
   // const [logs, setLogs] = useState([]);
   // const [filteredLogs, setFilteredLogs] = useState([]);
@@ -1402,71 +1467,64 @@ const VisitorPage = () => {
           <div className="flex w-full  m-2">
             <div className="flex w-full md:flex-row flex-col space-x-4 border-b border-gray-400">
               <h2
-                className={`p-2 px-4 ${
-                  page === "all"
-                    ? "text-blue-500 font-medium  shadow-custom-all-sides"
-                    : "text-black"
-                } rounded-t-md  cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
+                className={`p-2 px-4 ${page === "all"
+                  ? "text-blue-500 font-medium  shadow-custom-all-sides"
+                  : "text-black"
+                  } rounded-t-md  cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
                 onClick={() => setPage("all")}
               >
                 All
               </h2>
               <h2
-                className={`p-2 ${
-                  page === "Visitor In"
-                    ? "text-blue-500 font-medium  shadow-custom-all-sides"
-                    : "text-black"
-                } rounded-t-md  cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
+                className={`p-2 ${page === "Visitor In"
+                  ? "text-blue-500 font-medium  shadow-custom-all-sides"
+                  : "text-black"
+                  } rounded-t-md  cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
                 onClick={() => setPage("Visitor In")}
               >
                 Visitor In
               </h2>
               <h2
-                className={`p-2 ${
-                  page === "Visitor Out"
-                    ? "text-blue-500 font-medium  shadow-custom-all-sides"
-                    : "text-black"
-                }  rounded-t-md  rounded-sm cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
+                className={`p-2 ${page === "Visitor Out"
+                  ? "text-blue-500 font-medium  shadow-custom-all-sides"
+                  : "text-black"
+                  }  rounded-t-md  rounded-sm cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
                 onClick={() => setPage("Visitor Out")}
               >
                 Visitor Out
               </h2>
               <h2
-                className={`p-2 ${
-                  page === "approval"
-                    ? "text-blue-500 font-medium  shadow-custom-all-sides"
-                    : "text-black"
-                }  rounded-t-md  rounded-sm cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
+                className={`p-2 ${page === "approval"
+                  ? "text-blue-500 font-medium  shadow-custom-all-sides"
+                  : "text-black"
+                  }  rounded-t-md  rounded-sm cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
                 onClick={() => setPage("approval")}
               >
                 Approvals
               </h2>
               <h2
-                className={`p-2 ${
-                  page === "History"
-                    ? "text-blue-500 font-medium  shadow-custom-all-sides"
-                    : "text-black"
-                }  rounded-t-md rounded-sm cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
+                className={`p-2 ${page === "History"
+                  ? "text-blue-500 font-medium  shadow-custom-all-sides"
+                  : "text-black"
+                  }  rounded-t-md rounded-sm cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
                 onClick={() => setPage("History")}
               >
                 Approvals History
               </h2>
               <h2
-                className={`p-2 ${
-                  page === "logs"
-                    ? "text-blue-500 font-medium  shadow-custom-all-sides"
-                    : "text-black"
-                }  rounded-t-md rounded-sm cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
+                className={`p-2 ${page === "logs"
+                  ? "text-blue-500 font-medium  shadow-custom-all-sides"
+                  : "text-black"
+                  }  rounded-t-md rounded-sm cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
                 onClick={() => setPage("logs")}
               >
                 Visitor Logs
               </h2>
-               <h2
-                className={`p-2 ${
-                  page === "self-registration"
-                    ? "text-blue-500 font-medium  shadow-custom-all-sides"
-                    : "text-black"
-                }  rounded-t-md rounded-sm cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
+              <h2
+                className={`p-2 ${page === "self-registration"
+                  ? "text-blue-500 font-medium  shadow-custom-all-sides"
+                  : "text-black"
+                  }  rounded-t-md rounded-sm cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
                 onClick={() => setPage("self-registration")}
               >
                 Self-Registration
@@ -1484,21 +1542,19 @@ const VisitorPage = () => {
               />
               <div className="border md:flex-row flex-col flex p-2 rounded-md text-center border-black">
                 <span
-                  className={`md:border-r border-gray-700  px-2 cursor-pointer hover:underline ${
-                    selectedVisitor === "unexpected"
-                      ? "text-blue-600 underline"
-                      : ""
-                  } text-center`}
+                  className={`md:border-r border-gray-700  px-2 cursor-pointer hover:underline ${selectedVisitor === "unexpected"
+                    ? "text-blue-600 underline"
+                    : ""
+                    } text-center`}
                   onClick={() => handleClick("unexpected")}
                 >
                   <span>Unexpected visitor</span>
                 </span>
                 <span
-                  className={`  px-2  cursor-pointer hover:underline ${
-                    selectedVisitor === "expected"
-                      ? "text-blue-600 underline"
-                      : ""
-                  } text-center`}
+                  className={`  px-2  cursor-pointer hover:underline ${selectedVisitor === "expected"
+                    ? "text-blue-600 underline"
+                    : ""
+                    } text-center`}
                   onClick={() => handleClick("expected")}
                 >
                   <span>Expected visitor</span>
@@ -1540,21 +1596,19 @@ const VisitorPage = () => {
               />
               <div className="border md:flex-row flex-col flex p-2 rounded-md text-center border-black">
                 <span
-                  className={`md:border-r px-2 border-gray-700 cursor-pointer hover:underline ${
-                    selectedVisitor === "unexpected"
-                      ? "text-blue-600 underline"
-                      : ""
-                  } text-center`}
+                  className={`md:border-r px-2 border-gray-700 cursor-pointer hover:underline ${selectedVisitor === "unexpected"
+                    ? "text-blue-600 underline"
+                    : ""
+                    } text-center`}
                   onClick={() => handleClick("unexpected")}
                 >
                   &nbsp; <span>Unexpected visitor</span>
                 </span>
                 <span
-                  className={`px-2  cursor-pointer hover:underline ${
-                    selectedVisitor === "expected"
-                      ? "text-blue-600 underline"
-                      : ""
-                  } text-center`}
+                  className={`px-2  cursor-pointer hover:underline ${selectedVisitor === "expected"
+                    ? "text-blue-600 underline"
+                    : ""
+                    } text-center`}
                   onClick={() => handleClick("expected")}
                 >
                   <span>Expected visitor</span>
@@ -1626,21 +1680,19 @@ const VisitorPage = () => {
 
                 <div className="border md:flex-row flex-col flex p-2 rounded-md text-center border-black">
                   <span
-                    className={`md:border-r px-2 border-gray-700 cursor-pointer hover:underline ${
-                      selectedVisitor === "unexpected"
-                        ? "text-blue-600 underline"
-                        : ""
-                    } text-center`}
+                    className={`md:border-r px-2 border-gray-700 cursor-pointer hover:underline ${selectedVisitor === "unexpected"
+                      ? "text-blue-600 underline"
+                      : ""
+                      } text-center`}
                     onClick={() => handleClick("unexpected")}
                   >
                     &nbsp; <span>Unexpected visitor</span>
                   </span>
                   <span
-                    className={`px-2  border-black cursor-pointer hover:underline ${
-                      selectedVisitor === "expected"
-                        ? "text-blue-600 underline"
-                        : ""
-                    } text-center`}
+                    className={`px-2  border-black cursor-pointer hover:underline ${selectedVisitor === "expected"
+                      ? "text-blue-600 underline"
+                      : ""
+                      } text-center`}
                     onClick={() => handleClick("expected")}
                   >
                     <span>Expected visitor</span>
@@ -1925,11 +1977,11 @@ const VisitorPage = () => {
                     No Visitors  found
                   </div>
                 )}
-                {page === "self-registration" && (
-            <div>
-              <SelfRegistration />
-            </div>
-          )}
+              {page === "self-registration" && (
+                <div>
+                  <SelfRegistration />
+                </div>
+              )}
             </>
           )}
         </div>

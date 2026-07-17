@@ -213,13 +213,15 @@ function CreatePolls() {
         console.log("userSites", unitsRes);
         setUnits(unitsRes.data);
 
-        const employeesList = usersRes.data.map((emp) => ({
-          id: emp.id,
-          name: `${emp.firstname} ${emp.lastname}`,
-          building_id: emp.building_id || emp.building?.id || null, //for some users id is null
-          userSites: emp.user_sites || [],
-          building: emp.building || {},
-        }));
+    const employeesList = usersRes.data
+  .filter((emp) => emp.user_status === true) // ✅ ONLY ACTIVE USERS
+  .map((emp) => ({
+    id: emp.id,
+    name: `${emp.firstname} ${emp.lastname}`,
+    building_id: emp.building_id || emp.building?.id || null,
+    userSites: emp.user_sites || [],
+    building: emp.building || {},
+  }));
 
         setMembers(employeesList);
         setFilteredMembers(employeesList);
@@ -604,10 +606,16 @@ function CreatePolls() {
             </div>
           )}
 
-          <div className="flex justify-center my-5 gap-2">
+          <div className="flex justify-end my-5 gap-3">
+            <button
+                          className="bg-gray-400 text-white p-2 px-4 rounded-md font-medium flex items-center gap-2"
+onClick={()=>navigate("/communication/polls")}
+            >
+            <MdClose/>  Cancel
+            </button>
             <button
               onClick={handleSubmit}
-              className="bg-black text-white p-2 px-4 rounded-md font-medium flex items-center gap-2"
+              className=" text-white p-2 px-4 rounded-md font-medium flex items-center gap-2"
               style={{ background: themeColor }}
             >
               <FaCheck /> Create Poll

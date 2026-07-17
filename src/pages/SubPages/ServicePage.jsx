@@ -1,5 +1,11 @@
-import { useEffect, useState } from "react";
-import { getSoftServices, softServiceDownloadQrCode} from "../../api";
+import { useEffect, useRef, useState } from "react";
+import {
+  getSoftServices,
+  softServiceDownloadQrCode,
+  exportSoftServices,
+  importSoftServices,
+  downloadSoftServiceSample,
+} from "../../api";
 import { BiEdit } from "react-icons/bi";
 import { IoAddCircleOutline } from "react-icons/io5";
 import Table from "../../components/table/Table";
@@ -20,10 +26,47 @@ const ServicePage = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [servicess, setServices] = useState([]);
   const [importModal, setImportModal] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [importFile, setImportFile] = useState(null);
+  const [fileInputRef] = useState(useRef(null));
 
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString();
+  };
+
+  const filterByDate = async () => {
+    if (!startDate || !endDate) {
+      return toast.error("Select both dates");
+    }
+
+    const toastId = toast.loading("Exporting...");
+
+    try {
+      const response = await exportSoftServices(startDate, endDate);
+
+      const url = window.URL.createObjectURL(
+        new Blob([response.data])
+      );
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `soft_services_${startDate}_to_${endDate}.xlsx`;
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      window.URL.revokeObjectURL(url);
+
+      toast.success("Export successful", { id: toastId });
+      setShowExportModal(false);
+    } catch (error) {
+      console.error(error);
+      toast.error("Export failed", { id: toastId });
+    }
   };
   const column = [
     {
@@ -55,7 +98,7 @@ const ServicePage = () => {
       selector: (row) => row.floor_name,
       sortable: true,
     },
-   {
+    {
       name: "Unit",
       cell: (row) =>
         row?.units?.map((unit) => unit.name).join(", "),
@@ -74,31 +117,53 @@ const ServicePage = () => {
       sortable: true,
     },
   ];
-const fetchService = async () => {
-      try {
-        const serviceResponse = await getSoftServices();
+  const fetchService = async () => {
+    try {
+      const serviceResponse = await getSoftServices();
 
-        const servicesArray =
-          serviceResponse?.data?.soft_services || [];
+      const servicesArray =
+        serviceResponse?.data?.soft_services || [];
 
-        const sortedServiceData = servicesArray.sort(
-          (a, b) =>
-            new Date(b.created_at) -
-            new Date(a.created_at)
-        );
+      const sortedServiceData = servicesArray.sort(
+        (a, b) =>
+          new Date(b.created_at) -
+          new Date(a.created_at)
+      );
 
-        setFilteredData(sortedServiceData);
-        setServices(sortedServiceData);
-      } catch (error) {
-        console.error("Error fetching services:", error);
-        toast.error("Failed to fetch services");
-      }
-    };
+      setFilteredData(sortedServiceData);
+      setServices(sortedServiceData);
+    } catch (error) {
+      console.error("Error fetching services:", error);
+      toast.error("Failed to fetch services");
+    }
+  };
 
- useEffect(() => {
+  useEffect(() => {
     fetchService();
   }, []);
+  const handleImportExcel = async () => {
+    if (!importFile) {
+      return toast.error("Please select file");
+    }
 
+    const toastId = toast.loading("Uploading...");
+
+    try {
+      await importSoftServices(importFile);
+
+      toast.success("File Imported Successfully", {
+        id: toastId,
+      });
+
+      setImportModal(false);
+      setImportFile(null);
+
+      fetchService(); // Refresh list
+    } catch (error) {
+      console.error(error);
+      toast.error("Import failed", { id: toastId });
+    }
+  };
 
   const handleSearch = (event) => {
     const searchValue = event.target.value;
@@ -114,37 +179,37 @@ const fetchService = async () => {
     }
   };
   const exportToExcel = () => {
-  if (selectedRows.length === 0) {
-    return toast.error("Please select at least one record to export.");
-  }
+    if (selectedRows.length === 0) {
+      return toast.error("Please select at least one record to export.");
+    }
 
-  // Filter only selected rows
-  const selectedData = filteredData.filter((serv) =>
-    selectedRows.includes(serv.id)
-  );
+    // Filter only selected rows
+    const selectedData = filteredData.filter((serv) =>
+      selectedRows.includes(serv.id)
+    );
 
-  const mappedData = selectedData.map((serv) => ({
-    "Service Name": serv.name,
-    Building: serv.building_name,
-    Floor: serv.floor_name,
-    Unit: serv?.units?.map((u) => u.name).join(", "),
-    "Created On": dateFormat(serv.created_at),
-    "Created By": serv.user_name,
-  }));
+    const mappedData = selectedData.map((serv) => ({
+      "Service Name": serv.name,
+      Building: serv.building_name,
+      Floor: serv.floor_name,
+      Unit: serv?.units?.map((u) => u.name).join(", "),
+      "Created On": dateFormat(serv.created_at),
+      "Created By": serv.user_name,
+    }));
 
-  const ws = XLSX.utils.json_to_sheet(mappedData);
-  const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const ws = XLSX.utils.json_to_sheet(mappedData);
+    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
 
-  const blob = new Blob([excelBuffer], {
-    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  });
+    const blob = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
 
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "service_file_download.xlsx";
-  link.click();
-};
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "service_file_download.xlsx";
+    link.click();
+  };
 
 
   const themeColor = "rgb(3 19 37)";
@@ -162,10 +227,10 @@ const fetchService = async () => {
     if (selectedRows.length === 0) {
       return toast.error("Please select at least one data.");
     }
-  
+
     console.log(selectedRows);
     toast.loading("Qr code downloading, please wait!");
-  
+
 
     try {
       const response = await softServiceDownloadQrCode(selectedRows);
@@ -258,7 +323,7 @@ const fetchService = async () => {
               <IoAddCircleOutline size={20} />
               Add
             </Link>
-              {/* ✅ IMPORT BUTTON */}
+            {/* ✅ IMPORT BUTTON */}
             <button
               onClick={() => setImportModal(true)}
               className="flex items-center gap-2 text-white px-4 py-2 rounded"
@@ -276,9 +341,9 @@ const fetchService = async () => {
             </button>
 
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md"
-              onClick={exportToExcel}
+              onClick={() => setShowExportModal(true)}
               style={{ background: themeColor }}
+              className="px-4 py-2 text-white rounded-md"
             >
               Export
             </button>
@@ -292,14 +357,14 @@ const fetchService = async () => {
           </div>
         </div>
         {servicess.length !== 0 ? (
-          <Table columns={column} data={filteredData} onSelectedRows={handleSelectedRows} selectableRow={true}/>
+          <Table columns={column} data={filteredData} onSelectedRows={handleSelectedRows} selectableRow={true} />
         ) : (
           <div className="flex justify-center items-center h-full">
             <DNA
               visible={true}
               height="120"
               width="120"
-              ariaLabel="dna-loading" 
+              ariaLabel="dna-loading"
               wrapperStyle={{}}
               wrapperClass="dna-wrapper"
             />
@@ -309,7 +374,7 @@ const fetchService = async () => {
         {importModal && (
           <ServiceImportModal
             onclose={() => setImportModal(false)}
-            fetchCamBilling={fetchService}   // refresh service list after import
+            fetchService={fetchService}
           />
         )}
         {/* <DataTable
@@ -327,6 +392,46 @@ const fetchService = async () => {
           omitColumn={column}
         /> */}
       </div>
+      {showExportModal && (
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded w-[350px]">
+            <h2 className="font-bold mb-4">
+              Export By Date Range
+            </h2>
+
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="border p-2 w-full mb-2 rounded"
+            />
+
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="border p-2 w-full mb-4 rounded"
+            />
+
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowExportModal(false)}
+                className="bg-gray-500 text-white px-4 py-2 rounded"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={filterByDate}
+                style={{ background: themeColor }}
+                className="text-white px-4 py-2 rounded"
+              >
+                Export
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

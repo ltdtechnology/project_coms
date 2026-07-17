@@ -7,6 +7,7 @@ import {
   updateAccountingInvoice,
   deleteAccountingInvoice,
   sendInvoice,
+  bulkSendInvoices,
   addPaymentToInvoice,
   getOverdueInvoices,
   downloadInvoicePdf,
@@ -15,8 +16,14 @@ import {
 import InvoiceModal from "./InvoiceModal";
 import AddPaymentModal from "./AddPaymentModal";
 import Navbar from "../../components/Navbar";
+import { getItemInLocalStorage } from "../../utils/localStorage";
 
 const AccountingInvoices = () => {
+  const userType = getItemInLocalStorage("USERTYPE");
+  const isAdmin = userType === "pms_admin";
+  const isAccountingUser = userType === "accounting_emp";
+  const canCreate = isAdmin || isAccountingUser;
+  const canEditDelete = isAdmin;
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,6 +32,7 @@ const AccountingInvoices = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [showOverdueOnly, setShowOverdueOnly] = useState(false);
+  const [selectedInvoiceIds, setSelectedInvoiceIds] = useState([]);
 
   useEffect(() => {
     fetchInvoices();
@@ -123,6 +131,52 @@ const AccountingInvoices = () => {
     }
   };
 
+  const toggleInvoiceSelection = (id) => {
+    setSelectedInvoiceIds((prev) =>
+      prev.includes(id) ? prev.filter((iid) => iid !== id) : [...prev, id]
+    );
+  };
+
+  const handleSelectAllDraft = () => {
+    const draftIds = filteredInvoices
+      .filter((inv) => inv.status === "draft")
+      .map((inv) => inv.id);
+    const allSelected = draftIds.every((id) => selectedInvoiceIds.includes(id));
+    if (allSelected) {
+      setSelectedInvoiceIds([]);
+    } else {
+      setSelectedInvoiceIds(draftIds);
+    }
+  };
+
+  const handleBulkSend = async () => {
+    const draftIds = selectedInvoiceIds.filter((id) => {
+      const inv = invoices.find((i) => i.id === id);
+      return inv && inv.status === "draft";
+    });
+    if (draftIds.length === 0) {
+      toast.error("No draft invoices selected");
+      return;
+    }
+    if (!window.confirm(`Are you sure you want to send ${draftIds.length} invoice${draftIds.length === 1 ? '' : 's'}?`))
+      return;
+    try {
+      const res = await bulkSendInvoices(draftIds);
+      const result = res.data;
+      if (result.sent?.length > 0) {
+        toast.success(`${result.sent.length} invoice${result.sent.length === 1 ? '' : 's'} sent successfully`);
+      }
+      if (result.failed?.length > 0) {
+        toast.error(`${result.failed.length} invoice${result.failed.length === 1 ? '' : 's'} failed: ${result.failed.map((f) => f.error).join(', ')}`);
+      }
+      setSelectedInvoiceIds([]);
+      fetchInvoices();
+    } catch (error) {
+      toast.error("Failed to bulk send invoices");
+      console.error(error);
+    }
+  };
+
   const handleAddPayment = (invoice) => {
     setSelectedInvoice(invoice);
     setIsPaymentModalOpen(true);
@@ -190,13 +244,27 @@ const AccountingInvoices = () => {
       <Navbar />
       <div className="w-full flex mx-3 mb-10 flex-col overflow-hidden p-6 bg-white/80 mt-2">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Accounting Invoices</h1>
-          <button
-            onClick={handleCreate}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            + Add Invoice
-          </button>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold">Accounting Invoices</h1>
+            {isAdmin && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
+                Full Access
+              </span>
+            )}
+            {isAccountingUser && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-200">
+                Create Only
+              </span>
+            )}
+          </div>
+          {canCreate && (
+            <button
+              onClick={handleCreate}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              + Add Invoice
+            </button>
+          )}
         </div>
 
         <div className="mb-4 flex gap-4">
@@ -229,6 +297,18 @@ const AccountingInvoices = () => {
             />
             <span>Overdue Only</span>
           </label>
+
+          {selectedInvoiceIds.length > 0 && (
+            <button
+              onClick={handleBulkSend}
+              className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 text-sm"
+            >
+              Bulk Send ({selectedInvoiceIds.filter((id) => {
+                const inv = invoices.find((i) => i.id === id);
+                return inv && inv.status === "draft";
+              }).length})
+            </button>
+          )}
         </div>
 
         {loading ? (
@@ -240,6 +320,14 @@ const AccountingInvoices = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
+                  <th className="px-2 py-3 w-10">
+                    <input
+                      type="checkbox"
+                      checked={filteredInvoices.filter((inv) => inv.status === "draft").length > 0 && filteredInvoices.filter((inv) => inv.status === "draft").every((inv) => selectedInvoiceIds.includes(inv.id))}
+                      onChange={handleSelectAllDraft}
+                      className="h-4 w-4"
+                    />
+                  </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Invoice
                   </th>
@@ -267,7 +355,7 @@ const AccountingInvoices = () => {
                 {filteredInvoices.length === 0 ? (
                   <tr>
                     <td
-                      colSpan="7"
+                      colSpan="8"
                       className="px-6 py-4 text-center text-gray-500"
                     >
                       No invoices found
@@ -283,6 +371,14 @@ const AccountingInvoices = () => {
 
                     return (
                       <tr key={invoice.id} className="hover:bg-gray-50">
+                        <td className="px-2 py-4">
+                          <input
+                            type="checkbox"
+                            checked={selectedInvoiceIds.includes(invoice.id)}
+                            onChange={() => toggleInvoiceSelection(invoice.id)}
+                            className="h-4 w-4"
+                          />
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap font-medium">
                           {invoice.invoice_number}
                         </td>
@@ -305,8 +401,7 @@ const AccountingInvoices = () => {
 
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`px-2 py-1 rounded text-xs ${
-                              invoice.status === "paid"
+                            className={`px-2 py-1 rounded text-xs ${invoice.status === "paid"
                                 ? "bg-green-100 text-green-800"
                                 : invoice.status === "overdue"
                                   ? "bg-red-100 text-red-800"
@@ -315,7 +410,7 @@ const AccountingInvoices = () => {
                                     : invoice.status === "partially_paid"
                                       ? "bg-yellow-100 text-yellow-800"
                                       : "bg-gray-100 text-gray-800"
-                            }`}
+                              }`}
                           >
                             {invoice.status}
                           </span>
@@ -334,23 +429,22 @@ const AccountingInvoices = () => {
                           {(invoice.status === "sent" ||
                             invoice.status === "overdue" ||
                             invoice.status === "partially_paid") && (
-                            <button
-                              onClick={() => handleAddPayment(invoice)}
-                              className="text-green-600 hover:text-green-900 mr-3"
-                            >
-                              Add Payment
-                            </button>
-                          )}
+                              <button
+                                onClick={() => handleAddPayment(invoice)}
+                                className="text-green-600 hover:text-green-900 mr-3"
+                              >
+                                Add Payment
+                              </button>
+                            )}
 
                           <button
-                            onClick={() => handleEdit(invoice)}
-                            // disabled={invoice.status === "paid"}
-                            className={`mr-3 ${
-                              // invoice.status === "paid"
-                              // ? "text-gray-400 cursor-not-allowed"
-                              // : "text-blue-600 hover:text-blue-900"
-                              "text-blue-600 hover:text-blue-900"
-                            }`}
+                            onClick={() => canEditDelete ? handleEdit(invoice) : undefined}
+                            disabled={!canEditDelete}
+                            title={!canEditDelete ? "Only Admin can edit" : "Edit"}
+                            className={`mr-3 ${!canEditDelete
+                                ? "text-gray-300 cursor-not-allowed"
+                                : "text-blue-600 hover:text-blue-900"
+                              }`}
                           >
                             Edit
                           </button>
@@ -363,13 +457,13 @@ const AccountingInvoices = () => {
                           </button>
 
                           <button
-                            onClick={() => handleDelete(invoice)}
-                            disabled={deleteDisabled}
-                            className={`${
-                              deleteDisabled
-                                ? "text-gray-400 cursor-not-allowed"
+                            onClick={() => canEditDelete ? handleDelete(invoice) : undefined}
+                            disabled={!canEditDelete || deleteDisabled}
+                            title={!canEditDelete ? "Only Admin can delete" : ""}
+                            className={`${!canEditDelete || deleteDisabled
+                                ? "text-gray-300 cursor-not-allowed"
                                 : "text-red-600 hover:text-red-900"
-                            }`}
+                              }`}
                           >
                             Delete
                           </button>

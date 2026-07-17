@@ -14,7 +14,7 @@ const VisitorFilters = ({ onApplyFilters, onResetFilters }) => {
   const [loadingFloors, setLoadingFloors] = useState(false);
   const [loadingUnits, setLoadingUnits] = useState(false);
   const [loadingHosts, setLoadingHosts] = useState(false);
-  
+
   // Filter states
   const [filters, setFilters] = useState({
     dateFrom: '',
@@ -35,7 +35,7 @@ const VisitorFilters = ({ onApplyFilters, onResetFilters }) => {
   const fetchInitialData = async () => {
     try {
       setLoading(true);
-      
+
       // Fetch buildings
       const buildingsRes = await getBuildings();
       if (buildingsRes?.data) {
@@ -47,7 +47,7 @@ const VisitorFilters = ({ onApplyFilters, onResetFilters }) => {
       if (purposesRes?.data) {
         setPurposes(Array.isArray(purposesRes.data) ? purposesRes.data : []);
       }
-      
+
       setLoading(false);
     } catch (error) {
       console.error("Error fetching initial data:", error);
@@ -70,11 +70,11 @@ const VisitorFilters = ({ onApplyFilters, onResetFilters }) => {
         unitId: '',
         hostId: ''
       }));
-      
+
       setFloors([]);
       setUnits([]);
       setHosts([]);
-      
+
       if (value) {
         fetchFloorsByBuilding(value);
       }
@@ -88,10 +88,10 @@ const VisitorFilters = ({ onApplyFilters, onResetFilters }) => {
         unitId: '',
         hostId: ''
       }));
-      
+
       setUnits([]);
       setHosts([]);
-      
+
       if (value) {
         fetchUnitsByFloor(value);
       }
@@ -104,9 +104,9 @@ const VisitorFilters = ({ onApplyFilters, onResetFilters }) => {
         unitId: value,
         hostId: ''
       }));
-      
+
       setHosts([]);
-      
+
       if (value) {
         fetchHostsByUnit(value);
       }
@@ -118,15 +118,15 @@ const VisitorFilters = ({ onApplyFilters, onResetFilters }) => {
       setLoadingFloors(true);
       const floorsRes = await getFloors(buildingId);
       console.log("Floors for building:", floorsRes);
-      
+
       if (floorsRes?.data) {
-        const floorsList = Array.isArray(floorsRes.data) 
-          ? floorsRes.data 
+        const floorsList = Array.isArray(floorsRes.data)
+          ? floorsRes.data
           : floorsRes.data.floors || [];
-        
+
         setFloors(floorsList);
       }
-      
+
       setLoadingFloors(false);
     } catch (error) {
       console.error("Error fetching floors:", error);
@@ -140,15 +140,15 @@ const VisitorFilters = ({ onApplyFilters, onResetFilters }) => {
       setLoadingUnits(true);
       const unitsRes = await getUnits(floorId);
       console.log("Units for floor:", unitsRes);
-      
+
       if (unitsRes?.data) {
-        const unitsList = Array.isArray(unitsRes.data) 
-          ? unitsRes.data 
+        const unitsList = Array.isArray(unitsRes.data)
+          ? unitsRes.data
           : unitsRes.data.units || [];
-        
+
         setUnits(unitsList);
       }
-      
+
       setLoadingUnits(false);
     } catch (error) {
       console.error("Error fetching units:", error);
@@ -178,15 +178,15 @@ const VisitorFilters = ({ onApplyFilters, onResetFilters }) => {
         return;
       }
       console.log("Hosts for unit:", hostsRes);
-      
+
       if (hostsRes?.data) {
-        const hostsList = Array.isArray(hostsRes.data) 
-          ? hostsRes.data 
+        const hostsList = Array.isArray(hostsRes.data)
+          ? hostsRes.data
           : hostsRes.data.users || [];
-        
+
         setHosts(hostsList);
       }
-      
+
       setLoadingHosts(false);
     } catch (error) {
       console.error("Error fetching hosts:", error);
@@ -198,19 +198,19 @@ const VisitorFilters = ({ onApplyFilters, onResetFilters }) => {
   const handleApplyFilters = () => {
     // Build filter object for API
     const apiFilters = {};
-    
+
     if (filters.dateFrom) {
       apiFilters['q[expected_date_gteq]'] = filters.dateFrom;
     }
-    
+
     if (filters.dateTo) {
       apiFilters['q[expected_date_lteq]'] = filters.dateTo;
     }
-    
+
     if (filters.mobile) {
       apiFilters['q[contact_no_cont]'] = filters.mobile;
     }
-    
+
     // Use simple params depending on the most-specific selection
     // Priority: host > unit > floor > building
     if (filters.hostId) {
@@ -222,19 +222,19 @@ const VisitorFilters = ({ onApplyFilters, onResetFilters }) => {
     } else if (filters.buildingId) {
       apiFilters['building_id'] = filters.buildingId;
     }
-    
+
     if (filters.hostApproval !== '') {
-      if (filters.hostApproval === 'required') {
+      if (filters.hostApproval === 'rejected') {
         apiFilters['q[skip_host_approval_eq]'] = false;
-      } else if (filters.hostApproval === 'not_required') {
+      } else if (filters.hostApproval === 'approved') {
         apiFilters['q[skip_host_approval_eq]'] = true;
       }
     }
-    
+
     if (filters.purpose) {
       apiFilters['q[purpose_cont]'] = filters.purpose;
     }
-    
+
     onApplyFilters(apiFilters);
     setShowFilters(false);
   };
@@ -264,11 +264,10 @@ const VisitorFilters = ({ onApplyFilters, onResetFilters }) => {
       {/* Filter Toggle Button */}
       <button
         onClick={() => setShowFilters(!showFilters)}
-        className={`flex items-center gap-2 px-4 py-2 rounded-md border ${
-          hasActiveFilters 
-            ? 'bg-blue-500 text-white border-blue-500' 
-            : 'bg-white text-gray-700 border-gray-300'
-        } hover:shadow-md transition-all`}
+        className={`flex items-center gap-2 px-4 py-2 rounded-md border ${hasActiveFilters
+          ? 'bg-blue-500 text-white border-blue-500'
+          : 'bg-white text-gray-700 border-gray-300'
+          } hover:shadow-md transition-all`}
       >
         <FaFilter />
         Filters
@@ -435,7 +434,9 @@ const VisitorFilters = ({ onApplyFilters, onResetFilters }) => {
                       <option value="">Select Host</option>
                       {hosts.map((host) => (
                         <option key={host.id} value={host.id}>
-                          {host.good_name || `${host.firstname} ${host.lastname}` || host.email || `User ${host.id}`}
+                          {host.name
+                            ? `${host.name})`
+                            : host.email}
                         </option>
                       ))}
                     </select>
@@ -453,12 +454,14 @@ const VisitorFilters = ({ onApplyFilters, onResetFilters }) => {
                 </label>
                 <select
                   value={filters.hostApproval}
-                  onChange={(e) => handleFilterChange('hostApproval', e.target.value)}
+                  onChange={(e) =>
+                    handleFilterChange("hostApproval", e.target.value)
+                  }
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
                 >
                   <option value="">All</option>
-                  <option value="required">Required</option>
-                  <option value="not_required">Not Required</option>
+                  <option value="true">Approved</option>
+                  <option value="false">Rejected</option>
                 </select>
               </div>
 

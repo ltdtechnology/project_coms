@@ -45,10 +45,12 @@ function CreateGroup({ onclose }) {
       try {
         const res = await getSetupUsers();
 
-        const employeesList = res.data.map((emp) => ({
-          value: emp.id,
-          label: `${emp.firstname} ${emp.lastname}`,
-        }));
+    const employeesList = res.data
+  .filter((emp) => emp.user_status === true) // ✅ ONLY ACTIVE USERS
+  .map((emp) => ({
+    value: emp.id,
+    label: `${emp.firstname} ${emp.lastname}`,
+  }));
 
         setMembers(employeesList);
         setFilteredMembers(employeesList);

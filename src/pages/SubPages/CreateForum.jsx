@@ -26,17 +26,17 @@ function CreateForum() {
     attachments: "",
   });
 
-const validateForm = () => {
-  if (
-    !formData.title.trim() ||
-    !formData.category ||
-    !formData.description.trim()
-  ) {
-    return false;
-  }
-  return true;
+  const validateForm = () => {
+    if (
+      !formData.title.trim() ||
+      !formData.category ||
+      !formData.description.trim()
+    ) {
+      return false;
+    }
+    return true;
 
-};
+  };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0]; // Get the first selected file
@@ -51,12 +51,12 @@ const validateForm = () => {
   };
 
   const handleCreateForum = async () => {
-      if (!validateForm()) {
-    toast.error("Please fill all mandatory fields");
-    return;
-  }
+    if (!validateForm()) {
+      toast.error("Please fill all mandatory fields");
+      return;
+    }
     const postData = new FormData();
-   
+
     postData.append("forum[thread_title]", formData.title);
     postData.append("forum[thread_category]", formData.category);
     postData.append("forum[thread_tags]", formData.tags);
@@ -163,7 +163,13 @@ const validateForm = () => {
                 onChange={handleFileChange}
               />
             </div>
-            <div className="flex justify-center my-4 gap-2">
+            <div className="flex justify-end my-4 gap-3">
+              <button
+                className="bg-gray-400 text-white p-2 px-4 rounded-md font-medium flex items-center gap-2"
+                onClick={() => navigate("/communication/forum")}
+              >
+                Cancel
+              </button>
               <button
                 onClick={handleCreateForum}
                 style={{ background: themeColor }}

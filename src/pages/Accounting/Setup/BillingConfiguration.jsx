@@ -7,6 +7,9 @@ import {
   uploadBillingLogo,
   previewCamBills,
   generateCamBills,
+  exportCamStatementPdf,
+  downloadCamBillPdf,
+  sendCamBillEmail,
 } from '../../../api/accountingApi';
 import { getSites } from '../../../api';
 
@@ -22,6 +25,13 @@ const BillingConfiguration = () => {
   const [billingYear, setBillingYear] = useState(new Date().getFullYear());
   const [billingMonth, setBillingMonth] = useState(new Date().getMonth() + 1);
   const [billingPreview, setBillingPreview] = useState(null);
+  const [billingRows, setBillingRows] = useState([]);
+  const [statementUnitId, setStatementUnitId] = useState('');
+  const [selectedBill, setSelectedBill] = useState(null);
+  const [showBillDetailsModal, setShowBillDetailsModal] = useState(false);
+  const [sendingEmail, setSendingEmail] = useState(false);
+  const [emailRecipient, setEmailRecipient] = useState('');
+  const [showEmailModal, setShowEmailModal] = useState(false);
   const [formData, setFormData] = useState({
     company_name: '',
     company_logo: '',
@@ -45,7 +55,10 @@ const BillingConfiguration = () => {
     enable_gst_split: false,
     enable_igst: false,
     society_maintenance_percent: '',
-    management_fees_label: 'Management Fees'
+    management_fees_label: 'Management Fees',
+    management_fees_enabled: false,
+    enable_igst: false,
+    supply_site_name: ''
   });
 
   useEffect(() => {
@@ -192,6 +205,7 @@ const BillingConfiguration = () => {
         ? rows.reduce((sum, r) => sum + Number(r.total_amount || 0), 0)
         : 0;
       setBillingPreview({ count: Array.isArray(rows) ? rows.length : 0, total });
+      setBillingRows(Array.isArray(rows) ? rows : []);
       if (!rows.length) {
         toast('No billable units found for this period');
       } else {
@@ -215,12 +229,115 @@ const BillingConfiguration = () => {
       const res = await generateCamBills({ year: billingYear, month: billingMonth, site_id: siteId });
       const rows = res?.data?.data || res?.data || [];
       const count = Array.isArray(rows) ? rows.length : 0;
+      setBillingPreview({ count, total: Array.isArray(rows) ? rows.reduce((sum, r) => sum + Number(r.total_amount || 0), 0) : 0 });
+      setBillingRows(Array.isArray(rows) ? rows : []);
       toast.success(`Generated CAM bills for ${count} unit(s)`);
     } catch (err) {
       console.error('Failed to generate CAM bills from BillingConfiguration', err);
       toast.error('Generate failed');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDownloadCamStatement = async () => {
+    if (!statementUnitId) {
+      toast.error('Please enter a Unit ID to download the CAM statement');
+      return;
+    }
+    try {
+      setLoading(true);
+      const startDate = `${billingYear}-${String(billingMonth).padStart(2, '0')}-01`;
+      const lastDay = new Date(billingYear, billingMonth, 0).getDate();
+      const endDate = `${billingYear}-${String(billingMonth).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
+      const response = await exportCamStatementPdf({ unit_id: statementUnitId, start_date: startDate, end_date: endDate });
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `cam_statement_${statementUnitId}_${billingYear}_${billingMonth}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      toast.success('CAM statement PDF download started');
+    } catch (err) {
+      console.error('Failed to download CAM statement PDF', err);
+      toast.error('Download failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleViewBillDetails = (row) => {
+    setSelectedBill(row);
+    setShowBillDetailsModal(true);
+  };
+
+  const handleDownloadCamBillPdf = async (bill) => {
+    try {
+      setLoading(true);
+      const startDate = `${bill.year}-${String(bill.month).padStart(2, "0")}-01`;
+      const lastDay = new Date(bill.year, bill.month, 0).getDate();
+      const endDate = `${bill.year}-${String(bill.month).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+      const response = await downloadCamBillPdf({
+        unit_id: bill.unit_id,
+        start_date: startDate,
+        end_date: endDate,
+        template: "invoice",
+        remark_1: "Any Debit / Credit of expenses will be adjusted in next statement of expenses.",
+        remark_2: "This is a computer generated statement, signature is not required.",
+        remark_3: "For queries write to the management office.",
+        remark_4: "These are consolidated expenses for the selected period.",
+      });
+      if (response.data?.type === "application/json") {
+        const text = await response.data.text();
+        const errorData = JSON.parse(text);
+        throw new Error(errorData.error || "PDF generation failed");
+      }
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `cam_bill_${bill.unit_id}_${bill.year}_${bill.month}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      toast.success('CAM bill PDF downloaded successfully');
+    } catch (err) {
+      console.error('Failed to download CAM bill PDF', err);
+      toast.error('PDF download failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSendBillEmail = async () => {
+    if (!selectedBill) {
+      toast.error('No bill selected');
+      return;
+    }
+    if (!emailRecipient || !emailRecipient.includes('@')) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+    try {
+      setSendingEmail(true);
+      await sendCamBillEmail({
+        unit_id: selectedBill.unit_id,
+        year: selectedBill.year,
+        month: selectedBill.month,
+        recipient_email: emailRecipient,
+      });
+      toast.success(`CAM bill email sent to ${emailRecipient}`);
+      setShowEmailModal(false);
+      setEmailRecipient('');
+    } catch (err) {
+      console.error('Failed to send CAM bill email', err);
+      toast.error('Email sending failed');
+    } finally {
+      setSendingEmail(false);
     }
   };
 
@@ -546,6 +663,27 @@ const BillingConfiguration = () => {
         {/* Society Maintenance Charges */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold text-gray-700 mb-4">{formData.management_fees_label || 'Management Fees'}</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className="flex items-center gap-3">
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="management_fees_enabled"
+                  checked={!!formData.management_fees_enabled}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      management_fees_enabled: e.target.checked,
+                    }))
+                  }
+                  disabled={!isEditing}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                <span className="ms-3 text-sm font-medium text-gray-700">Enable Management Fees</span>
+              </label>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -557,7 +695,7 @@ const BillingConfiguration = () => {
                 value={formData.management_fees_label || ''}
                 onChange={handleChange}
                 placeholder="e.g. Management Fees"
-                disabled={!isEditing}
+                disabled={!isEditing || !formData.management_fees_enabled}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -580,29 +718,24 @@ const BillingConfiguration = () => {
                   min="0"
                   max="100"
                   step="0.01"
-                  disabled={!isEditing}
+                  disabled={!isEditing || !formData.management_fees_enabled}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">%</span>
               </div>
-              {/* <p className="text-xs text-gray-500 mt-1">
-                Example: Enter 8 for 8% society maintenance charge on total expenses.
-              </p> */}
             </div>
-            {/* {formData.society_maintenance_percent > 0 && (
-              <div className="flex items-center">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <p className="text-sm text-blue-800">
-                    <span className="font-semibold">Society Management Fees: {formData.society_maintenance_percent}%</span>
-                    <br />
-                    <span className="text-xs text-blue-600">
-                      This will be calculated from total monthly expenses and shown in accounting bills &amp; unit statements.
-                    </span>
-                  </p>
-                </div>
-              </div>
-            )} */}
           </div>
+          {formData.management_fees_enabled && Number(formData.society_maintenance_percent) > 0 && (
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-800">
+                <span className="font-semibold">Management Fee: {formData.society_maintenance_percent}%</span>
+                <br />
+                <span className="text-xs text-blue-600">
+                  This {formData.management_fees_label || 'Management Fees'} charge will be applied on total expenses in billing &amp; unit statements.
+                </span>
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Terms & Conditions */}
@@ -626,7 +759,7 @@ const BillingConfiguration = () => {
             Use this panel to quickly preview or generate CAM bills for a selected month. For detailed per-unit
             review, use the "Accounting Bills" tab.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Site</label>
               <select
@@ -667,6 +800,16 @@ const BillingConfiguration = () => {
                 ))}
               </select>
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Unit ID</label>
+              <input
+                type="text"
+                value={statementUnitId}
+                onChange={(e) => setStatementUnitId(e.target.value)}
+                placeholder="e.g. 101"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              />
+            </div>
             <div className="flex gap-2 flex-wrap md:justify-end">
               <button
                 type="button"
@@ -682,6 +825,13 @@ const BillingConfiguration = () => {
               >
                 Generate Bills
               </button>
+              <button
+                type="button"
+                onClick={handleDownloadCamStatement}
+                className="px-3 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700"
+              >
+                Download CAM Statement PDF
+              </button>
             </div>
           </div>
           {billingPreview && (
@@ -691,6 +841,71 @@ const BillingConfiguration = () => {
                 <span className="font-medium"> {billingPreview.count}</span> unit(s), total
                 <span className="font-medium"> ₹{billingPreview.total.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
               </p>
+            </div>
+          )}
+          {billingRows.length > 0 && (
+            <div className="mt-4 overflow-x-auto">
+              <div className="min-w-full bg-white border border-gray-200 rounded-lg">
+                <div className="px-4 py-3 border-b border-gray-200">
+                  <p className="text-sm font-semibold text-gray-700">Sample CAM bill totals</p>
+                  <p className="text-xs text-gray-500">Advance deduction is applied on the first CAM month if configured.</p>
+                </div>
+                <table className="min-w-full text-left text-sm text-gray-600">
+                  <thead>
+                    <tr>
+                      <th className="px-4 py-3 border-b border-gray-200">Unit ID</th>
+                      <th className="px-4 py-3 border-b border-gray-200">Base</th>
+                      <th className="px-4 py-3 border-b border-gray-200">GST</th>
+                      <th className="px-4 py-3 border-b border-gray-200">Advance</th>
+                      <th className="px-4 py-3 border-b border-gray-200">Total</th>
+                      <th className="px-4 py-3 border-b border-gray-200">View</th>
+                      <th className="px-4 py-3 border-b border-gray-200">Download</th>
+                      <th className="px-4 py-3 border-b border-gray-200">Send Mail</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {billingRows.slice(0, 8).map((row) => (
+                      <tr key={`${row.unit_id}-${row.year}-${row.month}`}>
+                        <td className="px-4 py-3 border-b border-gray-100">{row.unit_id}</td>
+                        <td className="px-4 py-3 border-b border-gray-100">₹{Number(row.base_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td className="px-4 py-3 border-b border-gray-100">₹{Number(row.gst_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td className="px-4 py-3 border-b border-gray-100">₹{Number(row.advance_deduction || row.advance_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td className="px-4 py-3 border-b border-gray-100 font-semibold text-green-700">₹{Number(row.total_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td className="px-4 py-3 border-b border-gray-100 text-center">
+                          <button
+                            onClick={() => handleViewBillDetails(row)}
+                            className="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
+                            title="View detailed breakdown"
+                          >
+                            👁️ View
+                          </button>
+                        </td>
+                        <td className="px-4 py-3 border-b border-gray-100 text-center">
+                          <button
+                            onClick={() => handleDownloadCamBillPdf(row)}
+                            className="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors"
+                            title="Download PDF"
+                          >
+                            ⬇️ PDF
+                          </button>
+                        </td>
+                        <td className="px-4 py-3 border-b border-gray-100 text-center">
+                          <button
+                            onClick={() => {
+                              setSelectedBill(row);
+                              setShowEmailModal(true);
+                            }}
+                            className="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors"
+                            title="Send via email"
+                          >
+                            ✉️ Mail
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div> */}
@@ -707,6 +922,168 @@ const BillingConfiguration = () => {
           </div>
         )}
       </form>
+
+      {/* CAM Bill Details Modal */}
+      {showBillDetailsModal && selectedBill && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full mx-4 max-h-96 overflow-y-auto">
+            <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-4 flex justify-between items-center">
+              <h3 className="text-lg font-bold">CAM Bill Details</h3>
+              <button
+                onClick={() => setShowBillDetailsModal(false)}
+                className="text-white hover:bg-blue-800 p-1 rounded"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              {/* Unit & Period Info */}
+              <div className="border-b pb-3">
+                <p className="text-sm text-gray-600">Unit ID</p>
+                <p className="text-lg font-semibold text-gray-800">{selectedBill.unit_id}</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 border-b pb-3">
+                <div>
+                  <p className="text-sm text-gray-600">Period</p>
+                  <p className="text-sm font-semibold text-gray-800">{selectedBill.month}/{selectedBill.year}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Carpet Area</p>
+                  <p className="text-sm font-semibold text-gray-800">{Number(selectedBill.carpet_area_sqft || 0).toFixed(2)} sqft</p>
+                </div>
+              </div>
+
+              {/* Days Information */}
+              <div className="bg-gray-50 p-3 rounded border border-gray-200">
+                <p className="text-sm text-gray-600 mb-2">Active Days</p>
+                <p className="text-lg font-bold text-gray-800">{selectedBill.active_days} days</p>
+              </div>
+
+              {/* Rate Information */}
+              <div className="bg-blue-50 p-3 rounded border border-blue-200">
+                <p className="text-sm text-gray-600">Daily Rate</p>
+                <p className="text-sm font-semibold text-gray-800">
+                  ₹{Number(selectedBill.daily_rate_per_sqft || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })} per sqft per day
+                </p>
+              </div>
+
+              {/* Calculation Breakdown */}
+              <div className="space-y-2 border-t pt-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Base Amount:</span>
+                  <span className="font-semibold text-gray-800">₹{Number(selectedBill.base_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Society Charges ({selectedBill.gst_rate_percent}%):</span>
+                  <span className="font-semibold text-gray-800">₹{Number(selectedBill.gst_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                </div>
+                {Number(selectedBill.advance_deduction || 0) > 0 && (
+                  <div className="flex justify-between items-center text-orange-600">
+                    <span className="text-sm">Advance Deduction:</span>
+                    <span className="font-semibold">-₹{Number(selectedBill.advance_deduction || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Total */}
+              <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-3 rounded border border-green-200 flex justify-between items-center">
+                <span className="font-bold text-gray-800">Total Due:</span>
+                <span className="text-xl font-bold text-green-700">₹{Number(selectedBill.total_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-2 pt-2">
+                <button
+                  onClick={() => {
+                    handleDownloadCamBillPdf(selectedBill);
+                    setShowBillDetailsModal(false);
+                  }}
+                  className="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"
+                >
+                  Download PDF
+                </button>
+                <button
+                  onClick={() => {
+                    setShowBillDetailsModal(false);
+                    setShowEmailModal(true);
+                  }}
+                  className="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"
+                >
+                  Send Email
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Send Email Modal */}
+      {showEmailModal && selectedBill && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg max-w-sm w-full mx-4">
+            <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-4 flex justify-between items-center">
+              <h3 className="text-lg font-bold">Send CAM Bill</h3>
+              <button
+                onClick={() => {
+                  setShowEmailModal(false);
+                  setEmailRecipient('');
+                }}
+                className="text-white hover:bg-purple-800 p-1 rounded"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div>
+                <p className="text-sm text-gray-600 mb-2">
+                  Sending CAM bill for Unit <span className="font-bold">{selectedBill.unit_id}</span> ({selectedBill.month}/{selectedBill.year})
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Recipient Email Address *
+                </label>
+                <input
+                  type="email"
+                  value={emailRecipient}
+                  onChange={(e) => setEmailRecipient(e.target.value)}
+                  placeholder="resident@example.com"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+                <p className="text-xs text-purple-800">
+                  The bill details and PDF attachment will be sent to the email address above.
+                </p>
+              </div>
+
+              <div className="flex gap-2 pt-2">
+                <button
+                  onClick={() => {
+                    setShowEmailModal(false);
+                    setEmailRecipient('');
+                  }}
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSendBillEmail}
+                  disabled={sendingEmail || !emailRecipient}
+                  className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-gray-400 font-medium"
+                >
+                  {sendingEmail ? 'Sending...' : 'Send Email'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -36,6 +36,7 @@ export const updateJournalEntry = (id, data) => API.put(`/journal_entries/${id}.
 export const deleteJournalEntry = (id) => API.delete(`/journal_entries/${id}.json`);
 export const postJournalEntry = (id) => API.post(`/journal_entries/${id}/post.json`);
 export const cancelJournalEntry = (id) => API.post(`/journal_entries/${id}/cancel.json`);
+export const bulkPostJournalEntries = (ids) => API.post("/journal_entries/bulk_post.json", { journal_entry_ids: ids });
 
 // Accounting Invoices
 export const getAccountingInvoices = () => API.get("/accounting_invoices.json");
@@ -74,6 +75,7 @@ export const updateAccountingInvoice = (id, data) => {
 };
 export const deleteAccountingInvoice = (id) => API.delete(`/accounting_invoices/${id}.json`);
 export const sendInvoice = (id) => API.post(`/accounting_invoices/${id}/send_invoice.json`);
+export const bulkSendInvoices = (ids) => API.post("/accounting_invoices/bulk_send.json", { invoice_ids: ids });
 export const addPaymentToInvoice = (id, data) => API.post(`/accounting_invoices/${id}/add_payment.json`, data);
 export const downloadInvoicePdf = (id) => API.get(`/accounting_invoices/${id}/download_pdf.json`, { responseType: 'blob' });
 export const getOverdueInvoices = () => API.get("/accounting_invoices/overdue.json");
@@ -186,6 +188,9 @@ export const previewCamBills = (data) => API.post("/api/cam/bills/preview", data
 export const generateCamBills = (data) => API.post("/api/cam/bills/generate", data);
 export const getCamBills = (params) => API.get("/api/cam/bills", { params });
 export const getCamBill = (id) => API.get(`/api/cam/bills/${id}`);
+export const downloadCamBillPdf = (params) => API.get("/cam_statement_pdf", { params, responseType: "blob" });
+export const sendCamBillEmail = (data) => API.post("/api/cam/bills/send_email", data);
+export const getCamBillDetails = (params) => API.get("/api/cam/bills/details", { params });
 
 // Advance Maintenance (24 months before possession)
 export const recordAdvanceMaintenance = (data) => API.post("/api/cam/advance_maintenances/generate", data);

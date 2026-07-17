@@ -216,7 +216,7 @@ const EditVisitorSetupModal = ({ onclose, item, setAdded, page }) => {
                 UNPLANNED
               </option>
               <option value="OTHERS">
-                OTHERS
+                OTHER
               </option>
             </select>
           </div>

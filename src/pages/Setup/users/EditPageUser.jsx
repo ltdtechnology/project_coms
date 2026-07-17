@@ -102,21 +102,30 @@ const [unitsByFloor, setUnitsByFloor] = useState({});
       };
 
       setFormData(formattedData);
-      if (Array.isArray(userData.pets)) {
+      if (Array.isArray(userData.pets_details)) {
         setPets(
-          userData.pets.map((p) => ({
+          userData.pets_details.map((p) => ({
             id: p.id ?? null,
             pet_name: p.pet_name ?? "",
-            // pet_owner_mobile_no: p.pet_owner_mobile_no ?? "",
+            pet_owner_mobile_no: p.owner_mobile_no ?? "",
             pet_breed: p.pet_breed ?? "",
             gender: p.gender ?? "",
             colour: p.colour ?? "",
             age: p.age ?? "",
+            profile_image: p.profile_image ?? null,
+            pet_images: p.pet_images ?? [],
           }))
         );
       }
 
+      if (firstSite) {
+        setSelectedBuilding(firstSite.build_id?.toString() || "");
+        setSelectedFloorId(firstSite.floor_id?.toString() || "");
+        setSelectedUnit(firstSite.unit_id?.toString() || "");
+      }
+
       setOriginalData(formattedData);
+      setHydratedSite(true);
       setUserSites(sitesResp.data);
 
     } catch (error) {
@@ -615,19 +624,27 @@ formData.user_sites.some(
         blood_group: formData.blood_group,
         no_of_pets: formData.no_of_pets,
         birth_date: formData.birth_date,
-        pet_details: formData.pet_details || [],
+        pet_details_attributes: pets.map((pet) => ({
+          id: pet.id ?? undefined,
+          pet_name: pet.pet_name,
+          pet_breed: pet.pet_breed,
+          gender: pet.gender,
+          colour: pet.colour,
+          age: pet.age,
+          _destroy: pet._destroy ? "1" : undefined,
+        })),
 
-     user_sites_attributes: formData.user_sites.map((site) => ({
-  id: site.id ?? undefined,
-    site_id: Number(site.site_id || siteId), 
-  build_id: Number(site.build_id),
-  floor_id: Number(site.floor_id),
-  unit_id: Number(site.unit_id),
-  ownership: formData.occupancy_type,
-  ownership_type: site.ownership_type || "primary",
-  is_approved: true,
-  lives_here: formData.lives_here,
-})),
+        user_sites_attributes: formData.user_sites.map((site) => ({
+          id: site.id ?? undefined,
+          site_id: Number(site.site_id || siteId),
+          build_id: Number(site.build_id),
+          floor_id: Number(site.floor_id),
+          unit_id: Number(site.unit_id),
+          ownership: formData.occupancy_type,
+          ownership_type: site.ownership_type || "primary",
+          is_approved: true,
+          lives_here: formData.lives_here,
+        })),
         user_members_attributes: formData.user_members.map((m) => ({
           id: m.id ?? undefined,
           member_type: m.member_type,
@@ -649,7 +666,7 @@ formData.user_sites.some(
         })),
       },
     };
-    console.log("PETS PAYLOAD", postData.user.pets_attributes);
+    console.log("PETS PAYLOAD", postData.user.pet_details_attributes);
     try {
       console.log("Sending update data:", postData);
       await editSetupUsers(id, postData);

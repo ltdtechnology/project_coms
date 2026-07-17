@@ -5,7 +5,7 @@ const TaxRateModal = ({ taxRate, onClose, onSave }) => {
     name: "",
     rate: 0,
     tax_type: "sales",
-    is_active: true,
+    active: true,
     description: "",
   });
 
@@ -15,7 +15,7 @@ const TaxRateModal = ({ taxRate, onClose, onSave }) => {
         name: taxRate.name || "",
         rate: taxRate.rate || 0,
         tax_type: taxRate.tax_type || "sales",
-        is_active: taxRate.is_active !== undefined ? taxRate.is_active : true,
+        active: taxRate.active !== undefined ? taxRate.active : true,
         description: taxRate.description || "",
       });
     }
@@ -93,9 +93,11 @@ const TaxRateModal = ({ taxRate, onClose, onSave }) => {
                 required
                 className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="sales">Sales Tax</option>
-                <option value="purchase">Purchase Tax</option>
-                <option value="vat">VAT</option>
+                {/* <option value="sales">Sales Tax</option> */}
+                {/* <option value="purchase">Purchase Tax</option> */}
+                {/* <option value="vat">VAT</option> */}
+                {/* <option value="sgst">SGST</option> */}
+                <option value="igst">IGST</option>
                 <option value="gst">GST</option>
                 <option value="other">Other</option>
               </select>
@@ -105,8 +107,8 @@ const TaxRateModal = ({ taxRate, onClose, onSave }) => {
               <label className="flex items-center gap-2">
                 <input
                   type="checkbox"
-                  name="is_active"
-                  checked={formData.is_active}
+                  name="active"
+                  checked={formData.active}
                   onChange={handleChange}
                   className="w-4 h-4"
                 />

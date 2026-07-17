@@ -6,8 +6,8 @@ import toast from 'react-hot-toast';
 const ProtectedAdminRoutes = ({children}) => {
     const token = getItemInLocalStorage('TOKEN') || null;
     const user = getItemInLocalStorage("USERTYPE")
-    if (!token || (user !== "pms_admin" && user !== "project_head")) {
-      toast.error('Not Authorized', );
+    if (!token || (user !== "pms_admin" && user !== "project_head" && user !== "accounting_emp")) {
+      toast.error('Not Authorized');
       return <Navigate to={'/mytickets'} />;
     }
   

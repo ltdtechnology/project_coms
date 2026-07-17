@@ -143,7 +143,7 @@ const FitoutCategory = ({ handleToggleCategoryPage, setCatAdded }) => {
   return (
     <div className="">
       {/* <h1 className="text-2xl font-bold mb-4">Dynamic FAQ Form</h1> */}
-      <div className="grid md:grid-cols-3 gap-4 ">
+      <div className="grid md:grid-cols-3 gap-4 my-4 ">
         <div className="flex flex-col gap-2">
           <label className="font-medium">Enter Category </label>
           <input
@@ -198,7 +198,7 @@ const FitoutCategory = ({ handleToggleCategoryPage, setCatAdded }) => {
             className="px-4 py-2 gap-2 mr-2 rounded-md text-sm font-medium text-white transition-all hover:bg-black"
             style={{ background: themeColor }}
           >
-            Add
+            Create
           </button>
           <button
             onClick={handleToggleCategoryPage}

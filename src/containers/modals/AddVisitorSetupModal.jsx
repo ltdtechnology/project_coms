@@ -149,7 +149,7 @@ const AddVisitorSetupModal = ({ onclose, setAdded, page }) => {
               <option value="">Select Code Type</option>
               <option value="PLANNED">PLANNED</option>
               <option value="UNPLANNED">UNPLANNED</option>
-              <option value="OTHERS">OTHERS</option>
+              <option value="OTHERS">OTHER</option>
             </select>
           </div>
         )}
