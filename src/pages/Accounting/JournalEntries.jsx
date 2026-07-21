@@ -700,6 +700,15 @@ const JournalEntries = () => {
 
                         {entry.status === "posted" && (
                           <>
+                            {canEditDelete && (
+                              <button
+                                onClick={() => handleEdit(entry)}
+                                className="text-blue-600 hover:text-blue-900 mr-3"
+                                title="Edit"
+                              >
+                                <FaEdit className="inline mr-1" />
+                              </button>
+                            )}
                             <button
                               onClick={() => handleView(entry)}
                               className="text-blue-600 hover:text-blue-900 mr-3"
