@@ -1001,8 +1001,21 @@ const JournalEntries = () => {
                 </div>
               </div>
 
-              {/* Close Button */}
-              <div className="flex justify-end mt-6">
+              {/* Action Buttons */}
+              <div className="flex justify-end gap-3 mt-6">
+                {canEditDelete && (
+                  <button
+                    onClick={() => {
+                      setIsViewModalOpen(false);
+                      const entryData = viewEntry;
+                      setViewEntry(null);
+                      handleEdit(entryData);
+                    }}
+                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  >
+                    Edit
+                  </button>
+                )}
                 <button
                   onClick={() => {
                     setIsViewModalOpen(false);

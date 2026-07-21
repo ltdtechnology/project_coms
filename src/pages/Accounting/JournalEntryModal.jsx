@@ -283,14 +283,13 @@ const JournalEntryModal = ({ entry, onClose, onSave }) => {
           <div className="grid grid-cols-1 gap-4 mb-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Entry Date *
+                Entry Date
               </label>
               <input
                 type="date"
                 name="entry_date"
                 value={formData.entry_date}
                 onChange={handleChange}
-                required
                 className="w-full px-3 py-2 border rounded"
               />
             </div>
@@ -432,7 +431,7 @@ const JournalEntryModal = ({ entry, onClose, onSave }) => {
                   {/* Ledger/Vendor Name */}
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Ledger/Vendor Name <span className="text-red-500">*</span>
+                      Ledger/Vendor Name
                     </label>
                     <input
                       type="text"
@@ -448,7 +447,7 @@ const JournalEntryModal = ({ entry, onClose, onSave }) => {
                   {/* Account Group */}
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Account Group <span className="text-red-500">*</span>
+                      Account Group
                     </label>
                     <select
                       name="account_group_id"
@@ -577,7 +576,6 @@ const JournalEntryModal = ({ entry, onClose, onSave }) => {
                               handleEntryChange(actualIndex, "ledger_id", e.target.value)
                             }
                             className="w-full px-2 py-1 border rounded"
-                            required
                           >
                             <option value="">Select Ledger/Vendor</option>
                             {ledgers.map((ledger) => (

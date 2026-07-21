@@ -1283,6 +1283,11 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
       return acc;
     }, { taxableValue: 0, cgst: 0, sgst: 0, igst: 0, total: 0 });
 
+    const first = formData.items[0];
+    totals.cgstRate = first ? parseFloat(first.cgst_rate || 0) : 0;
+    totals.sgstRate = first ? parseFloat(first.sgst_rate || 0) : 0;
+    totals.igstRate = first ? parseFloat(first.igst_rate || 0) : 0;
+
     return totals;
   };
 
@@ -1372,9 +1377,9 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
               <h3 className="font-semibold text-xl text-gray-800 border-b pb-3 mb-4">Basic Information</h3>
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Source Type *
-                  </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Source Type
+                    </label>
                   <select
                     name="source_type"
                     value={formData.source_type}
@@ -1388,9 +1393,9 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Invoice Number *
-                  </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Invoice Number
+                    </label>
                   <input
                     type="text"
                     name="invoice_number"
@@ -1403,36 +1408,34 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Invoice Date *
-                  </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Invoice Date
+                    </label>
                   <input
                     type="date"
                     name="invoice_date"
                     value={formData.invoice_date}
                     onChange={handleChange}
-                    required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Due Date *
-                  </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Due Date
+                    </label>
                   <input
                     type="date"
                     name="due_date"
                     value={formData.due_date}
                     onChange={handleChange}
-                    required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Income Month *
+                    Income Month
                   </label>
                   <select
                     name="income_month"
@@ -1448,7 +1451,7 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Income Year *
+                    Income Year
                   </label>
                   <input
                     type="number"
@@ -1483,14 +1486,13 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Building / Floor / Unit *
+                    Building / Floor / Unit
                   </label>
                   <div className="grid grid-cols-3 gap-4">
                     {/* Building */}
                     <select
                       value={selectedBuilding}
                       onChange={handleBuildingChange}
-                      required
                       disabled={loading}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
                     >
@@ -1506,7 +1508,6 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
                     <select
                       value={selectedFloor}
                       onChange={handleFloorChange}
-                      required
                       disabled={!selectedBuilding || loading}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
                     >
@@ -1522,7 +1523,6 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
                     <select
                       value={selectedUnit}
                       onChange={handleUnitChange}
-                      required
                       disabled={!selectedFloor || loading}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
                     >
@@ -1610,14 +1610,13 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
                   </div>
                   <div className="">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Customer Name *
+                      Customer Name
                     </label>
                     <input
                       type="text"
                       name="customer_name"
                       value={formData.customer_name}
                       onChange={handleChange}
-                      required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm"
                       placeholder="Enter customer name"
                     />
@@ -2048,19 +2047,19 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
                     
                     {/* Add: CGST */}
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
-                      <span className="text-sm text-gray-600">Add: CGST %</span>
+                      <span className="text-sm text-gray-600">Add: {totals.cgstRate}% CGST</span>
                       <span className="text-sm text-gray-700">₹{totals.cgst.toFixed(2)}</span>
                     </div>
                     
                     {/* Add: SGST */}
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
-                      <span className="text-sm text-gray-600">Add: SGST %</span>
+                      <span className="text-sm text-gray-600">Add: {totals.sgstRate}% SGST</span>
                       <span className="text-sm text-gray-700">₹{totals.sgst.toFixed(2)}</span>
                     </div>
                     
                     {/* Add: IGST */}
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
-                      <span className="text-sm text-gray-600">Add: IGST %</span>
+                      <span className="text-sm text-gray-600">Add: {totals.igstRate}% IGST</span>
                       <span className="text-sm text-gray-700">₹{totals.igst.toFixed(2)}</span>
                     </div>
                     
@@ -2386,7 +2385,7 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
                       <td className="border-t border-gray-800 p-2" style={{display: 'flex', justifyContent: 'space-between'}}>
                         <span><strong>Code</strong></span>
                         <span>{formData.state_code || "27"}</span>
-                        <span><strong>Mode of Payment: UPI No.:</strong></span>
+                        <span><strong>Mode of Payment: {paymentData.payment_mode ? paymentData.payment_mode.replace('_', ' ').toUpperCase() : '-'}{paymentData.reference_number ? ` No.: ${paymentData.reference_number}` : ''}</strong></span>
                       </td>
                     </tr>
                   </tbody>
@@ -2471,11 +2470,11 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
                               <td className="p-1 text-right">{totals.taxableValue.toFixed(2)}</td>
                             </tr>
                             <tr>
-                              <td className="p-1"><strong>Add: CGST</strong></td>
+                              <td className="p-1"><strong>Add: {totals.cgstRate}% CGST</strong></td>
                               <td className="p-1 text-right">{totals.cgst.toFixed(2)}</td>
                             </tr>
                             <tr>
-                              <td className="p-1"><strong>Add: SGST</strong></td>
+                              <td className="p-1"><strong>Add: {totals.sgstRate}% SGST</strong></td>
                               <td className="p-1 text-right">{totals.sgst.toFixed(2)}</td>
                             </tr>
                             <tr>

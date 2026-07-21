@@ -293,17 +293,9 @@ const InvoiceModalV2 = ({ invoice, onClose, onSave }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Validate required fields
+    // Validate required fields (soft validation)
     if (!formData.invoice_number.trim()) {
       toast.error("Invoice number is required");
-      return;
-    }
-    if (!formData.unit_id) {
-      toast.error("Please select a unit");
-      return;
-    }
-    if (!formData.amount) {
-      toast.error("Amount is required");
       return;
     }
     
@@ -365,7 +357,7 @@ const InvoiceModalV2 = ({ invoice, onClose, onSave }) => {
             <div className="grid grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Source Type *
+                  Source Type
                 </label>
                 <select
                   name="source_type"
@@ -384,7 +376,7 @@ const InvoiceModalV2 = ({ invoice, onClose, onSave }) => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Status *
+                  Status
                 </label>
                 <select
                   name="status"
@@ -406,7 +398,7 @@ const InvoiceModalV2 = ({ invoice, onClose, onSave }) => {
             <div className="grid grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Invoice Number *
+                  Invoice Number
                 </label>
                 <input
                   type="text"
@@ -419,7 +411,7 @@ const InvoiceModalV2 = ({ invoice, onClose, onSave }) => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Invoice Date *
+                  Invoice Date
                 </label>
                 <input
                   type="date"
@@ -431,7 +423,7 @@ const InvoiceModalV2 = ({ invoice, onClose, onSave }) => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Received Date *
+                  Received Date
                 </label>
                 <input
                   type="date"
@@ -449,7 +441,7 @@ const InvoiceModalV2 = ({ invoice, onClose, onSave }) => {
             <h3 className="font-semibold text-xl text-gray-800 border-b pb-3 mb-4">Unit Information</h3>
             <div className="grid grid-cols-3 gap-4 mb-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Building *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Building</label>
                 <select
                   value={selectedBuilding}
                   onChange={handleBuildingChange}
@@ -465,7 +457,7 @@ const InvoiceModalV2 = ({ invoice, onClose, onSave }) => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Floor *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Floor</label>
                 <select
                   value={selectedFloor}
                   onChange={handleFloorChange}
@@ -481,7 +473,7 @@ const InvoiceModalV2 = ({ invoice, onClose, onSave }) => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Unit *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Unit</label>
                 <select
                   value={selectedUnit}
                   onChange={handleUnitChange}
@@ -535,7 +527,7 @@ const InvoiceModalV2 = ({ invoice, onClose, onSave }) => {
             <div className="grid grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Customer Name *
+                  Customer Name
                 </label>
                 <input
                   type="text"
@@ -593,9 +585,9 @@ const InvoiceModalV2 = ({ invoice, onClose, onSave }) => {
           <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
             <h3 className="font-semibold text-xl text-gray-800 border-b pb-3 mb-4">Amount</h3>
             <div className="max-w-sm">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Amount *
-              </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Amount
+                </label>
               <div className="flex items-center">
                 <span className="text-xl font-bold text-gray-600 mr-2">₹</span>
                 <input
@@ -619,7 +611,7 @@ const InvoiceModalV2 = ({ invoice, onClose, onSave }) => {
             <div className="grid grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Payment Mode *
+                  Payment Mode
                 </label>
                 <select
                   name="payment_mode"
@@ -637,7 +629,7 @@ const InvoiceModalV2 = ({ invoice, onClose, onSave }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Reference Number *
+                  Reference Number
                 </label>
                 <input
                   type="text"

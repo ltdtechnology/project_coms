@@ -344,6 +344,9 @@ const AccountingInvoices = () => {
                     Amount
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Payment Mode
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -354,10 +357,10 @@ const AccountingInvoices = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredInvoices.length === 0 ? (
                   <tr>
-                    <td
-                      colSpan="8"
-                      className="px-6 py-4 text-center text-gray-500"
-                    >
+                      <td
+                        colSpan="9"
+                        className="px-6 py-4 text-center text-gray-500"
+                      >
                       No invoices found
                     </td>
                   </tr>
@@ -397,6 +400,10 @@ const AccountingInvoices = () => {
 
                         <td className="px-6 py-4 whitespace-nowrap">
                           ₹{parseFloat(invoice.total_amount || 0).toFixed(2)}
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {invoice.payment_mode || invoice.first_payment?.payment_mode || "-"}
                         </td>
 
                         <td className="px-6 py-4 whitespace-nowrap">
