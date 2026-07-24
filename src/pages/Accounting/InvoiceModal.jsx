@@ -2034,7 +2034,7 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
                 </div>
 
                 {/* Right Column - Tax Summary and Additional Details */}
-                <div className="space-y-6">
+               <div className="space-y-6">
                   {/* Tax Summary - UPDATED TO MATCH SCREENSHOT */}
                   <div className="space-y-4 p-6 border-2 border-gray-300 rounded-lg bg-white shadow-sm">
                     <h4 className="text-lg font-bold text-gray-800 mb-4 text-center border-b pb-2">Tax Summary</h4>
@@ -2047,19 +2047,19 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
                     
                     {/* Add: CGST */}
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
-                      <span className="text-sm text-gray-600">Add: {totals.cgstRate}% CGST</span>
+                      <span className="text-sm text-gray-600">Add: CGST {formData.items[0]?.cgst_rate || 0}%</span>
                       <span className="text-sm text-gray-700">₹{totals.cgst.toFixed(2)}</span>
                     </div>
                     
                     {/* Add: SGST */}
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
-                      <span className="text-sm text-gray-600">Add: {totals.sgstRate}% SGST</span>
+                      <span className="text-sm text-gray-600">Add: SGST {formData.items[0]?.sgst_rate || 0}%</span>
                       <span className="text-sm text-gray-700">₹{totals.sgst.toFixed(2)}</span>
                     </div>
                     
                     {/* Add: IGST */}
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
-                      <span className="text-sm text-gray-600">Add: {totals.igstRate}% IGST</span>
+                      <span className="text-sm text-gray-600">Add: IGST {formData.items[0]?.igst_rate || 0}%</span>
                       <span className="text-sm text-gray-700">₹{totals.igst.toFixed(2)}</span>
                     </div>
                     
@@ -2118,7 +2118,6 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
                       <span className="text-xl font-bold text-green-700">₹{totals.total.toFixed(2)}</span>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>
