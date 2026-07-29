@@ -795,9 +795,9 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
     try {
       const response = await getBillingConfigurations();
       const configs = response.data.data || response.data || [];
-      // console.log("Billing Configurations fetched:", configs);
+      const config = Array.isArray(configs) ? configs[0] : configs;
       
-        setBillingConfig(configs); // Use first config
+        setBillingConfig(config || {});
       
     } catch (error) {
       console.error("Failed to fetch billing configuration", error);
@@ -2295,7 +2295,7 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
               {/* Company Header Section */}
               <div className="border-b border-gray-800">
                 <div className="text-center py-4">
-                  <h1 className="text-xl font-bold text-gray-900">{billingConfig.company_name || siteInfo.name || "JP Infra Venture LLP"}</h1>
+                  <h1 className="text-xl font-bold text-gray-900">{billingConfig.billing_name || billingConfig.company_name || siteInfo.name || "JP Infra Venture LLP"}</h1>
                   <p className="text-xs text-gray-700 mt-1">
                     {billingConfig.address || siteInfo.address || "3rd Floor, 301, Viraj Tower, Near WEH, Metro Station, W.E.Highway, Andheri East, Mumbai -400093"}
                   </p>

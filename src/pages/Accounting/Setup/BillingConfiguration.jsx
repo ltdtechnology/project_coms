@@ -57,7 +57,9 @@ const BillingConfiguration = () => {
     society_maintenance_percent: '',
     management_fees_label: 'Management Fees',
     management_fees_enabled: false,
-    supply_site_name: ''
+    supply_site_name: '',
+    billing_name: '',
+    apex_amount_percent: ''
   });
 
   useEffect(() => {
@@ -365,6 +367,21 @@ const BillingConfiguration = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
+                Billing Name *
+              </label>
+              <input
+                type="text"
+                name="billing_name"
+                value={formData.billing_name}
+                onChange={handleChange}
+                required
+                disabled={!isEditing}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Society Name *
               </label>
               <input
@@ -375,6 +392,33 @@ const BillingConfiguration = () => {
                 required
                 disabled={!isEditing}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Place of Supply
+              </label>
+              <input
+                type="text"
+                name="supply_site_name"
+                value={formData.supply_site_name}
+                onChange={handleChange}
+                placeholder="e.g. Maharashtra"
+                disabled={!isEditing}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Site Name
+              </label>
+              <input
+                type="text"
+                value={sites.find(s => String(s.id || s.site_id || s.value) === String(siteId))?.name || ''}
+                disabled
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-100 text-gray-500 cursor-not-allowed"
               />
             </div>
 
@@ -735,6 +779,44 @@ const BillingConfiguration = () => {
               </p>
             </div>
           )}
+
+          {/* Apex Body Transfer */}
+          <div className="mt-6 pt-4 border-t border-gray-200">
+            <h4 className="text-sm font-semibold text-gray-700 mb-3">Apex Body Transfer</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Apex Amount (%)
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    name="apex_amount_percent"
+                    value={formData.apex_amount_percent || ''}
+                    onChange={handleChange}
+                    placeholder="e.g. 30"
+                    min="0"
+                    max="100"
+                    step="0.01"
+                    disabled={!isEditing}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">%</span>
+                </div>
+              </div>
+            </div>
+            {Number(formData.apex_amount_percent || 0) > 0 && (
+              <div className="mt-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                <p className="text-sm text-purple-800">
+                  <span className="font-semibold">Apex Body Transfer: {formData.apex_amount_percent}%</span>
+                  <br />
+                  <span className="text-xs text-purple-600">
+                    This amount will be transferred to the Apex Body from advance maintenance receipts.
+                  </span>
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Terms & Conditions */}

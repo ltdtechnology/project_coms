@@ -1223,7 +1223,7 @@ const AccountingReports = () => {
 
           {/* SECTION 2: APEX CALCULATION */}
           <div className="mb-8">
-            <h4 className="font-semibold mb-4 text-lg text-orange-700">2. Apex Body Transfer (30%)</h4>
+            <h4 className="font-semibold mb-4 text-lg text-orange-700">2. Apex Body Transfer ({reportData.apex?.contribution_percentage || 30}%)</h4>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
                 <p className="text-xs text-gray-500 mb-1">Advance Amount</p>

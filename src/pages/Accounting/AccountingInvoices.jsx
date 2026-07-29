@@ -76,10 +76,6 @@ const AccountingInvoices = () => {
   };
 
   const handleDelete = async (invoice) => {
-    if (["paid", "partially_paid", "sent"].includes(invoice.status)) {
-      toast.error("This invoice cannot be deleted");
-      return;
-    }
 
     if (!window.confirm("Are you sure you want to delete this invoice?"))
       return;
@@ -202,8 +198,8 @@ const AccountingInvoices = () => {
         await updateAccountingInvoice(selectedInvoice.id, invoiceData);
         toast.success("Invoice updated successfully");
 
-        // Handle payment if provided
-        if (paymentData && paymentData.payment_mode) {
+        // Handle payment only if invoice has no existing payments
+        if (paymentData && paymentData.payment_mode && selectedInvoice.payments_count === 0) {
           await addPaymentToInvoice(selectedInvoice.id, {
             payment_date: new Date().toISOString().split("T")[0],
             amount: paymentData.amount,
@@ -366,11 +362,7 @@ const AccountingInvoices = () => {
                   </tr>
                 ) : (
                   filteredInvoices.map((invoice) => {
-                    const deleteDisabled = [
-                      "paid",
-                      "partially_paid",
-                      "sent",
-                    ].includes(invoice.status);
+                    const deleteDisabled = false;
 
                     return (
                       <tr key={invoice.id} className="hover:bg-gray-50">

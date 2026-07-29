@@ -48,6 +48,9 @@ const MonthlyExpenseSetup = () => {
   const [societyMaintenancePercent, setSocietyMaintenancePercent] = useState(0);
   const [managementFeesEnabled, setManagementFeesEnabled] = useState(false);
 
+  // Apex body transfer
+  const [apexAmountPercent, setApexAmountPercent] = useState(0);
+
   // Total carpet area for Per Square Feet calculation
   const [totalArea, setTotalArea] = useState(0);
 
@@ -156,9 +159,11 @@ const MonthlyExpenseSetup = () => {
         if (Array.isArray(bcData) && bcData.length > 0) {
           setManagementFeesEnabled(!!bcData[0]?.management_fees_enabled);
           setSocietyMaintenancePercent(Number(bcData[0]?.society_maintenance_percent || 0));
+          setApexAmountPercent(Number(bcData[0]?.apex_amount_percent || 0));
         } else if (bcData && typeof bcData === 'object' && !Array.isArray(bcData)) {
           setManagementFeesEnabled(!!bcData.management_fees_enabled);
           setSocietyMaintenancePercent(Number(bcData.society_maintenance_percent || 0));
+          setApexAmountPercent(Number(bcData.apex_amount_percent || 0));
         }
       } catch (e) {
         console.error(e);
@@ -366,6 +371,26 @@ const MonthlyExpenseSetup = () => {
     } else {
       // Grand total row without society charges
       sheetData.push(["Grand Total", "", grandTotal, ""]);
+      merges.push({ s: { r, c: 0 }, e: { r, c: 1 } });
+      r++;
+      sheetData.push([]); r++;
+    }
+
+    // ─── Apex Body Transfer ───
+    if (apexAmountPercent > 0 && grandTotal > 0) {
+      sheetData.push(["Apex Body Transfer", "", "", ""]);
+      merges.push({ s: { r, c: 0 }, e: { r, c: 3 } });
+      r++;
+      sheetData.push(["Description", "", "Amount (₹)", ""]);
+      merges.push({ s: { r, c: 0 }, e: { r, c: 1 } });
+      r++;
+
+      const apexAmount = grandTotal * apexAmountPercent / 100;
+      sheetData.push([`Apex Body Transfer @ ${apexAmountPercent}%`, "", apexAmount, ""]);
+      merges.push({ s: { r, c: 0 }, e: { r, c: 1 } });
+      r++;
+
+      sheetData.push(["Grand Total with Apex Transfer", "", grandTotal + apexAmount, ""]);
       merges.push({ s: { r, c: 0 }, e: { r, c: 1 } });
       r++;
       sheetData.push([]); r++;
@@ -719,6 +744,24 @@ const MonthlyExpenseSetup = () => {
                     <td className="px-4 py-2">
                       <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
                         Billing Config
+                      </span>
+                    </td>
+                    <td className="px-4 py-2">
+                      <span className="text-xs text-gray-500">on ₹{ledgerTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                    </td>
+                  </tr>
+                )}
+                {apexAmountPercent > 0 && (
+                  <tr className="bg-purple-50/50 border-t-2 border-purple-200">
+                    <td className="px-4 py-2">
+                      <span className="font-medium text-purple-800">Apex Body Transfer ({apexAmountPercent}%)</span>
+                    </td>
+                    <td className="px-4 py-2 text-right font-bold text-purple-700">
+                      ₹{(ledgerTotal * apexAmountPercent / 100).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                    </td>
+                    <td className="px-4 py-2">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
+                        Apex Body
                       </span>
                     </td>
                     <td className="px-4 py-2">
