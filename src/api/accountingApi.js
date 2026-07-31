@@ -155,13 +155,13 @@ export const importIncomeMIS = (file) => {
 };
 
 
-export const importIndividualMIS = (file, year, month) => {
+export const importIndividualMIS = (file, start_date, end_date) => {
   const formData = new FormData();
   formData.append('file', file);
   const token = getItemInLocalStorage("TOKEN");
   return API.post('/accounting_reports/individual_mis/import.json', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
-    params: { token, year, month },
+    params: { token, start_date, end_date },
   });
 }
 

@@ -50,8 +50,8 @@ const AccountingReports = () => {
     end_date: new Date().toISOString().split('T')[0],
   });
   const [individualMisFilters, setIndividualMisFilters] = useState({
-    year: new Date().getFullYear(),
-    month: new Date().getMonth() + 1,
+    start_date: new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0],
+    end_date: new Date().toISOString().split('T')[0],
   });
   console.log("filters", filters?.unit_id);
   const [units, setUnits] = useState([]);
@@ -209,8 +209,8 @@ const AccountingReports = () => {
   const getMisParams = (kind) => {
     if (kind === "individual") {
       return {
-        year: individualMisFilters.year,
-        month: individualMisFilters.month,
+        start_date: individualMisFilters.start_date,
+        end_date: individualMisFilters.end_date,
       };
     }
     return {
@@ -693,7 +693,7 @@ const AccountingReports = () => {
           toast.error("Select Individual MIS file first");
           return;
         }
-        res = await importIndividualMIS(individualMisFile, individualMisFilters.year, individualMisFilters.month);
+        res = await importIndividualMIS(individualMisFile, individualMisFilters.start_date, individualMisFilters.end_date);
       } else {
         throw new Error("Invalid MIS import type");
       }
@@ -812,41 +812,22 @@ const AccountingReports = () => {
                   <div className="border rounded p-4">
                     <div className="flex items-center gap-4 mb-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Year</label>
-                        <select
-                          value={individualMisFilters.year}
-                          onChange={(e) => setIndividualMisFilters(prev => ({ ...prev, year: parseInt(e.target.value) }))}
-                          className="px-3 py-2 border rounded min-w-[120px]"
-                        >
-                          {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i).map(year => (
-                            <option key={year} value={year}>{year}</option>
-                          ))}
-                        </select>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">From Date</label>
+                        <input
+                          type="date"
+                          value={individualMisFilters.start_date}
+                          onChange={(e) => setIndividualMisFilters(prev => ({ ...prev, start_date: e.target.value }))}
+                          className="px-3 py-2 border rounded min-w-[160px]"
+                        />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Month</label>
-                        <select
-                          value={individualMisFilters.month}
-                          onChange={(e) => setIndividualMisFilters(prev => ({ ...prev, month: parseInt(e.target.value) }))}
-                          className="px-3 py-2 border rounded min-w-[120px]"
-                        >
-                          {[
-                            { value: 1, label: "January" },
-                            { value: 2, label: "February" },
-                            { value: 3, label: "March" },
-                            { value: 4, label: "April" },
-                            { value: 5, label: "May" },
-                            { value: 6, label: "June" },
-                            { value: 7, label: "July" },
-                            { value: 8, label: "August" },
-                            { value: 9, label: "September" },
-                            { value: 10, label: "October" },
-                            { value: 11, label: "November" },
-                            { value: 12, label: "December" },
-                          ].map(month => (
-                            <option key={month.value} value={month.value}>{month.label}</option>
-                          ))}
-                        </select>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">To Date</label>
+                        <input
+                          type="date"
+                          value={individualMisFilters.end_date}
+                          onChange={(e) => setIndividualMisFilters(prev => ({ ...prev, end_date: e.target.value }))}
+                          className="px-3 py-2 border rounded min-w-[160px]"
+                        />
                       </div>
                     </div>
                     <div className="font-medium mb-2">Individual MIS contains both Income and Expenses data</div>
