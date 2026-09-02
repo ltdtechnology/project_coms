@@ -271,7 +271,7 @@ const InvoiceModalV2 = ({ invoice, onClose, onSave }) => {
           customer_name: selectedUser.name || selectedUser.full_name || "",
           customer_email: selectedUser.email || "",
           gst_no: selectedUser.gst_number || selectedUser.gst_no || "",
-          customer_address: selectedUser.address || selectedUser.permanent_address || ""
+          customer_address: selectedUser.address || selectedUser.permanent_address || unitFullAddress || ""
         }));
       }
     } else {
@@ -307,6 +307,14 @@ const InvoiceModalV2 = ({ invoice, onClose, onSave }) => {
   const unitName = unitDetails?.name || unitDetails?.flat || unitDetails?.flat_no || "";
   const siteName = unitDetails?.site_name || unitDetails?.site?.name || "";
   const buildingName = unitDetails?.building_name || unitDetails?.building?.name || "";
+  const floorName = unitDetails?.floor_name || unitDetails?.floor?.name || "";
+  const unitAddressParts = [
+    unitName && `Unit ${unitName}`,
+    floorName && `Floor ${floorName}`,
+    buildingName && `Building ${buildingName}`,
+    siteName,
+  ].filter(Boolean);
+  const unitFullAddress = unitAddressParts.join(", ");
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto p-4">

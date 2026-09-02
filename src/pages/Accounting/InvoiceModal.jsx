@@ -894,7 +894,7 @@ const InvoiceModal = ({ invoice, onClose, onSave }) => {
           customer_name: selectedUser.name || selectedUser.full_name || "",
           customer_email: selectedUser.email || "",
           gst_no: selectedUser.gst_number || selectedUser.gst_no || "",
-          customer_address: selectedUser.address || selectedUser.permanent_address || ""
+          customer_address: selectedUser.address || selectedUser.permanent_address || unitFullAddress || ""
         }));
       }
     } else {
